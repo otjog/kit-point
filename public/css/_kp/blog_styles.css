@@ -1,0 +1,140 @@
+@charset "utf-8";
+/* CSS Document */
+
+/******************************
+
+[Table of Contents]
+
+4. Home
+5. Blog
+
+
+******************************/
+
+/*********************************
+4. Home
+*********************************/
+
+.home
+{
+	width: 100%;
+	height: 260px;
+	background: transparent;
+}
+.home_background
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+}
+.home_overlay
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #cde4f1;
+	background: linear-gradient(#FFFFFF, #cde4f1);
+	opacity: 0.9;
+}
+.home_content
+{
+	width: 100%;
+	height: 100%;
+}
+
+/*********************************
+5. Blog
+*********************************/
+
+.blog
+{
+	padding-top: 80px;
+	padding-bottom: 100px;
+	background: #FFFFFF;
+}
+.blog_posts
+{
+	width: 100%;
+	flex-wrap: wrap;
+}
+.blog_post
+{
+	width: calc((100% - 60px) / 3);
+	height: 290px;
+	margin-bottom: 30px;
+	border-radius: 5px;
+	box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
+	z-index: 0;
+	-webkit-transition: all 200ms ease;
+	-moz-transition: all 200ms ease;
+	-ms-transition: all 200ms ease;
+	-o-transition: all 200ms ease;
+	transition: all 200ms ease;
+}
+.blog_post:hover
+{
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	z-index: 1;
+}
+.blog_image
+{
+	width: 100%;
+	height: 160px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.blog_text
+{
+	padding-left: 31px;
+	padding-right: 31px;
+	padding-top: 21px;
+	padding-bottom: 30px;
+	font-size: 18px;
+	font-weight: 500;
+}
+.blog_button
+{
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	height: 48px;
+	background: #0e8ce4;
+	text-align: center;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	visibility: hidden;
+	opacity: 0;
+	-webkit-transition: all 200ms ease;
+	-moz-transition: all 200ms ease;
+	-ms-transition: all 200ms ease;
+	-o-transition: all 200ms ease;
+	transition: all 200ms ease;
+}
+.blog_button:hover
+{
+	background: #0982d7;
+}
+.blog_post:hover .blog_button
+{
+	visibility: visible;
+	opacity: 1;
+}
+.blog_button a
+{
+	display: block;
+	color: #FFFFFF;
+	line-height: 48px;
+	font-size: 18px;
+}
