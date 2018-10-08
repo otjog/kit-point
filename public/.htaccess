@@ -1,0 +1,36 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    RewriteCond %{HTTP_HOST} www.kit-point.ru
+    RewriteRule (.*) https://kit-point/$1 [R=301,L]
+
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
+    RewriteRule ^index\.php$ https://kit-point.ru/ [R=301,L]
+
+    RewriteCond %{HTTPS} !=on
+    # This checks to make sure the connection is not already HTTPS
+
+    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+    # This rule will redirect users from their original location, to the same location but using HTTPS.
+    # i.e.  http://www.example.com/foo/ to https://www.example.com/foo/
+    # The leading slash is made optional so that this will work either in httpd.conf
+    # or .htaccess context
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
