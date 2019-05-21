@@ -164,6 +164,7 @@ return [
         App\Providers\ViewComposerServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         App\Providers\PaymentServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
 
     ],
 

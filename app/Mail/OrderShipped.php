@@ -18,7 +18,8 @@ class OrderShipped extends Mailable
      *
      * @return void
      */
-    public function __construct($data){
+    public function __construct($data)
+    {
         $this->data = $data;
     }
 
@@ -27,8 +28,8 @@ class OrderShipped extends Mailable
      *
      * @return $this
      */
-    public function build(){
-        return $this
-            ->view('email.order')->with(['data' => $this->data]);
+    public function build()
+    {
+        return $this->view('email.order')->with($this->data);
     }
 }

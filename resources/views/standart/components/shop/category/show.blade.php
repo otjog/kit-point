@@ -1,8 +1,9 @@
 <div class="col-lg">
 
-    <!-- Shop Content -->
-
     <div class="shop_content">
+
+        <h1>{{$header_page}}</h1>
+
         <!--div class="shop_bar clearfix mb-3">
             <div class="shop_product_count"><span>186</span> products found</div>
             <div class="shop_sorting">
@@ -20,9 +21,9 @@
             </div>
         </div-->
 
-        @include( $template_name .'.modules.product_filter.reload.list')
+        @include( $global_data['project_data']['template_name'] .'.modules.product_filter.reload.list')
 
-        @include( $template_name .'.components.shop.product.list')
+        @include( $global_data['project_data']['template_name'] .'.components.shop.product.list')
 
     </div>
 

@@ -1,5 +1,5 @@
 @if( isset( $filtered_products ) )
-    @include( $template_name .'.components.shop.product.list', ['products' => $filtered_products])
+    @include( $global_data['project_data']['template_name'] .'.components.shop.product.list', ['products' => $filtered_products])
 @else
     {{-- Progress Bar --}}
     <div class="progress" style="display: none">
@@ -16,7 +16,6 @@
 
     {{-- Error Block --}}
     <div class="error" style="display: none">
-        <p>Не можем рассчитать стоимость доставки.
-            <br>Обратитесь к менеджеру.</p>
+        Ошибка
     </div>
 @endif

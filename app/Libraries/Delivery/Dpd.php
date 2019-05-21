@@ -53,33 +53,32 @@ class Dpd {
 
     private $geoData;
 
+    private $destinationType;
+
     public function __construct($geoData){
 
         $this->geoData = $this->prepareGeoData($geoData);
 
     }
 
-    public function getDeliveryCost($parcelParameters, $serviceTypes){
+    public function getDeliveryCost($parcelParameters, $destinationType){
 
         $data = [];
 
-        foreach($serviceTypes as $type){
+        switch($destinationType){
+            case 'toTerminal'   : $selfDelivery = true; break;
+            case 'toDoor'       : $selfDelivery = false; break;
+            default :   break;
+        }
 
-            switch($type){
-                case 'toTerminal'   : $selfDelivery = true; break;
-                case 'toDoor'       : $selfDelivery = false; break;
-                default :   break;
-            }
+        $services = $this->getServiceCost($parcelParameters, $selfDelivery);
 
-            $services = $this->getServiceCost($parcelParameters, $selfDelivery);
+        if( count($services) > 0 ){
 
-            if( count($services) > 0 ){
+            $optimalService = $this->getOptimalService($services);
 
-                $optimalService = $this->getOptimalService($services);
+            $data = $this->prepareResponse($optimalService);
 
-                $data[$type] = $this->prepareResponse($optimalService);
-
-            }
         }
 
         return $data;
@@ -133,6 +132,7 @@ class Dpd {
             'selfPickup' => true, //Доставка от терминала
             'selfDelivery' => $selfDelivery, //Доставка До терминала
             'parcel' => $parcelParameters,
+            //'declaredValue' => 1000
         ];
 
         if($serviceCode !== null){
@@ -246,7 +246,9 @@ class Dpd {
 
     private function prepareResponse($data){
 
-        $response = [];
+        $response = [
+            'type' => $this->destinationType
+        ];
 
         foreach($data as $key => $value){
             switch($key){

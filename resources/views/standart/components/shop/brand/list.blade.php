@@ -1,29 +1,21 @@
-<div class="product-list" id="product-list">
-    <div class="container">
+<div class="col-12">
+    <h1>{{$header_page}}</h1>
+    <div class="card-columns">
 
-        <h1>Запчасти для котлов</h1>
+        @foreach($brands->chunk($global_data['project_data']['components']['shop']['chunk_categories']) as $brands_row)
 
-        @if(isset($brands) && count($brands) > 0)
+            @foreach($brands_row as $key => $brand)
 
-            @foreach($brands->chunk($components['shop']['chunk_category']) as $brands_row)
+                <div class="card rounded-0">
+                    <div class="card-body px-2">
+                        <a href="{{ route( 'brands.show', $brand['name'] ) }}">
+                            <h6 class="card-title text-dark text-center"><u>{{$brand['name']}}</u></h6>
+                        </a>
 
-                <div class="card-group">
-
-                    @foreach($brands_row as $key => $brand)
-
-                        <div class="card rounded-0">
-                            <div class="card-body px-2">
-                                <a href="../brands/{{$brand->id}}">
-                                    <img
-                                            class="img-fluid mx-auto d-block"
-                                            src="{{ URL::asset('storage/img/shop/brands/'.mb_strtolower($brand->name).'-logo.png') }}">
-
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
+                    </div>
                 </div>
             @endforeach
-        @endif
+
+        @endforeach
     </div>
 </div>

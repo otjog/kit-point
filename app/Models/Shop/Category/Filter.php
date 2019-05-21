@@ -26,7 +26,8 @@ class Filter extends Model{
             'filters.id',
             'filters.alias',
             'filters.name',
-            'filters.type'
+            'filters.type',
+            'filters.expanded'
         )
             ->where('filters.active', 1)
             ->orderBy('filters.sort')
@@ -40,15 +41,21 @@ class Filter extends Model{
 
         $temporary = [];
 
-        $category_id    = $request->route()->parameters;
+        $routeData = $request->route()->parameters;
 
         $old_values     = $request->toArray();
 
-        $productsInCategory = $products->getActiveProductsFromCategoryWithFilterParameters($category_id);
+        $productsOfRoute = $products->getActiveProductsWithFilterParameters($routeData);
 
-        if( count($productsInCategory) > 0){
+        if( count($productsOfRoute) > 0){
 
             foreach($filters as $key => $filter){
+
+                if($filter['expanded']){
+                    $filter['expanded'] = 'true';
+                }else{
+                    $filter['expanded'] = 'false';
+                }
 
                 switch($filter['alias']){
 
@@ -66,7 +73,7 @@ class Filter extends Model{
                         });
 */
 
-                        $manufacturers  = $productsInCategory->pluck('manufacturer');
+                        $manufacturers  = $productsOfRoute->pluck('manufacturer');
 
                         $distinctManfs  = $manufacturers->pluck('name', 'id');
 
@@ -78,18 +85,8 @@ class Filter extends Model{
 
                         break;
 
-                    case 'brand'        :
-
-                        $brands = $productsInCategory->pluck('brands');
-
-                        $filter['values']       = $brands->flatten()->pluck('name', 'id');
-
-                        $filter['old_values']   = $this->addOldValues($old_values, $filter['alias']);
-
-                        break;
-
                     case 'price'        :
-                        $prices = $productsInCategory->pluck('price');
+                        $prices = $productsOfRoute->pluck('price');
 
                         $values = [
                             $prices->min('value'),
@@ -114,6 +111,20 @@ class Filter extends Model{
 
                         break;
 
+                    case 'category'     :
+
+                        $categories  = $productsOfRoute->pluck('category');
+
+                        $distinctCat  = $categories->pluck('name', 'id');
+
+                        $filter['values']   = $distinctCat->filter(function ($value, $key) {
+                            return $key !== '' && $value !== null;
+                        });
+
+                        $filter['old_values']   = $this->addOldValues($old_values, $filter['alias']);
+
+                        break;
+
                     default             :
                         if($filter['filter_type'] === 'slider-range'){
 
@@ -127,7 +138,7 @@ class Filter extends Model{
 
                         }else{
 
-                            $parameters = $productsInCategory->pluck('parameters');
+                            $parameters = $productsOfRoute->pluck('parameters');
 
                             $values = [];
 

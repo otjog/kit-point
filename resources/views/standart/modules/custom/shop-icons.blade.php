@@ -9,7 +9,7 @@
                     <div class="char_icon"><i class="fas fa-truck fa-2x text-primary"></i></div>
                     <div class="char_content">
                         <div class="char_title">Бесплатная доставка</div>
-                        <div class="char_subtitle">от 0 {{$components['shop']['currency']['symbol']}}</div>
+                        <div class="char_subtitle">от 0 {{$global_data['project_data']['components']['shop']['currency']['symbol']}}</div>
                         <div class="char_anchor"><a href="{{route('pages.show', 3)}}" >Подробнее о доставке</a></div>
                     </div>
                 </div>

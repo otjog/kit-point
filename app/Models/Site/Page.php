@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model{
 
+    protected $moduleMethods = [
+        'show' => 'getPageIfActive',
+    ];
+
+    public function getModuleMethods($moduleMethod)
+    {
+        return $this->moduleMethods[$moduleMethod];
+    }
+
     public function page_menus(){
         return $this->belongsToMany('App\Models\Site\PageMenu', 'page_menu_has_page')->withTimestamps();
     }
@@ -21,6 +30,37 @@ class Page extends Model{
             'pages.created_at',
             'pages.updated_at'
         )
+            ->get();
+    }
+
+    public function getActivePages(){
+        return self::select(
+            'pages.id',
+            'pages.active',
+            'pages.alias',
+            'pages.name',
+            'pages.description',
+            'pages.sort',
+            'pages.created_at',
+            'pages.updated_at'
+        )
+            ->where('active', 1)
+            ->get();
+    }
+
+    public function getActivePagesById($ids){
+        return self::select(
+            'pages.id',
+            'pages.active',
+            'pages.alias',
+            'pages.name',
+            'pages.description',
+            'pages.sort',
+            'pages.created_at',
+            'pages.updated_at'
+        )
+            ->where('active', 1)
+            ->whereIn('id', $ids)
             ->get();
     }
 

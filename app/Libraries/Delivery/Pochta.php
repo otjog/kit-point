@@ -24,6 +24,8 @@ class Pochta {
 
     private $geoData;
 
+    private $destinationType;
+
 
     public function __construct($geoData){
 
@@ -31,25 +33,17 @@ class Pochta {
 
     }
 
-    public function getDeliveryCost($parcelParameters, $serviceTypes){
+    public function getDeliveryCost($parcelParameters, $destinationType){
+
+        $this->destinationType = $destinationType;
 
         $data = [];
 
-        foreach($serviceTypes as $type){
-
-            switch($type){
-
-                case 'toTerminal' :
-                    $postalTypes = [
-                        "PARCEL_CLASS_1",
-                        "POSTAL_PARCEL",
-                    ];
-                    break;
-
-                case 'toDoor' :
-                    break;
-
-            }
+        if($destinationType === 'toTerminal'){
+            $postalTypes = [
+                "PARCEL_CLASS_1",
+                "POSTAL_PARCEL",
+            ];
 
             $services = $this->getServiceCost( $parcelParameters, $postalTypes );
 
@@ -57,12 +51,14 @@ class Pochta {
 
                 $optimalService = $this->getOptimalService($services);
 
-                $data[$type] = $this->prepareResponse($optimalService);
+                $data = $this->prepareResponse($optimalService);
 
             }
-        }
 
-        return $data;
+            return $data;
+        }else{
+            return [];
+        }
     }
 
     private function getServiceCost($parcelParameters, $postalTypes){
@@ -167,7 +163,9 @@ class Pochta {
 
     private function prepareResponse($data){
 
-        $response = [];
+        $response = [
+            'type' => $this->destinationType
+        ];
 
         foreach($data as $key => $value){
             switch($key) {
@@ -178,7 +176,7 @@ class Pochta {
                     $response['price'] = (int)($value / 100);
                     break;
                 case 'delivery-time'  :
-                    if($value->{"min-days"} !== $value->{"max-days"})
+                    if(isset($value->{"min-days"}) && $value->{"min-days"} !== $value->{"max-days"} )
                         $response['days'] = $value->{"min-days"} . '-' . $value->{"max-days"};
                     else
                         $response['days'] = $value->{"max-days"};

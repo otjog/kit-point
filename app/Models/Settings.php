@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Shop\Price\Currency;
 use App\Models\Shop\Price\Price;
+use Illuminate\Support\Facades\Cache;
 
 class Settings {
 
@@ -12,6 +13,8 @@ class Settings {
     private $currency;
 
     private $price;
+
+    public $data;
 
     public static function getInstance(){
         if (null === self::$instance) {
@@ -26,45 +29,52 @@ class Settings {
 
         $this->price = new Price();
 
-        $this->data = [
+        $this->data = config('global-data');
 
-            'template_name' => env('SITE_TEMPLATE'),
-            'info' => [
-                'email' => env('SITE_EMAIL'),
-                'phone' => env('SITE_PHONE'),
-                'address' => env('SITE_ADDRESS'),
-            ],
-            'components' => [
-                'site' => [],
-                'shop' => [
-                    'currency' =>
-                        $this->currency
-                            ->select('id', 'char_code', 'symbol')
-                            ->where('main', '1')
-                            ->first(),
-                    'price'    =>
-                        $this->price
-                            ->select('id', 'name')
-                            ->where('name', 'retail')
-                            ->first(),
-                    'pagination' => 15,
-                    'chunk_products' => 3,
-                    'chunk_categories' => 4,
-                    'filter_prefix' => 'p_'
-                ]
-            ],
-            'today' => date('Y-m-d')
-        ];
+        $this->data['global_data']['components']['shop']['currency'] =
+            Cache::rememberForever('config:general:components:shop:currency', function()  {
+                return $this->currency
+                    ->select('id', 'char_code', 'symbol')
+                    ->where('main', '1')
+                    ->first();
+            });
 
+        $this->data['global_data']['components']['shop']['price'] =
+            $this->price
+                ->select('id', 'name')
+                ->where('name', 'retail')
+                ->first();
     }
 
     private function __clone(){}
+
+    public function addParameter($name, $value){
+
+        $nameArray = explode('.', $name);
+
+        $max = count($nameArray)-1;
+        if ($max === 0) {
+            $this->data[$name] = $value;
+        } else {
+            $result = array($nameArray[$max] => $value);
+            for($i=$max-1; $i>0; $result = array($nameArray[$i--] => $result));
+
+            $this->data[$nameArray[0]] = $result;
+        }
+
+    }
+
+    public function issetParameter($path){
+        return false;
+    }
 
     public function getParameters(){
        return $this->data;
     }
 
     public function getParameter($path){
+
+        $path =  'global_data.' . $path;
 
         $data = $this->getParameters();
 
@@ -77,17 +87,19 @@ class Settings {
             if($key === 0)
                 $temporary = $data;
 
-            if($key+1 === count($pathArray) )
-                return $this->getLevel($temporary, $level);
-            else
-                $temporary = $this->getLevel($temporary, $level);
+            if(isset($temporary[$level])){
+
+                if($key+1 === count($pathArray))
+                    return $temporary[$level];
+                else
+                    $temporary = $temporary[$level];
+            } else {
+                return null;
+            }
+
+
+
         }
-
-    }
-
-    private function getLevel($array, $level){
-
-        return $array[ $level ];
 
     }
 

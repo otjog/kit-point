@@ -3,21 +3,29 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
-use App\Models\Seo\MetaTagsCreater;
 use App\Models\Shop\Order\Basket;
+use App\Models\Site\Module;
 use Illuminate\Http\Request;
 use App\Models\Shop\Category\Category;
 use App\Models\Shop\Product\Product;
 use App\Models\Settings;
+use App\Models\Site\Template;
+
 class CategoryController extends Controller{
 
     protected $categories;
 
     protected $baskets;
 
+    protected $settings;
+
+    protected $template;
+
+    protected $module;
+
     protected $data;
 
-    protected $metaTagsCreater;
+    protected $globalData;
 
     /**
      * Создание нового экземпляра контроллера.
@@ -25,22 +33,21 @@ class CategoryController extends Controller{
      * @param  Category $categories
      * @return void
      */
-    public function __construct(Category $categories, Basket $baskets, MetaTagsCreater $metaTagsCreater){
+    public function __construct(Category $categories, Basket $baskets, Template $template, Module $module){
 
-        $settings = Settings::getInstance();
+        $this->settings = Settings::getInstance();
 
-        $this->data = $settings->getParameters();
+        $this->globalData = $this->settings->getParameters();
 
-        $this->categories       = $categories;
+        $this->data =& $this->globalData['global_data'];
 
-        $this->baskets          = $baskets;
+        $this->template = $template;
 
-        $this->metaTagsCreater  = $metaTagsCreater;
+        $this->module = $module;
 
-        $this->data['template'] = [
-            'component' => 'shop',
-            'resource'  => 'category',
-        ];
+        $this->categories = $categories;
+
+        $this->baskets = $baskets;
 
     }
 
@@ -51,11 +58,15 @@ class CategoryController extends Controller{
      */
     public function index(){
 
-        $this->data['template'] ['view']        = 'list';
-        $this->data['data']     ['categories']  =  $this->categories->getCategoriesTree();
-        $this->data['data']     ['header_page'] =  'Категории';
+        $this->data['shop']['category']  =  $this->categories->getCategoriesTree();
 
-        return view( 'templates.default', $this->data);
+        $this->data['header_page'] =  'Категории';
+
+        $this->data['template'] = $this->template->getTemplateData($this->data, 'shop', 'category', 'list');
+
+        $this->data['modules'] = $this->module->getModulesData($this->data['template']['schema']);
+
+        return view( $this->data['template']['viewKey'], $this->globalData);
     }
 
     /**
@@ -91,35 +102,30 @@ class CategoryController extends Controller{
 
         $category = $this->categories->getCategory($id);
 
-        $this->data['template'] ['view']                = 'show';
-        $this->data['template'] ['sidebar']             = 'product_filter';
-        $this->data['template'] ['filter-tags']         = 'filter-tags';
-        $this->data['data']     ['category']            = $category;
-        $this->data['data']     ['children_categories'] = $this->categories->getActiveChildrenCategories($id);
-        $this->data['data']     ['header_page']         = $category[0]->name;
-        $this->data['data']     ['parameters']          = [];
-
-        $this->data['template']['custom'][] = 'shop-icons';
+        $this->data['shop']['category']            = $category;
+        $this->data['shop']['children_categories'] = $this->categories->getActiveChildrenCategories($id);
+        $this->data['shop']['parameters']          = [];
+        $this->data['header_page']         = $category[0]->name;
 
         if( count( $request->query ) > 0 ){
 
-            $parameters = $request->toArray();
+            $filterData = $request->toArray();
 
-            $parameters['category'] = $id;
+            $routeData = ['category' => $id];
 
-            $this->data['data'] ['products'] = $products->getFilteredProducts($parameters);
+            $this->data['shop']['products'] = $products->getFilteredProducts($routeData, $filterData);
 
-            $this->data['data'] ['parameters'] = $request->toArray();
+            $this->data['shop']['parameters'] = $request->toArray();
 
         }else{
-
-            $this->data['data'] ['products'] = $products->getActiveProductsFromCategory($id);
-
+            $this->data['shop']['products'] = $products->getActiveProductsFromCategory($id);
         }
 
-        $this->data['meta'] = $this->metaTagsCreater->getMetaTags($this->data);
+        $this->data['template'] = $this->template->getTemplateData($this->data, 'shop', 'category', 'show', $id);
 
-        return view( 'templates.default', $this->data);
+        $this->data['modules'] = $this->module->getModulesData($this->data['template']['schema']);
+
+        return view( $this->data['template']['viewKey'], $this->globalData);
     }
 
     /**

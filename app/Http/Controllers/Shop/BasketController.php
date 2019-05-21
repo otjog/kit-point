@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Shop;
 
 use App\Models\Shop\Product\Product;
 use App\Models\Shop\Order\Basket;
+use App\Models\Site\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Settings;
+use App\Models\Site\Module;
 
 class BasketController extends Controller{
 
@@ -14,18 +16,28 @@ class BasketController extends Controller{
 
     protected $data;
 
-    public function __construct(Basket $baskets){
+    protected $globalData;
 
-        $settings = Settings::getInstance();
+    protected $template;
 
-        $this->data = $settings->getParameters();
+    protected $module;
+
+    protected $settings;
+
+    public function __construct(Basket $baskets, Template $template, Module $module){
+
+        $this->settings = Settings::getInstance();
+
+        $this->globalData = $this->settings->getParameters();
+
+        $this->data =& $this->globalData['global_data'];
+
+        $this->template = $template;
+
+        $this->module = $module;
 
         $this->baskets = $baskets;
 
-        $this->data['template'] = [
-            'component' => 'shop',
-            'resource'  => 'basket'
-        ];
     }
 
     /**
@@ -80,19 +92,23 @@ class BasketController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $products, $token){
+    public function edit($token){
 
-        $basket = $this->baskets->getActiveBasketWithProductsAndRelations( $products, $token );
+        $products = new Product();
+
+        $basket = $this->baskets->getActiveBasketWithProductsAndRelations($token);
 
         if($basket->order_id === null){
 
-            $this->data['template']['view'] = 'edit';
+            $this->data['shop']['basket']   = $basket;
 
-            $this->data['data']['basket']   = $basket;
+            $this->data['shop']['parcels'] = $products->getParcelParameters($basket->products);
 
-            $this->data['data']['parcels'] = $products->getParcelParameters($basket->products);
+            $this->data['template'] = $this->template->getTemplateData($this->data, 'shop', 'basket', 'edit');
 
-            return view( 'templates.default', $this->data);
+            $this->data['modules'] = $this->module->getModulesData($this->data['template']['schema']);
+
+            return view( $this->data['template']['viewKey'], $this->globalData);
 
         } else {
 
@@ -109,9 +125,9 @@ class BasketController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $token){
-
-        $this->baskets->updateBasket( $request );
+    public function update(Request $request)
+    {
+        $this->baskets->updateBasket($request);
 
         return back();
     }
@@ -125,29 +141,6 @@ class BasketController extends Controller{
     public function destroy($id)
     {
         //
-    }
-
-    private function changeQuantityInArray($products){
-
-        $newProducts = [];
-
-        foreach ($products as $key => $product){
-
-            if( substr( $key, 0, 1 ) !== '_'){
-
-                $product['quantity'] = (int)$product['quantity'];
-
-                if($product['quantity'] > 0){
-
-                    $newProducts[] = $product;
-
-                }
-
-            }
-
-        }
-
-        return $newProducts;
     }
 
 }

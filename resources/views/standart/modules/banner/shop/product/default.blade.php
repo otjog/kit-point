@@ -16,10 +16,10 @@
 
                         @if( isset($banner->data->price['sale']) && $banner->data->price['sale'] > 0)
                             <span>
-                            {{$banner->data->price['value'] + $banner->data->price['sale']}}<small>{{$components['shop']['currency']['symbol']}}</small>
+                            {{$banner->data->price['value'] + $banner->data->price['sale']}}<small>{{$global_data['project_data']['components']['shop']['currency']['symbol']}}</small>
                         </span>
                         @endif
-                        {{$banner->data->price['value']}}<small>{{$components['shop']['currency']['symbol']}}</small>
+                        {{$banner->data->price['value']}}<small>{{$global_data['project_data']['components']['shop']['currency']['symbol']}}</small>
                     </div>
                     <div class="banner_product_name ">{{$banner->data->name}}</div>
                     <div class="button banner_button"><a href="{{ route('products.show', $banner->data->id) }}">Купить сейчас</a></div>

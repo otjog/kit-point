@@ -49,35 +49,36 @@ class Cdek {
 
     private $geoData;
 
+    private $destinationType;
+
     public function __construct($geoData){
 
         $this->geoData = $this->prepareGeoData($geoData);
 
     }
 
-    public function getDeliveryCost($parcelParameters, $serviceTypes){
+    public function getDeliveryCost($parcelParameters, $destinationType){
+
+        $this->destinationType = $destinationType;
 
         $parcelParameters = $this->getParcelParameters($parcelParameters);
 
         $data = [];
 
-        foreach($serviceTypes as $type){
+        switch($destinationType){
+            case 'toTerminal'   :   $tariffs = ['136', '5', '10', '15', '62', '63']; break;
+            case 'toDoor'       :   $tariffs = ['137', '12', '16']; break;
+            default :   break;
+        }
 
-            switch($type){
-                case 'toTerminal'   :   $tariffs = ['136', '5', '10', '15', '62', '63']; break;
-                case 'toDoor'       :   $tariffs = ['137', '12', '16']; break;
-                default :   break;
-            }
+        $services = $this->getServiceCost($parcelParameters, $tariffs);
 
-            $services = $this->getServiceCost($parcelParameters, $tariffs);
+        if( count($services) > 0 ){
 
-            if( count($services) > 0 ){
+            $optimalService = $services[0];
 
-                $optimalService = $services[0];
+            $data = $this->prepareResponse($optimalService);
 
-                $data[$type] = $this->prepareResponse($optimalService);
-
-            }
         }
 
         return $data;
@@ -229,7 +230,9 @@ class Cdek {
 
     private function prepareResponse($data){
 
-        $response = [];
+        $response = [
+            'type' => $this->destinationType
+        ];
 
         foreach($data as $key => $value){
             switch($key){

@@ -3,10 +3,30 @@
 namespace App\Models\Shop\Category;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Settings;
 
 class Category extends Model{
 
+    protected $moduleMethods = [
+        'index' => 'getCategoriesTree',
+    ];
+
+    public function getModuleMethods($moduleMethod)
+    {
+        return $this->moduleMethods[$moduleMethod];
+    }
+
     protected $fillable = ['active', 'name'];
+
+    protected $settings;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->settings = Settings::getInstance();
+
+    }
 
     public function products(){
         return $this->hasMany('App\Models\Shop\Product\Product');
@@ -18,6 +38,7 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
+            'img',
             'url'
             )
             ->orderBy('name')
@@ -30,9 +51,25 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
+            'img',
             'url'
         )
             ->where('active', 1)
+            ->orderBy('sort')
+            ->get();
+    }
+
+    public function getActiveCategoriesById($ids){
+        return self::select(
+            'id',
+            'parent_id',
+            'name',
+            'original_name',
+            'img',
+            'url'
+        )
+            ->where('active', 1)
+            ->whereIn('id', $ids)
             ->orderBy('sort')
             ->get();
     }
@@ -43,6 +80,7 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
+            'img',
             'url'
         )
             ->where('parent_id', $parent_id)
@@ -56,6 +94,7 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
+            'img',
             'url'
         )
             ->where('active', 1)
@@ -70,6 +109,7 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
+            'img',
             'url'
         )
             ->where('id', $id)
@@ -83,6 +123,7 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
+            'img',
             'url'
         )
             ->where('id', $id)
@@ -92,6 +133,11 @@ class Category extends Model{
     }
 
     public function getCategoriesTree($parent_id = 0){
+
+        if($this->settings->getParameter('models.category.categoriesTree')){
+            return $this->settings->getParameter('models.category.categoriesTree');
+        }
+
         /**
          * http://forum.php.su/topic.php?forum=71&topic=4385
          */
@@ -104,6 +150,7 @@ class Category extends Model{
             $cur['id'] = $category['id'];
             $cur['parent_id'] = $category['parent_id'];
             $cur['name'] = $category['name'];
+            $cur['img'] = $category['img'];
 
             if($category['parent_id'] == $parent_id){ /* id категории, с которой начинается дерево */
                 $tree[$category['id']] =& $cur;
@@ -112,7 +159,12 @@ class Category extends Model{
                 $allCat[$category['parent_id']]['children'][$category['id']] =& $cur;
             }
         }
-        return collect($tree);
+
+        $result = collect($tree);
+
+        $this->settings->addParameter('models.category.categoriesTree', $result);
+
+        return $result;
     }
 
 }

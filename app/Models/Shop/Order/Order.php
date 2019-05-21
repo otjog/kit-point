@@ -78,34 +78,6 @@ class Order extends Model{
 
             $order[0]->relations['products'] = $products->getProductsFromOrder( $order[0]->id );
 
-            foreach( $order[0]->products as $key => $product){
-
-                $attributes = explode(',', $product['pivot']['order_attributes']);
-
-                $parameters = $product->basket_parameters;
-
-                $temporary = [];
-
-                foreach($attributes as $attribute){
-
-                    foreach($parameters as $parameter){
-                        if($parameter->pivot->id === (int)$attribute){
-                            $temporary[] = $parameter;
-                        }
-                    }
-
-                }
-
-                $product['pivot']['order_attributes_collection'] = $temporary;
-
-                $product->quantity = $product['pivot']['quantity'];
-
-            }
-
-            $order[0]->total = $this->getTotal($order[0]->products);
-
-            $order[0]->count_scu = count((array)$order[0]->products);
-
             return $order[0];
 
         }else{
@@ -147,7 +119,7 @@ class Order extends Model{
 
         $basket->save();
 
-        event(new NewOrder($order));
+        event(new NewOrder($order->id));
 
         return $order;
     }

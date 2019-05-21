@@ -1,32 +1,28 @@
 
-    @if(isset( $data['header_page'] ))
-        @include( $template_name .'.modules.home.default', $data)
-    @endif
-
     @if(isset( $template['banner'] ))
-        @include( $template_name .'.modules.banner.default')
+        @include( $global_data['project_data']['template_name'] .'.modules.banner.default')
     @endif
 
     @if(isset( $template['component'] ))
-        <div class="{{$template['resource']}}">
+        <div class="{{$template['resource']}} py-3">
             <div class="container">
                 <div class="row">
 
                     @if(isset($template['sidebar']))
-                        @include( $template_name .'.modules.'.$template['sidebar'].'.default', $data)
+                        @include( $global_data['project_data']['template_name'] .'.modules.'.$template['sidebar'].'.default', $data)
                     @endif
 
-                    @include( $template_name .'.components.'.$template['component'].'.'.$template['resource'].'.'.$template['view'], $data)
+                    @include( $global_data['project_data']['template_name'] .'.components.'.$template['component'].'.'.$template['resource'].'.'.$template['view'], $data)
 
                 </div>
             </div>
         </div>
     @endif
 
-    @if(isset( $template['custom'] ) && count( $template['custom'] ) > 0)
-        @foreach($template['custom'] as $module)
+    @if(isset( $template['modules'] ) && count( $template['modules'] ) > 0)
+        @foreach($template['modules'] as $folder => $file)
 
-            @include( $template_name .'.modules.custom.'.$module)
+            @include( $global_data['project_data']['template_name'] .'.modules.' . $folder . '.' . $file)
 
         @endforeach
     @endif
