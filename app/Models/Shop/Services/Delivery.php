@@ -7,139 +7,120 @@ use Illuminate\Database\Eloquent\Model;
 use App\Libraries\Delivery\Dpd;
 use App\Libraries\Delivery\Cdek;
 use App\Libraries\Delivery\Pochta;
+use App\Libraries\Delivery\CustomDelivery;
+use App\Libraries\Helpers\DeclesionsOfWord;
 use App\Models\Geo\GeoData;
 
-class Delivery extends Model{
+class Delivery extends Model
+{
+    protected $shipments;
 
-    private $geoData;
+    protected $geoData;
 
-    private $services;
-
-    private $shipments;
-
-    private $serviceTypes = [ 'toTerminal', 'toDoor' ];
-
-    public function __construct(array $attributes = []){
-
+    public function __construct(array $attributes = [])
+    {
         parent::__construct($attributes);
 
         $this->shipments = new Shipment();
 
-        $this->services = $this->shipments->getDeliveryServices();
+        $geo = new GeoData();
 
-        $geoData = new GeoData();
-
-        $this->geoData = $geoData->getGeoData();
+        $this->geoData = $geo->getGeoData();
     }
 
-    public function getPrices($parcelParameters){
+    public function getPrices($parcel, $shipmentServiceAlias, $destinationType, $productIds){
 
-            $data = [
-                'costs' => [],
-            ];
+        $shipmentService = $this->shipments->getShipmentServiceByAlias($shipmentServiceAlias);
 
-            foreach($this->services as $services){
+        $parcelParameters = $this->getDeliveryDataFromRequest($parcel);
 
-                switch($services->alias){
+        switch ($shipmentServiceAlias) {
 
-                    case 'dpd'      :
-                        $serviceObj = new Dpd( $this->geoData );
-                        $serviceTypes = $this->serviceTypes;
-                        break;
+            case 'dpd'      :
+                $serviceObj = new Dpd($this->geoData);
+                break;
 
-                    case 'cdek'     :
-                        $serviceObj = new Cdek( $this->geoData );
-                        $serviceTypes = $this->serviceTypes;
-                        break;
+            case 'cdek'     :
+                $serviceObj = new Cdek($this->geoData);
+                break;
 
-                    case 'pochta'   :
-                        $serviceObj = new Pochta( $this->geoData );
-                        $serviceTypes = ['toTerminal'];
-                        break;
+            case 'pochta'   :
+                $serviceObj = new Pochta($this->geoData);
+                break;
 
-                    default : break; //todo сделать выход из foreach
+            case 'custom'   :
+                $serviceObj = new CustomDelivery($this->geoData, $productIds);
+                break;
 
-                }
-
-                $costs = $serviceObj->getDeliveryCost($parcelParameters, $serviceTypes);
-
-                if( count($costs) > 0 ){
-
-                    $data['costs'][$services->alias]  = $costs;
-
-                    $data['shipments'][$services->alias] = $services;
-                }
-
-            }
-
-            if( count( $data['costs']) > 0 ){
-                $data['_bestOffer'] = $this->pullBestPrice($data);
-            }else{
-                $data['shipments'] = $this->shipments->getDefaultShipments();
-            }
-
-            $data['_geo'] = $this->geoData;
-
-            return $data;
-    }
-
-    public function getBestPrice($parcelParameters){
-
-        return $this->getPrices($parcelParameters);
-    }
-
-    public function getPoints(){
-
-        $data = [];
-
-        foreach($this->services as ['alias' => $serviceAlias]){
-
-            switch($serviceAlias){
-
-                case 'dpd'  : $serviceObj = new Dpd( $this->geoData ); break;
-
-                case 'cdek' : $serviceObj = new Cdek( $this->geoData ); break;
-
-            }
-
-            $data['points'][$serviceAlias] = $serviceObj->getPointsInCity();
+            default : break; //todo сделать выход из foreach
 
         }
 
-        $data['_geo'] = $this->geoData;
+        $data = $serviceObj->getDeliveryCost($parcelParameters, $destinationType);
+
+        if ( count($data) > 0 ) {
+
+            $data['declision'] = $this->getDeclisionOfDays($data['days']);
+
+            $shipmentService[0]->offer = $data;
+
+        }
+
+        return $shipmentService[0];
+
+    }
+
+    public function getPoints($shipmentServiceAlias)
+    {
+        $data = [];
+
+        $serviceObj = null;
+
+        switch ($shipmentServiceAlias) {
+
+            case 'dpd'  : $serviceObj = new Dpd( $this->geoData ); break;
+
+            case 'cdek' : $serviceObj = new Cdek( $this->geoData ); break;
+        }
+
+        if ($serviceObj !== null) {
+            $data['points'][$shipmentServiceAlias] = $serviceObj->getPointsInCity();
+        }
 
         return $data;
     }
 
-    private function pullBestPrice($data){
+    public function getDeliveryDataFromRequest($data)
+    {
+        if (count($data) > 0) {
 
-            $offers = [];
+            $parcels = [];
 
-            foreach($data['costs'] as $company => $parameters){
+            foreach ($data as $name => $params) {
 
-                foreach($parameters as $delTo => $cost){
+                $arr = explode('|', $params);
 
-                    $cost['company']    = $company;
+                foreach ($arr as $key => $param) {
 
-                    $cost['deliveryTo'] = $delTo;
-
-                    $offers[] = $cost;
+                    $parcels[$key][$name] = $param;
 
                 }
-
             }
-
-            $cost = array_column($offers, 'price');
-
-            $days = array_column($offers, 'days');
-
-            array_multisort(
-                $cost, SORT_ASC, SORT_NUMERIC,
-                $days, SORT_ASC, SORT_NUMERIC,
-                $offers
-            );
-
-            return array_shift($offers);
         }
 
+        return $parcels;
+
+    }
+
+    private function getDeclisionOfDays($days)
+    {
+        $daysArray = explode('-', $days);
+
+        if (count($daysArray) > 1)
+            $maxDay = (int)$daysArray[1];
+        else
+            $maxDay = (int)$daysArray[0];
+
+        return DeclesionsOfWord::make($maxDay, ['день', 'дня', 'дней']);
+    }
 }

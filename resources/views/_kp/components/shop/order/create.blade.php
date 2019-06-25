@@ -1,5 +1,11 @@
-<div class="container">
+@extends('_kp.index')
 
+@php
+    $basket =& $global_data['shop']['basket'];
+    $payments =& $global_data['shop']['payments'];
+@endphp
+
+@section('component')
 
     {{-- ALERT --}}
     @if (session('status'))
@@ -27,6 +33,7 @@
                             'height'    => '',
                             'quantity'  => ''
                         ];
+                        $productIds = '';
                 //todo расчет суммы корзины и параметров посылки расчитывать в моделях, а не во views
 
                     @endphp
@@ -47,13 +54,16 @@
 
                             foreach($parcels as $param => $value){
                             //todo сделать дефолтные значения, для отсутствующих параметров
-
                                 if( $parcels[$param] !== ''){
                                      $parcels[$param] .= '|';
                                 }
-
                                 $parcels[$param] .= $product[$param];
                             }
+
+                            if($productIds !== ''){
+                                $productIds .= '|';
+                            }
+                            $productIds .= $product->id;
 
                         @endphp
                     @endforeach
@@ -65,12 +75,6 @@
                 </ul>
 
             </div>
-
-            <form id="delivery-form">
-                @foreach($parcels as $param => $value)
-                    <input type="hidden" name="{{$param}}" value="{{$value}}">
-                @endforeach
-            </form>
 
         @endif
 
@@ -169,8 +173,10 @@
 
                 <hr class="mb-4">
 
+                {{-- PAY & SHIPMENT --}}
                 <div class="row">
 
+                    {{-- PAY --}}
                     @if( isset( $payments ) && count( $payments ) > 0 )
 
                         <div class="col-lg-12">
@@ -183,7 +189,7 @@
                                     @foreach( $payments_row as $payment)
                                         <div class="col-lg-{{12 / 3}} form-check form-check-inline mb-3 mr-0">
                                             <div class="custom-control custom-radio mx-3">
-                                                <input id="payment_{{ $payment->id }}" name="payment_id" value="{{ $payment->id }}" type="radio" class="custom-control-input" required="">
+                                                <input id="payment_{{ $payment->id }}" name="payment_id" value="{{ $payment->id }}" type="radio" class="custom-control-input" >
                                                 <label class="custom-control-label" for="payment_{{ $payment->id }}">{{ $payment->name }}</label>
                                             </div>
                                         </div>
@@ -194,23 +200,32 @@
                         </div>
                     @endif
 
+                    {{-- SHIPMENT --}}
+                    @if(isset($global_data['modules']['shop.order.shipment.index']))
+                        @php $module['template'] = 'order'; @endphp
+                        @include(
+                            $global_data['template']['name']. '.modules.shop.shipment.index',
+                                [
+                                    'shipment' => $global_data['modules']['shop.order.shipment.index'],
+                                    'module' => $module
+                                ]
+                        )
+                    @endif
 
-                    <div class="col-lg-12">
 
-                        <h4 class="mb-3 text-center">Способ доставки</h4>
+                </div>
 
-                        <div id="delivery-offers" class="order-4 my-4" data-component="shop|order">
-
-                            @include( $template_name .'.modules.delivery.reload.offers')
-
-                        </div>
-
+                {{-- COMMENT --}}
+                <div class="mb-3">
+                    <label for="comment">Ваши пожелания</label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="comment" name="comment"></textarea>
                     </div>
-
                 </div>
 
                 <hr class="mb-4">
 
+                {{-- AGREEMENT --}}
                 <div class="form-group">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="agreeTerms" required>
@@ -228,4 +243,5 @@
         </div>
 
     </div>
-</div>
+
+@endsection

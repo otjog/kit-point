@@ -5,8 +5,12 @@
 // Variables
 @import "variables";
 
-// Bootstrap
+//For All Templates
 @import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-free/css/all';
+
+//
+@import '../templates/_kp/css/app';
 
 .navbar-laravel {
   background-color: #fff;

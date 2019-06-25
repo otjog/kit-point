@@ -1,1 +1,1 @@
-@include( $template_name . '.index' )
+@include( $global_data['project_data']['template_name'] . '.index' )

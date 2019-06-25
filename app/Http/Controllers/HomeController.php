@@ -3,29 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Settings;
+use App\Models\Site\Module;
+use App\Models\Site\Template;
 
 class HomeController extends Controller{
 
-    protected $categories;
+    protected $settings;
 
-    protected $data;
-
-    public function __construct(){
-
-        $settings = Settings::getInstance();
-
-        $this->data = $settings->getParameters();
-
-        $this->data['template'] = [];
+    public function __construct()
+    {
+        $this->settings = Settings::getInstance();
     }
 
-    public function index(){
+    public function index()
+    {
+        $globalData = $this->settings->getParametersForController([],'home');
 
-        $this->data['template'] ['banner']  = 'default';
-
-        $this->data['template'] ['custom'][]  = 'shop-icons';
-
-        return view( 'templates.default', $this->data);
+        return view($globalData['template']['name'] . '.index', ['global_data' => $globalData]);
     }
 
 }

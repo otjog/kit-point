@@ -4,14 +4,17 @@ namespace App\Models;
 
 use App\Models\Shop\Price\Currency;
 use App\Models\Shop\Price\Price;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Geo\GeoData;
+use App\Models\Site\Template;
+use App\Models\Site\Metatags;
+use App\Models\Site\Module;
 
 class Settings {
 
     private static $instance = null;
 
-    private $currency;
-
-    private $price;
+    public $data;
 
     public static function getInstance(){
         if (null === self::$instance) {
@@ -20,53 +23,75 @@ class Settings {
         return self::$instance;
     }
 
-    private function __construct(){
+    private function __construct()
+    {
+        $this->data = config('global-data');
 
-        $this->currency = new Currency();
+        /* Add Currency */
+        $currency = new Currency();
 
-        $this->price = new Price();
+        $this->data['components']['shop']['currency'] =
+            Cache::rememberForever('config:general:components:shop:currency', function() use($currency) {
+                return $currency
+                    ->select('id', 'char_code', 'symbol')
+                    ->where('main', '1')
+                    ->first();
+            });
+        /* End Currency */
 
-        $this->data = [
+        /* Add Price */
+        $price = new Price();
 
-            'template_name' => env('SITE_TEMPLATE'),
-            'info' => [
-                'email' => env('SITE_EMAIL'),
-                'phone' => env('SITE_PHONE'),
-                'address' => env('SITE_ADDRESS'),
-            ],
-            'components' => [
-                'site' => [],
-                'shop' => [
-                    'currency' =>
-                        $this->currency
-                            ->select('id', 'char_code', 'symbol')
-                            ->where('main', '1')
-                            ->first(),
-                    'price'    =>
-                        $this->price
-                            ->select('id', 'name')
-                            ->where('name', 'retail')
-                            ->first(),
-                    'pagination' => 15,
-                    'chunk_products' => 3,
-                    'chunk_categories' => 4,
-                    'filter_prefix' => 'p_'
-                ]
-            ],
-            'today' => date('Y-m-d')
-        ];
+        $this->data['components']['shop']['price'] =
+            $price
+                ->select('id', 'name')
+                ->where('name', 'retail')
+                ->first();
+        /* End Price */
 
     }
 
     private function __clone(){}
 
-    public function getParameters(){
-       return $this->data;
+    public function addParameter($name, $value)
+    {
+        $nameArray = explode('.', $name);
+
+        $max = count($nameArray)-1;
+
+        if ($max === 0) {
+            $this->data[$name] = $value;
+        } else {
+            $result = array($nameArray[$max] => $value);
+            for($i=$max-1; $i>0; $result = array($nameArray[$i--] => $result));
+
+            $this->data[$nameArray[0]] = $result;
+        }
     }
 
-    public function getParameter($path){
+    public function pushArrayParameters($addData)
+    {
+        $this->data = $this->getParameters();
 
-        $data = $this->getParameters();
+        return array_merge($this->data, $addData);
+    }
+
+    public function getParameters()
+    {
+        /* Add Geo */
+        $geoData = new GeoData();
+
+        $this->data['geo'] = $geoData->getGeoData();
+        /* End Geo */
+
+        return $this->data;
+    }
+
+    public function getParameter($path)
+    {
+        if ($this->data === null) {
+            $this->data = $this->getParameters();
+        }
 
         $pathArray = explode('.', $path);
 
@@ -75,20 +100,39 @@ class Settings {
         foreach( $pathArray as $key => $level ){
 
             if($key === 0)
-                $temporary = $data;
+                $temporary = $this->data;
 
-            if($key+1 === count($pathArray) )
-                return $this->getLevel($temporary, $level);
-            else
-                $temporary = $this->getLevel($temporary, $level);
+            if(isset($temporary[$level])){
+
+                if($key+1 === count($pathArray))
+                    return $temporary[$level];
+                else
+                    $temporary = $temporary[$level];
+            } else {
+                return null;
+            }
+
         }
-
     }
 
-    private function getLevel($array, $level){
+    public function getParametersForController($data, $component, $model=null, $view=null, $id=null)
+    {
+        /* Add Template */
+        $template = new Template();
+        $this->data['template'] = $template->getTemplateData($component, $model, $view, $id);
+        /* End Template */
 
-        return $array[ $level ];
+        /* Add Metatags */
+        $metatags = new Metatags();
+        $this->data['template']['metatags'] = $metatags->getTagsForPage($this->data);
+        /* End Metatags */
 
+        /* Add Modules */
+        $module = new Module();
+        $this->data['modules'] = $module->getModulesData($this->data['template']['schema']);
+        /* End Modules */
+
+        return $this->pushArrayParameters($data);
     }
 
 }

@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shop\Order\Basket;
+use App\Models\Site\Module;
+use App\Models\Site\Template;
 use Illuminate\Http\Request;
 use App\Models\Shop\Product\Product;
-use App\Models\Seo\MetaTagsCreater;
 use App\Models\Settings;
+use App\Models\Site\Photo360;
+
 class ProductController extends Controller{
 
     protected $products;
 
-    protected $baskets;
-
-    protected $data;
-
-    protected $metaTagsCreater;
+    protected $settings;
 
     /**
      * Создание нового экземпляра контроллера.
@@ -24,50 +23,11 @@ class ProductController extends Controller{
      * @param  Product $products
      * @return void
      */
-    public function __construct(Product $products, Basket $baskets, MetaTagsCreater $metaTagsCreater ){
-
-        $settings = Settings::getInstance();
-
-        $this->data = $settings->getParameters();
-
+    public function __construct(Product $products)
+    {
         $this->products = $products;
 
-        $this->baskets = $baskets;
-
-        $this->metaTagsCreater = $metaTagsCreater;
-
-        $this->data['template'] = [
-            'component' => 'shop',
-            'resource'  => 'product'
-        ];
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request){
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(){
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request){
-        //
+        $this->settings = Settings::getInstance();
     }
 
     /**
@@ -76,49 +36,17 @@ class ProductController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
-
-        $this->data['template']['view'] = 'show';
-
-        $this->data['template']['custom'][] = 'shop-icons';
-
-        $this->data['data']['product']  = $this->products->getActiveProduct($id);
-
-        $this->data['meta'] = $this->metaTagsCreater->getMetaTags($this->data);
-
-        return view( 'templates.default', $this->data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id){
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function show($id)
     {
-        //
-    }
+        $photo360 = new Photo360();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id){
-        //
+        $data['shop']['product'] = $this->products->getActiveProduct($id);
+
+        $data['photo360'] = $photo360->getPhotos($data['shop']['product']['scu']);
+
+        $globalData = $this->settings->getParametersForController($data,'shop', 'product', 'show', $id);
+
+        return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
 
 }

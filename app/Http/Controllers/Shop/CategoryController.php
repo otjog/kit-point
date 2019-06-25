@@ -3,21 +3,19 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
-use App\Models\Seo\MetaTagsCreater;
 use App\Models\Shop\Order\Basket;
+use App\Models\Site\Module;
 use Illuminate\Http\Request;
 use App\Models\Shop\Category\Category;
 use App\Models\Shop\Product\Product;
 use App\Models\Settings;
+use App\Models\Site\Template;
+
 class CategoryController extends Controller{
 
     protected $categories;
 
-    protected $baskets;
-
-    protected $data;
-
-    protected $metaTagsCreater;
+    protected $settings;
 
     /**
      * Создание нового экземпляра контроллера.
@@ -25,22 +23,12 @@ class CategoryController extends Controller{
      * @param  Category $categories
      * @return void
      */
-    public function __construct(Category $categories, Basket $baskets, MetaTagsCreater $metaTagsCreater){
+    public function __construct(Category $categories)
+    {
+        $this->settings = Settings::getInstance();
 
-        $settings = Settings::getInstance();
+        $this->categories = $categories;
 
-        $this->data = $settings->getParameters();
-
-        $this->categories       = $categories;
-
-        $this->baskets          = $baskets;
-
-        $this->metaTagsCreater  = $metaTagsCreater;
-
-        $this->data['template'] = [
-            'component' => 'shop',
-            'resource'  => 'category',
-        ];
 
     }
 
@@ -49,34 +37,15 @@ class CategoryController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-
-        $this->data['template'] ['view']        = 'list';
-        $this->data['data']     ['categories']  =  $this->categories->getCategoriesTree();
-        $this->data['data']     ['header_page'] =  'Категории';
-
-        return view( 'templates.default', $this->data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function index()
     {
-        //
-    }
+        $data['shop']['category']  =  $this->categories->getCategoriesTree();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $data['header_page'] =  'Категории';
+
+        $globalData = $this->settings->getParametersForController($data, 'shop', 'category', 'list');
+
+        return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
 
     /**
@@ -87,70 +56,34 @@ class CategoryController extends Controller{
      * @param  int  $id
      * @return array
      */
-    public function show(Request $request, Product $products, $id){
-
+    public function show(Request $request, Product $products, $id)
+    {
         $category = $this->categories->getCategory($id);
 
-        $this->data['template'] ['view']                = 'show';
-        $this->data['template'] ['sidebar']             = 'product_filter';
-        $this->data['template'] ['filter-tags']         = 'filter-tags';
-        $this->data['data']     ['category']            = $category;
-        $this->data['data']     ['children_categories'] = $this->categories->getActiveChildrenCategories($id);
-        $this->data['data']     ['header_page']         = $category[0]->name;
-        $this->data['data']     ['parameters']          = [];
+        $data['shop']['category']           = $category;
+        $data['shop']['childrenCategories'] = $this->categories->getActiveChildrenCategories($id);
+        $data['shop']['parameters']         = [];
+        $data['header_page']                = $category[0]->name;
 
-        $this->data['template']['custom'][] = 'shop-icons';
+        //todo - продумать функционал для вывода во views component/shop/category/show товары из вложенных категории данной категории
 
-        if( count( $request->query ) > 0 ){
+        if ( count( $request->query ) > 0 ) {
 
-            $parameters = $request->toArray();
+            $filterData = $request->toArray();
 
-            $parameters['category'] = $id;
+            $routeData = ['category' => $id];
 
-            $this->data['data'] ['products'] = $products->getFilteredProducts($parameters);
+            $data['shop']['products'] = $products->getFilteredProducts($routeData, $filterData);
 
-            $this->data['data'] ['parameters'] = $request->toArray();
+            $data['shop']['parameters'] = $request->toArray();
 
-        }else{
-
-            $this->data['data'] ['products'] = $products->getActiveProductsFromCategory($id);
-
+        } else {
+            $data['shop']['products'] = $products->getActiveProductsFromCategory($id);
         }
 
-        $this->data['meta'] = $this->metaTagsCreater->getMetaTags($this->data);
+        $globalData = $this->settings->getParametersForController($data, 'shop', 'category', 'show', $id);
 
-        return view( 'templates.default', $this->data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id){
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id){
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id){
-        //
+        return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
 
 }

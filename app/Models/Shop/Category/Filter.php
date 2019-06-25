@@ -2,12 +2,20 @@
 
 namespace App\Models\Shop\Category;
 
-use http\Env\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop\Product\Product;
 use App\Models\Settings;
 
 class Filter extends Model{
+
+    protected $moduleMethods = [
+        'show' => 'getActiveFiltersWithParameters',
+    ];
+
+    public function getModuleMethods($moduleMethod)
+    {
+        return $this->moduleMethods[$moduleMethod];
+    }
 
     protected $prefix;
 
@@ -20,35 +28,44 @@ class Filter extends Model{
 
     }
 
-    public function getActiveFiltersWithParameters( $request, Product $products){
+    public function getActiveFiltersWithParameters(){
+
+        $products = new Product();
 
         $filters =  self::select(
             'filters.id',
             'filters.alias',
             'filters.name',
-            'filters.type'
+            'filters.type',
+            'filters.expanded'
         )
             ->where('filters.active', 1)
             ->orderBy('filters.sort')
             ->get();
 
-        return $this->getParametersForFilters($request, $products, $filters);
+        return $this->getParametersForFilters($products, $filters);
 
     }
 
-    public function getParametersForFilters( $request, Product $products, $filters ){
+    public function getParametersForFilters(Product $products, $filters ){
 
         $temporary = [];
 
-        $category_id    = $request->route()->parameters;
+        $routeData = request()->route()->parameters;
 
-        $old_values     = $request->toArray();
+        $old_values     = request()->toArray();
 
-        $productsInCategory = $products->getActiveProductsFromCategoryWithFilterParameters($category_id);
+        $productsOfRoute = $products->getActiveProductsWithFilterParameters($routeData);
 
-        if( count($productsInCategory) > 0){
+        if( count($productsOfRoute) > 0){
 
             foreach($filters as $key => $filter){
+
+                if($filter['expanded']){
+                    $filter['expanded'] = 'true';
+                }else{
+                    $filter['expanded'] = 'false';
+                }
 
                 switch($filter['alias']){
 
@@ -66,7 +83,7 @@ class Filter extends Model{
                         });
 */
 
-                        $manufacturers  = $productsInCategory->pluck('manufacturer');
+                        $manufacturers  = $productsOfRoute->pluck('manufacturer');
 
                         $distinctManfs  = $manufacturers->pluck('name', 'id');
 
@@ -78,18 +95,8 @@ class Filter extends Model{
 
                         break;
 
-                    case 'brand'        :
-
-                        $brands = $productsInCategory->pluck('brands');
-
-                        $filter['values']       = $brands->flatten()->pluck('name', 'id');
-
-                        $filter['old_values']   = $this->addOldValues($old_values, $filter['alias']);
-
-                        break;
-
                     case 'price'        :
-                        $prices = $productsInCategory->pluck('price');
+                        $prices = $productsOfRoute->pluck('price');
 
                         $values = [
                             $prices->min('value'),
@@ -114,6 +121,20 @@ class Filter extends Model{
 
                         break;
 
+                    case 'category'     :
+
+                        $categories  = $productsOfRoute->pluck('category');
+
+                        $distinctCat  = $categories->pluck('name', 'id');
+
+                        $filter['values']   = $distinctCat->filter(function ($value, $key) {
+                            return $key !== '' && $value !== null;
+                        });
+
+                        $filter['old_values']   = $this->addOldValues($old_values, $filter['alias']);
+
+                        break;
+
                     default             :
                         if($filter['filter_type'] === 'slider-range'){
 
@@ -127,7 +148,7 @@ class Filter extends Model{
 
                         }else{
 
-                            $parameters = $productsInCategory->pluck('parameters');
+                            $parameters = $productsOfRoute->pluck('parameters');
 
                             $values = [];
 
@@ -165,7 +186,8 @@ class Filter extends Model{
             }
 
         }
-        return $temporary;
+
+        return ['filters' => $temporary, 'routeData' => $routeData];
     }
 
     private function addOldValues($old_values, $filter_alias){

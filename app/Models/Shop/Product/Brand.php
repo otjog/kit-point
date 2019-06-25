@@ -2,33 +2,44 @@
 
 namespace App\Models\Shop\Product;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Shop\Parameter\Parameter;
 
-class Brand extends Model{
-
-    protected $fillable = ['name'];
-
-    public function products(){
-        return $this->belongsToMany('App\Models\Shop\Product\Product', 'product_has_brand')->withTimestamps();
-    }
+class Brand extends Parameter {
 
     public function getActiveBrands(){
         return self::select(
-            'id',
-            "name"
+
+            'product_has_parameter.value as name'
         )
-            ->where('active', 1)
+            ->where('active', '=', 1)
+
+            ->where('alias', '=', 'brand')
+
+            ->rightJoin('product_has_parameter', function ($join) {
+                $join->on('product_parameters.id', '=', 'product_has_parameter.parameter_id');
+            })
+
+            ->distinct()
             ->get();
 
     }
 
-    public function getActiveBrand($id){
+    public function getBrand($name)
+    {
         return self::select(
-            'id',
-            "name"
+            'product_has_parameter.value as name'
         )
-            ->where('id', $id)
-            ->where('active', 1)
+
+            ->where('active', '=', 1)
+
+            ->where('alias', '=', 'brand')
+
+            ->rightJoin('product_has_parameter', function ($join) use ($name){
+                $join->on('product_parameters.id', '=', 'product_has_parameter.parameter_id')
+                    ->where('product_has_parameter.value', '=', $name);
+            })
+
+            ->distinct()
             ->get();
 
     }

@@ -5,43 +5,31 @@ namespace App\Http\Controllers\Shop;
 use App\Libraries\Services\Pay\Contracts\OnlinePayment;
 use App\Models\Shop\Customer;
 use App\Models\Shop\Order\Payment;
+use App\Models\Site\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Shop\Order\Basket;
 use App\Models\Shop\Order\Order;
 use App\Models\Shop\Product\Product;
 use App\Models\Settings;
-class OrderController extends Controller{
+use App\Models\Site\Module;
 
+class OrderController extends Controller
+{
     protected $orders;
 
     protected $baskets;
 
-    protected $data;
+    protected $settings;
 
-    public function __construct(Order $orders, Basket $baskets){
-
-        $settings = Settings::getInstance();
-
-        $this->data = $settings->getParameters();
+    public function __construct(Order $orders, Basket $baskets)
+    {
+        $this->settings = Settings::getInstance();
 
         $this->orders   = $orders;
 
         $this->baskets  = $baskets;
 
-        $this->data['template'] = [
-            'component' => 'shop',
-            'resource'  => 'order',
-        ];
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(){
-        //GET
     }
 
     /**
@@ -50,19 +38,19 @@ class OrderController extends Controller{
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Payment $payments, OnlinePayment $paymentService, Customer $customers, Product $products){
-
+    public function store(Request $request, Payment $payments, OnlinePayment $paymentService, Customer $customers, Product $products)
+    {
         $token = $request['_token'];
 
         $payment = $payments->getMethodById($request->payment_id);
 
-        if($payment[0]->alias === 'online'){
+        if ($payment[0]->alias === 'online') {
 
-            $basket = $this->baskets->getActiveBasketWithProductsAndRelations($products, $token );
+            $basket = $this->baskets->getActiveBasketWithProductsAndRelations();
 
             return $paymentService->send($request, $basket);
 
-        }else{
+        } else {
 
             $basket = $this->baskets->getActiveBasket( $token );
 
@@ -80,17 +68,15 @@ class OrderController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, Product $products, Payment $payments){
+    public function create(Payment $payments)
+    {
+        $data['shop']['basket']   = $this->baskets->getActiveBasketWithProductsAndRelations();
 
-        $token = $request->session()->get('_token');
+        $data['shop']['payments'] = $payments->getActiveMethods();
 
-        $this->data['template']['view'] = 'create';
+        $globalData = $this->settings->getParametersForController($data, 'shop', 'order', 'create');
 
-        $this->data['data']['basket']   = $this->baskets->getActiveBasketWithProductsAndRelations( $products, $token );
-
-        $this->data['data']['payments'] = $payments->getActiveMethods();
-
-        return view( 'templates.default', $this->data);
+        return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
 
     /**
@@ -99,45 +85,13 @@ class OrderController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $products, $id){
+    public function show(Product $products, $id)
+    {
+        $data['shop']['order']    = $this->orders->getOrderById($products, $id);
 
-        $this->data['template']['view'] = 'show';
+        $globalData = $this->settings->getParametersForController($data, 'shop', 'order', 'show');
 
-        $this->data['data']['order']    = $this->orders->getOrderById($products, $id);
-
-        return view( 'templates.default', $this->data);
+        return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id){
-        //GET
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id){
-        //PUT/PATCH
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id){
-        //DELETE
-    }
-
-    /*****************Helpers**********************/
 }

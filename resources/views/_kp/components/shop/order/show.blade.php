@@ -1,5 +1,9 @@
-<div class="container">
+@extends('_kp.index')
 
+@section('component')
+    <?php
+        $order =& $global_data['shop']['order'];
+    ?>
     @if (session('status'))
         <div class="alert alert-success">
             {{ session('status') }}
@@ -32,6 +36,14 @@
             </ul>
         </div>
     </div>
+    @if($order->comment !== null && $order->comment !== '')
+        <hr>
+        Комментарий:
+        <p>
+            {{$order->comment}}
+        </p>
+        <hr>
+    @endif
     <div class="row">
         <div class="col-lg-12">
             Данные о товарах в заказе:
@@ -64,7 +76,19 @@
                 <div class="row no-gutters align-items-center my-2 border-bottom py-2 ">
 
                     <div class="col-lg-1 py-1 px-2">
-                        <img class="img-fluid mx-auto my-auto d-block" src="{{ URL::asset('storage/img/shop/product/thumbnail/'.$product->thumbnail) }}">
+                        @if( isset($product->images[0]->src) && $product->images[0]->src !== null )
+                            <img
+                                    class='img-fluid mx-auto my-auto d-block'
+                                    src="{{route('models.sizes.images.show', ['product', 'xs', $product->images[0]->src])}}"
+                                    alt=""
+                            />
+                        @else
+                            <img
+                                    class='img-fluid mx-auto my-auto d-block'
+                                    src="{{route('models.sizes.images.show', ['product', 'xs', 'no_image.jpg'])}}"
+                                    alt=""
+                            />
+                        @endif
                     </div>
 
                     <div class="col-lg-5">
@@ -88,16 +112,18 @@
 
                     <div class="col-lg-2 text-center">
                         <span class="text-muted">{{ $product->price['value'] }}</span>
-                        <span class="text-muted small"><small>{{$components['shop']['currency']['symbol']}}</small></span>
+                        <span class="text-muted small"><small>{{$global_data['components']['shop']['currency']['symbol']}}</small></span>
                     </div>
 
                     <div class="col-lg-2 text-center">
-                        <span class="text-muted">{{ $product->pivot['quantity'] }} шт.</span>
+                        <span class="text-muted">{{ $product->pivot['quantity'] }}
+                            <span class="text-muted small"><small>шт.</small></span>
+                        </span>
                     </div>
 
                     <div class="col-lg-2 text-center">
                         <span>{{ $product->price['value'] * $product->pivot['quantity'] }}</span>
-                        <span class="small"><i class="fas fa-ruble-sign"></i></span>
+                        <span class="text-muted small"><small>{{$global_data['components']['shop']['currency']['symbol']}}</small></span>
                     </div>
 
                 </div>
@@ -112,7 +138,7 @@
 
                 <div class="col-lg-2 text-center">
                     <span>{{ $order->total }}</span>
-                    <span class="small"><i class="fas fa-ruble-sign"></i></span>
+                    <span class="text-muted small"><small>{{$global_data['components']['shop']['currency']['symbol']}}</small></span>
                 </div>
 
             </div>
@@ -120,4 +146,4 @@
         </div>
 
     </div>
-</div>
+@endsection

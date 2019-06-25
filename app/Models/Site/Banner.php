@@ -7,34 +7,45 @@ use App\Models\Shop\Product\Product;
 
 class Banner extends Model{
 
-    public function getActiveBanners(){
-        $banners =  self::select(
-            'id',
-            'source',
-            'img',
-            'title'
-        )
-            ->where('active', 1)
-            ->get();
+    protected $moduleMethods = [
+        'index' => 'getActiveBanners',
+        'show' => 'getBannerByNameIfActive',
+    ];
 
-        return $this->composeSourceBanners($banners);
-
+    public function getModuleMethods($moduleMethod)
+    {
+        return $this->moduleMethods[$moduleMethod];
     }
 
-    private function composeSourceBanners($banners){
+    public function slides()
+    {
+        return $this->hasMany('App\Models\Site\BannerSlide');
+    }
 
-        foreach($banners as $banner){
-            list( $banner->component, $banner->resource, $banner->resource_id) = explode('|', $banner->source);
+    public function getActiveBanners()
+    {
+        return self::select(
+            'id',
+            'name'
+        )
+            ->with(['slides' => function($query)
+            {
+                $query->where('active', 1);
+            }])
+            ->where('active', 1)
+            ->get();
+    }
 
-            switch($banner->resource){
-                case 'product' :
-                    $products = new Product();
-
-                    $banner->data = $products->getActiveProduct($banner->resource_id);
-            }
-
-        }
-        return $banners;
+    public function getBannerByNameIfActive($name)
+    {
+        return self::select(
+            'id',
+            'name'
+        )
+            ->with('slides')
+            ->where('active', 1)
+            ->where('name', $name)
+            ->get();
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Shop\Order\Order;
+
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -15,15 +15,16 @@ class NewOrder{
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $order;
+    public $orderId;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Order $order){
-        $this->order = $order;
+    public function __construct($orderId)
+    {
+        $this->orderId = $orderId;
     }
 
     /**
@@ -31,7 +32,8 @@ class NewOrder{
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn(){
+    public function broadcastOn()
+    {
         return new PrivateChannel('channel-name');
     }
 }

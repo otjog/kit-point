@@ -28,8 +28,8 @@ class FilterTableSeeder extends Seeder
             ],
             [
                 'active'    => 1,
-                'alias'     => 'brand',
-                'name'      => 'Бренд',
+                'alias'     => 'category',
+                'name'      => 'Категория',
                 'sort'      => '30',
                 'type'      => 'checkbox'
             ],

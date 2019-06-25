@@ -4,48 +4,24 @@ namespace App\Http\Controllers\Shop;
 
 use App\Models\Shop\Product\Product;
 use App\Models\Shop\Order\Basket;
+use App\Models\Site\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Settings;
+use App\Models\Site\Module;
 
 class BasketController extends Controller{
 
     protected $baskets;
 
-    protected $data;
+    protected $settings;
 
-    public function __construct(Basket $baskets){
-
-        $settings = Settings::getInstance();
-
-        $this->data = $settings->getParameters();
+    public function __construct(Basket $baskets)
+    {
+        $this->settings = Settings::getInstance();
 
         $this->baskets = $baskets;
 
-        $this->data['template'] = [
-            'component' => 'shop',
-            'resource'  => 'basket'
-        ];
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -54,8 +30,8 @@ class BasketController extends Controller{
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         $token = $request->session()->get('_token');
 
         $this->baskets->addProductToBasket( $request, $token );
@@ -64,35 +40,26 @@ class BasketController extends Controller{
     }
 
     /**
-     * Display the specified resource.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($token){
-
-
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $products, $token){
+    public function edit($token)
+    {
+        $products = new Product();
 
-        $basket = $this->baskets->getActiveBasketWithProductsAndRelations( $products, $token );
+        $basket = $this->baskets->getActiveBasketWithProductsAndRelations($token);
 
-        if($basket->order_id === null){
+        if ($basket->order_id === null) {
 
-            $this->data['template']['view'] = 'edit';
+            $data['shop']['basket']   = $basket;
 
-            $this->data['data']['basket']   = $basket;
+            $data['shop']['parcels'] = $products->getParcelParameters($basket->products);
 
-            $this->data['data']['parcels'] = $products->getParcelParameters($basket->products);
+            $globalData = $this->settings->getParametersForController($data, 'shop', 'basket', 'edit');
 
-            return view( 'templates.default', $this->data);
+            return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
 
         } else {
 
@@ -109,45 +76,10 @@ class BasketController extends Controller{
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $token){
-
-        $this->baskets->updateBasket( $request );
+    public function update(Request $request)
+    {
+        $this->baskets->updateBasket($request);
 
         return back();
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    private function changeQuantityInArray($products){
-
-        $newProducts = [];
-
-        foreach ($products as $key => $product){
-
-            if( substr( $key, 0, 1 ) !== '_'){
-
-                $product['quantity'] = (int)$product['quantity'];
-
-                if($product['quantity'] > 0){
-
-                    $newProducts[] = $product;
-
-                }
-
-            }
-
-        }
-
-        return $newProducts;
-    }
-
 }

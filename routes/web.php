@@ -44,10 +44,14 @@
         Route::post('/redirect/{msg}', 'Shop\PayController@redirect');
     });
 
+    //Image
+    Route::resource('models.sizes.images',     'Image\ImageController',    [ 'only' => [ 'show' ]]);
+
     //Forms
     Route::group(['prefix' => 'form'], function () {
 
         //GeoData
+
         Route::post('geodata', function (\Illuminate\Http\Request $request, \App\Models\Geo\GeoData $geoData){
             $geoData->setGeoInput( $request->address_json );
             return back();
@@ -59,28 +63,16 @@
     Route::match(['get', 'post'], '/ajax', 'Ajax\AjaxController@index');
 
     /************************Админка*************************************************/
-    Auth::routes();
 
-    Route::group(['prefix' => 'adminio', 'middleware' => ['auth']], function () {
-
-        //Admin Home
-        Route::get('/', 'Admin\AdminController@index')->name('admin');
-
-        //Admin Products
-        Route::resource('products',     'Shop\ProductController',       [ 'except' => [ 'show' ]]);
-
-        //Admin Categories
-        Route::resource('categories',   'Shop\CategoryController',      [ 'except' => [ 'show' ]]);
-
-        //Admin Pages
-        Route::resource('pages',        'Info\PageController',          [ 'except' => [ 'show' ]]);
-
+    Route::group(['prefix' => 'admin'], function () {
+        Voyager::routes();
     });
 
 
     /******************Конец*Админка*************************************************/
 
-    Route::get('/parseXl', 'Parse\FromXlsxController@parse');
-    Route::get('/parseSite', 'Parse\FromSiteController@parse');
+    Route::get('/parse/{from}', 'Parse\ParseController@load');
     Route::get('/curs', 'Price\CurrencyController@getCur');
+    Route::get('/test', function(){
 
+    });

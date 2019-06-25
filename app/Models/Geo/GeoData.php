@@ -7,12 +7,24 @@ use App\Libraries\Geo\GeoLite;
 
 class GeoData extends Model{
 
+    private static $instance = null;
+
+    public static function getInstance(){
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /** @return array */
     public function getGeoData(){
 
         return session()->get('geoInput', function() {
 
+            if(session()->get('geoIp') === null){
+                $this->setGeoIp();
+            }
             return session()->get('geoIp');
-
         });
     }
 
@@ -22,30 +34,31 @@ class GeoData extends Model{
             $objectData = json_decode($json);
 
             $geoData = [
-                'postal_code'   => $objectData->data->postal_code,
-                'country_code'  => $this->getCountryCode($objectData->data->country),
-                'country_name'  => $objectData->data->country,
-                'region_code'   => substr($objectData->data->region_kladr_id, 0, 2),
-                'region_name'   => $objectData->data->region,
-                'region_type'   => $objectData->data->region_type,
-                'area_name'     => $objectData->data->area,
-                'area_type'     => $objectData->data->area_type,
-                'city_name'     => $objectData->data->city,
-                'city_type'     => $objectData->data->city_type,
-                'city_kladr_id' => $objectData->data->city_kladr_id,
-                'street_name'   => $objectData->data->street,
-                'street_type'   => $objectData->data->street_type,
-                'latitude'      => $objectData->data->geo_lat,
-                'longitude'     => $objectData->data->geo_lon,
+                'postal_code'   => $objectData->postal_code,
+                'country_code'  => $this->getCountryCode($objectData->country),
+                'country_name'  => $objectData->country,
+                'region_code'   => substr($objectData->region_kladr_id, 0, 2),
+                'region_name'   => $objectData->region,
+                'region_type'   => $objectData->region_type,
+                'area_name'     => $objectData->area,
+                'area_type'     => $objectData->area_type,
+                'city_name'     => $objectData->city,
+                'city_type'     => $objectData->city_type,
+                'city_kladr_id' => $objectData->city_kladr_id,
+                'street_name'   => $objectData->street,
+                'street_type'   => $objectData->street_type,
+                'latitude'      => $objectData->geo_lat,
+                'longitude'     => $objectData->geo_lon,
             ];
 
             if($geoData['city_name'] === null){
-                $geoData['city_name']       = $objectData->data->settlement;
-                $geoData['city_type' ]      = $objectData->data->settlement_type;
-                $geoData['city_kladr_id']   = $objectData->data->settlement_kladr_id;
+                $geoData['city_name']       = $objectData->settlement;
+                $geoData['city_type' ]      = $objectData->settlement_type;
+                $geoData['city_kladr_id']   = $objectData->settlement_kladr_id;
             }
 
             session(['geoInput' => $geoData]);
+
         }
 
     }

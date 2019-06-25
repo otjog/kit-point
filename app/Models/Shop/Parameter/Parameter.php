@@ -8,7 +8,8 @@ class Parameter extends Model{
 
     protected $table = 'product_parameters';
 
-    public function products(){
+    public function products()
+    {
         return $this->belongsToMany('App\Models\Shop\Product\Product', 'product_has_parameter', 'parameter_id', 'product_id')
             ->withPivot('id', 'value')
             ->withTimestamps();

@@ -5,22 +5,35 @@ namespace App\Models\Shop\Order;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop\Product\Product;
 use Illuminate\Support\Facades\DB;
+use App\Libraries\Helpers\DeclesionsOfWord;
 
-class Basket extends Model{
+class Basket extends Model
+{
+    protected $moduleMethods = [
+        'show' => 'getActiveBasketWithProductsAndRelations',
+    ];
+
+    public function getModuleMethods($moduleMethod)
+    {
+        return $this->moduleMethods[$moduleMethod];
+    }
 
     protected $table = 'shop_baskets';
 
-    public function products(){
+    public function products()
+    {
         return $this->belongsToMany('App\Models\Shop\Product\Product', 'shop_basket_has_product', 'basket_id', 'product_id')
             ->withPivot('quantity', 'order_attributes')
             ->withTimestamps();
     }
 
-    public function shopOrder(){
+    public function shopOrder()
+    {
         return $this->hasOne('App\Models\Shop\Order\Order', 'order_id');
     }
 
-    public function getActiveBasket($token){
+    public function getActiveBasket($token)
+    {
         return self::select('id', 'token', 'order_id')
             ->where('token', $token)
             ->where('order_id', null)
@@ -47,7 +60,12 @@ class Basket extends Model{
             ->first();
     }
 
-    public function getActiveBasketWithProductsAndRelations(Product $products, $token){
+    public function getActiveBasketWithProductsAndRelations($token = null)
+    {
+        $products = new Product();
+
+        if($token === null)
+            $token = session('_token');
 
         $basket = $this->getActiveBasket( $token );
 
@@ -55,33 +73,11 @@ class Basket extends Model{
 
             $basket->relations['products'] = $products->getProductsFromBasket( $basket->id );
 
-            foreach($basket->products as $key => $product){
-
-                $attributes = explode(',', $product['pivot']['order_attributes']);
-
-                $parameters = $product->basket_parameters;
-
-                $temporary = [];
-
-                foreach($attributes as $attribute){
-
-                    foreach($parameters as $parameter){
-                        if($parameter->pivot->id === (int)$attribute){
-                            $temporary[] = $parameter;
-                        }
-                    }
-
-                }
-
-                $product['pivot']['order_attributes_collection'] = $temporary;
-
-                $product->quantity = $product['pivot']['quantity'];
-
-            }
-
             $basket->total      = $this->getTotal($basket->products);
 
             $basket->count_scu  = count($basket->products);
+
+            $basket->declesion  = DeclesionsOfWord::make($basket->count_scu, ['товар', 'товара', 'товаров']);
 
         }
 
@@ -89,8 +85,8 @@ class Basket extends Model{
 
     }
 
-    public function addProductToBasket($request, $token ){
-
+    public function addProductToBasket($request, $token )
+    {
         $basket = $this->getActiveBasket( $token );
 
         $orderParameters = $request->all();
@@ -144,8 +140,8 @@ class Basket extends Model{
         }
     }
 
-    public function updateBasket( $request ){
-
+    public function updateBasket( $request )
+    {
         $parameters = $request->all();
 
         $token = $request['_token'];
@@ -197,8 +193,8 @@ class Basket extends Model{
 
     }
 
-    private function getTotal($products){
-
+    private function getTotal($products)
+    {
         $total = 0;
 
         foreach($products as $product){
@@ -212,7 +208,8 @@ class Basket extends Model{
     }
 
     //todo вынести в общую библиотеку
-    private function updateExistingPivot( string $tableName, array $relationColumns, array $updateColumns){
+    private function updateExistingPivot( string $tableName, array $relationColumns, array $updateColumns)
+    {
         $table = DB::table($tableName);
 
         foreach($relationColumns as $columnName => $columnValue){
@@ -222,7 +219,8 @@ class Basket extends Model{
         $table->update($updateColumns);
     }
 
-    private function deleteExistingPivot( string $tableName, array $relationColumns){
+    private function deleteExistingPivot( string $tableName, array $relationColumns)
+    {
         $table = DB::table($tableName);
 
         foreach($relationColumns as $columnName => $columnValue){

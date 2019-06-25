@@ -6,22 +6,11 @@ use SimpleXMLElement;
 
 class Cdek {
 
-    private $test = 1;
+    private $test;
 
-    private $clientAuthData     = [
-        //Параметры рабочей версии
-        0 => [
-            'Account' => 'f0ccc1a1b95b394277b212cac907b2db',
-            'Secure_password' => '3dedc3d754de58b61c6a58f334e25f7c'
-        ],
-        //Параметры тестовой версии
-        1 => [
-            'Account' => '98f9bf62204c260cc3f902a92dd8b498',
-            'Secure_password' => '3f46ddc6fd72cf5352084ae789bb4ffa'
-        ]
-    ];
+    private $clientAuthData;
 
-    private $senderCityPostCode = '308000';
+    private $senderCityPostCode;
 
     private $cdekServices = [
         //расчет стоимости доставки по параметрам посылок по России и странам ТС.
@@ -49,35 +38,53 @@ class Cdek {
 
     private $geoData;
 
+    private $destinationType;
+
     public function __construct($geoData){
 
         $this->geoData = $this->prepareGeoData($geoData);
 
+        $this->clientAuthData     = [
+            //Параметры рабочей версии
+            0 => [
+                'Account' => 'f0ccc1a1b95b394277b212cac907b2db',
+                'Secure_password' => '3dedc3d754de58b61c6a58f334e25f7c'
+            ],
+            //Параметры тестовой версии
+            1 => [
+                'Account' => '98f9bf62204c260cc3f902a92dd8b498',
+                'Secure_password' => '3f46ddc6fd72cf5352084ae789bb4ffa'
+            ]
+        ];
+
+        $this->senderCityPostCode = env('SHOP_DELIVERY_CDEK_INDEX_FROM');
+
+        $this->test = env('SHOP_DELIVERY_CDEK_TEST');
+
     }
 
-    public function getDeliveryCost($parcelParameters, $serviceTypes){
+    public function getDeliveryCost($parcelParameters, $destinationType){
+
+        $this->destinationType = $destinationType;
 
         $parcelParameters = $this->getParcelParameters($parcelParameters);
 
         $data = [];
 
-        foreach($serviceTypes as $type){
+        switch($this->destinationType){
+            case 'toTerminal'   :   $tariffs = ['136', '5', '10', '15', '62', '63']; break;
+            case 'toDoor'       :   $tariffs = ['137', '12', '16']; break;
+            default :   break;
+        }
 
-            switch($type){
-                case 'toTerminal'   :   $tariffs = ['136', '5', '10', '15', '62', '63']; break;
-                case 'toDoor'       :   $tariffs = ['137', '12', '16']; break;
-                default :   break;
-            }
+        $services = $this->getServiceCost($parcelParameters, $tariffs);
 
-            $services = $this->getServiceCost($parcelParameters, $tariffs);
+        if( count($services) > 0 ){
 
-            if( count($services) > 0 ){
+            $optimalService = $services[0];
 
-                $optimalService = $services[0];
+            $data = $this->prepareResponse($optimalService);
 
-                $data[$type] = $this->prepareResponse($optimalService);
-
-            }
         }
 
         return $data;
@@ -229,7 +236,9 @@ class Cdek {
 
     private function prepareResponse($data){
 
-        $response = [];
+        $response = [
+            'type' => $this->destinationType
+        ];
 
         foreach($data as $key => $value){
             switch($key){

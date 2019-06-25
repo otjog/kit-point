@@ -78,31 +78,7 @@ class Order extends Model{
 
             $order[0]->relations['products'] = $products->getProductsFromOrder( $order[0]->id );
 
-            foreach( $order[0]->products as $key => $product){
-
-                $attributes = explode(',', $product['pivot']['order_attributes']);
-
-                $parameters = $product->basket_parameters;
-
-                $temporary = [];
-
-                foreach($attributes as $attribute){
-
-                    foreach($parameters as $parameter){
-                        if($parameter->pivot->id === (int)$attribute){
-                            $temporary[] = $parameter;
-                        }
-                    }
-
-                }
-
-                $product['pivot']['order_attributes_collection'] = $temporary;
-
-                $product->quantity = $product['pivot']['quantity'];
-
-            }
-
-            $order[0]->total = $this->getTotal($order[0]->products);
+            $order[0]->total = $this->getOrderTotalPrice($order[0]->products);
 
             $order[0]->count_scu = count((array)$order[0]->products);
 
@@ -147,7 +123,7 @@ class Order extends Model{
 
         $basket->save();
 
-        event(new NewOrder($order));
+        event(new NewOrder($order->id));
 
         return $order;
     }
@@ -157,17 +133,26 @@ class Order extends Model{
         $data_order = [
             'shop_basket_id'    => $basket->id,
             'customer_id'       => $customer->id,
+            'comment'           => '',
         ];
 
         foreach($data as $key => $value){
             switch($key){
                 case 'payment_id'       :
-                case 'shipment_id'      :
                 case 'address'          :
                 case 'address_json'     :
-                case 'comment'          :
                 case 'paid'             :
-                case 'pay_id'           : $data_order[$key] = $value;
+                case 'pay_id'           :
+                    $data_order[$key] = $value;
+                    break;
+                case 'comment'          :
+                    $data_order[$key] .= "\n" . $value;
+                    break;
+                case 'shipment_id'      :
+                    $shipmentData = explode('_', $value);
+                    $data_order[$key] = $shipmentData[0];
+                    $data_order['comment'] .= "\n" . $value;
+                    break;
             }
         }
 
@@ -195,7 +180,7 @@ class Order extends Model{
         return $insertColumns;
     }
 
-    private function getTotal($products){
+    private function getOrderTotalPrice($products){
 
         $total = 0;
 
