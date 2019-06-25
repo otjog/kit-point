@@ -1,1 +1,0 @@
-@include($global_data['project_data']['template_name'] .'.positions.modals.forms.change-city')

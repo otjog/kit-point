@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-
-	<title>{{$global_data['template']['metatags']['title'] or ''}}</title>
-	<meta name="description" content="{{$global_data['template']['metatags']['description'] or ''}}">
-	<meta name="keywords" content="{{$global_data['template']['metatags']['keywords'] or ''}}">
+	<title>OneTech</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="OneTech shop project">
