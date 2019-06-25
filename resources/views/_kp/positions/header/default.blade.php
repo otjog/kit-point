@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-
-    <!-- Top Bar -->
-
-    @include( $template_name .'.modules.header.top')
-
-    <!-- Header Main -->
-
-    @include( $template_name .'.modules.header.main')
-
-    <!-- Main Navigation -->
-
-    @include( $template_name .'.modules.header.nav')
-
-=======
 @php
     $template = $global_data['template']['schema']['current']['header'];
     $modules = $global_data['modules'];
@@ -52,7 +37,7 @@
 @endif
 
 <!-- Menu -->
-    <div class="page_menu">
+    <!--div class="page_menu">
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -134,7 +119,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div-->
 
 </header>
->>>>>>> c41f8355ca57175a5f15327fb781ff1c4b3ccbeb

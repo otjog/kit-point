@@ -1,16 +1,20 @@
-<!-- Popular Categories -->
+@php
+    $categories = $modules[$module['resource']];
 
-<div class="popular_categories">
+@endphp
+@if(isset($categories) && $categories !== null)
+<!-- Popular Categories -->
+    <div class="popular_categories">
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
                 <div class="popular_categories_content">
-                    <div class="popular_categories_title">Popular Categories</div>
+                    <div class="popular_categories_title">Популярные категории</div>
                     <div class="popular_categories_slider_nav">
                         <div class="popular_categories_prev popular_categories_nav"><i class="fas fa-angle-left ml-auto"></i></div>
                         <div class="popular_categories_next popular_categories_nav"><i class="fas fa-angle-right ml-auto"></i></div>
                     </div>
-                    <div class="popular_categories_link"><a href="#">full catalog</a></div>
+                    <div class="popular_categories_link"><a href="{{route('categories.index')}}">Полный каталог</a></div>
                 </div>
             </div>
 
@@ -19,50 +23,28 @@
             <div class="col-lg-9">
                 <div class="popular_categories_slider_container">
                     <div class="owl-carousel owl-theme popular_categories_slider">
-
-                        <!-- Popular Categories Item -->
-                        <div class="owl-item">
-                            <div class="popular_category d-flex flex-column align-items-center justify-content-center">
-                                <div class="popular_category_image"><img src="{{asset('storage/_kp/images/popular_1.png')}}" alt=""></div>
-                                <div class="popular_category_text">Smartphones & Tablets</div>
+                        @foreach($categories as $category)
+                            <div class="owl-item">
+                                <div class="popular_category d-flex flex-column align-items-center justify-content-center">
+                                    <span class="popular_category_image">
+                                        <a href="{{route('categories.show', $category['id'])}}">
+                                            <img
+                                                    src="{{route('models.sizes.images.show', ['category', 's', $category['images'][0]->src])}}"
+                                                    alt="{{$category['images'][0]->src}}">
+                                        </a>
+                                    </span>
+                                    <span class="popular_category_text">
+                                        <a href="{{route('categories.show', $category['id'])}}">
+                                            {{$category['name']}}
+                                        </a>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-
-                        <!-- Popular Categories Item -->
-                        <div class="owl-item">
-                            <div class="popular_category d-flex flex-column align-items-center justify-content-center">
-                                <div class="popular_category_image"><img src="{{asset('storage/_kp/images/popular_2.png')}}" alt=""></div>
-                                <div class="popular_category_text">Computers & Laptops</div>
-                            </div>
-                        </div>
-
-                        <!-- Popular Categories Item -->
-                        <div class="owl-item">
-                            <div class="popular_category d-flex flex-column align-items-center justify-content-center">
-                                <div class="popular_category_image"><img src="{{asset('storage/_kp/images/popular_3.png')}}" alt=""></div>
-                                <div class="popular_category_text">Gadgets</div>
-                            </div>
-                        </div>
-
-                        <!-- Popular Categories Item -->
-                        <div class="owl-item">
-                            <div class="popular_category d-flex flex-column align-items-center justify-content-center">
-                                <div class="popular_category_image"><img src="{{asset('storage/_kp/images/popular_4.png')}}" alt=""></div>
-                                <div class="popular_category_text">Video Games & Consoles</div>
-                            </div>
-                        </div>
-
-                        <!-- Popular Categories Item -->
-                        <div class="owl-item">
-                            <div class="popular_category d-flex flex-column align-items-center justify-content-center">
-                                <div class="popular_category_image"><img src="{{asset('storage/_kp/images/popular_5.png')}}" alt=""></div>
-                                <div class="popular_category_text">Accessories</div>
-                            </div>
-                        </div>
-
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endif

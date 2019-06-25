@@ -1,1 +1,0 @@
-@include('_raduga.modules.' . $module['module'] . '.' . $module['template'] . '.index', ['banners' => $modules[$module['resource']]])

@@ -33,9 +33,7 @@
                             'height'    => '',
                             'quantity'  => ''
                         ];
-
                         $productIds = '';
-
                 //todo расчет суммы корзины и параметров посылки расчитывать в моделях, а не во views
 
                     @endphp
@@ -56,7 +54,6 @@
 
                             foreach($parcels as $param => $value){
                             //todo сделать дефолтные значения, для отсутствующих параметров
-
                                 if( $parcels[$param] !== ''){
                                      $parcels[$param] .= '|';
                                 }
@@ -180,7 +177,6 @@
                 <div class="row">
 
                     {{-- PAY --}}
-
                     @if( isset( $payments ) && count( $payments ) > 0 )
 
                         <div class="col-lg-12">
@@ -225,13 +221,11 @@
                     <div class="input-group">
                         <textarea class="form-control" id="comment" name="comment"></textarea>
                     </div>
-
                 </div>
 
                 <hr class="mb-4">
 
                 {{-- AGREEMENT --}}
-
                 <div class="form-group">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="agreeTerms" required>

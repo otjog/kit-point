@@ -7,11 +7,11 @@
                 <div class="cart_icon">
                     @if( isset($basket) && $basket !== null)
                         <a href="{{route('baskets.edit', csrf_token())}}">
-                            <img src="{{ URL::asset('storage/img/elements/cart.png') }}" alt="">
+                            <img src="{{ URL::asset('storage/_kp/images/cart.png') }}" alt="">
                             <div class="cart_count"><span>{{ $basket->count_scu or 0}}</span></div>
                         </a>
                     @else
-                        <img src="{{ URL::asset('storage/img/elements/cart.png') }}" alt="">
+                        <img src="{{ URL::asset('storage/_kp/images/cart.png') }}" alt="">
                         <div class="cart_count"><span>{{ $basket->count_scu or 0}}</span></div>
                     @endif
                 </div>
