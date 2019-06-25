@@ -38,43 +38,53 @@ class Product extends Model{
 
     }
 
-    public function images(){
-        return $this->belongsToMany('App\Models\Site\Image', 'product_has_image')->withTimestamps();
+    public function images()
+    {
+        return $this->morphToMany('App\Models\Site\Image', 'imageable');
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(    'App\Models\Shop\Category\Category');
     }
 
-    public function manufacturer(){
+    public function manufacturer()
+    {
         return $this->belongsTo(    'App\Models\Shop\Product\Manufacturer');
     }
 
-    public function prices(){
+    public function prices()
+    {
         return $this->belongsToMany('App\Models\Shop\Price\Price', 'product_has_price')->withPivot('value', 'currency_id')->withTimestamps();
     }
 
-    public function discounts(){
+    public function discounts()
+    {
         return $this->belongsToMany('App\Models\Shop\Price\Discount', 'product_has_discount')->withPivot('value')->withTimestamps();
     }
 
-    public function parameters(){
+    public function parameters()
+    {
         return $this->belongsToMany('App\Models\Shop\Parameter\Parameter', 'product_has_parameter', 'product_id', 'parameter_id')->withPivot('id', 'value')->withTimestamps();
 }
 
-    public function basket_parameters(){
+    public function basket_parameters()
+    {
         return $this->belongsToMany('App\Models\Shop\Parameter\Parameter', 'product_has_parameter', 'product_id', 'parameter_id')->withPivot('id', 'value', 'basket_value')->withTimestamps();
     }
 
-    public function baskets(){
+    public function baskets()
+    {
         return $this->belongsToMany('App\Models\Shop\Order\Basket', 'shop_basket_has_product', 'product_id', 'basket_id')->withPivot('quantity', 'order_attributes')->withTimestamps();
     }
 
-    public function offers(){
+    public function offers()
+    {
         return $this->belongsToMany('App\Models\Shop\Offer\Offer', 'shop_offer_has_product', 'product_id', 'offer_id')->withTimestamps();
     }
 
-    public function orders(){
+    public function orders()
+    {
         return $this->belongsToMany('App\Models\Shop\Order\Order', 'shop_order_has_product', 'product_id', 'order_id')
             ->withPivot('quantity', 'price_id', 'currency_id', 'price_value', 'order_attributes')
             ->withTimestamps();

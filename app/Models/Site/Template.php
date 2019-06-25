@@ -16,13 +16,9 @@ class Template extends Model
 
     protected $metatags;
 
-    public function getTemplateData($globalData, $component, $model=null, $view=null, $id=null){
+    public function getTemplateData($component, $model=null, $view=null, $id=null){
 
-        $schemaName = env('SITE_TEMPLATE_SCHEMA', 'default');
-
-        $globalData['template'] =& $this->data;
-
-        $this->schemaName = $schemaName;
+        $this->schemaName = env('SITE_TEMPLATE_SCHEMA', 'default');
 
         $model  !== null ? $model = '.'.$model  : $model = '';
 
@@ -41,12 +37,6 @@ class Template extends Model
         $this->data['viewKey'] = $this->data['name'] . '.' . ($component==='home' ? '' : 'components.') . $this->data['componentKey'] . $view;
 
         $this->data['schema'] = $this->getTemplateSchema();
-
-        /* * * METATAGS * * */
-        $this->metatags = new Metatags();
-
-        $this->data['metatags'] = $this->metatags->getTagsForPage($globalData);
-        /* * END METATAGS * */
 
         return $this->data;
     }

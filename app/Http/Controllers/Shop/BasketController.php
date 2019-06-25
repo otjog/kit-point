@@ -14,50 +14,14 @@ class BasketController extends Controller{
 
     protected $baskets;
 
-    protected $data;
-
-    protected $globalData;
-
-    protected $template;
-
-    protected $module;
-
     protected $settings;
 
-    public function __construct(Basket $baskets, Template $template, Module $module){
-
+    public function __construct(Basket $baskets)
+    {
         $this->settings = Settings::getInstance();
-
-        $this->globalData = $this->settings->getParameters();
-
-        $this->data =& $this->globalData['global_data'];
-
-        $this->template = $template;
-
-        $this->module = $module;
 
         $this->baskets = $baskets;
 
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -66,8 +30,8 @@ class BasketController extends Controller{
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         $token = $request->session()->get('_token');
 
         $this->baskets->addProductToBasket( $request, $token );
@@ -76,39 +40,26 @@ class BasketController extends Controller{
     }
 
     /**
-     * Display the specified resource.
-     *
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($token){
-
-
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($token){
-
+    public function edit($token)
+    {
         $products = new Product();
 
         $basket = $this->baskets->getActiveBasketWithProductsAndRelations($token);
 
-        if($basket->order_id === null){
+        if ($basket->order_id === null) {
 
-            $this->data['shop']['basket']   = $basket;
+            $data['shop']['basket']   = $basket;
 
-            $this->data['shop']['parcels'] = $products->getParcelParameters($basket->products);
+            $data['shop']['parcels'] = $products->getParcelParameters($basket->products);
 
-            $this->data['template'] = $this->template->getTemplateData($this->data, 'shop', 'basket', 'edit');
+            $globalData = $this->settings->getParametersForController($data, 'shop', 'basket', 'edit');
 
-            $this->data['modules'] = $this->module->getModulesData($this->data['template']['schema']);
-
-            return view( $this->data['template']['viewKey'], $this->globalData);
+            return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
 
         } else {
 
@@ -131,16 +82,4 @@ class BasketController extends Controller{
 
         return back();
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 }

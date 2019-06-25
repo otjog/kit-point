@@ -118,12 +118,12 @@ class Metatags extends Model{
         $title =& $metatags['title'];
 
         $resource = array_get($this->data, $this->data['template']['componentKey']);
-
+        //dd($resource);
         $title = env('APP_NAME');
 
-        if(isset($resource[0]))
+        if (isset($resource[0]['name']))
             $title .= ' - ' . $resource[0]['name'];
-        else
+        elseif (isset($resource['name']))
             $title .= ' - ' . $resource['name'];
 
         return $metatags;

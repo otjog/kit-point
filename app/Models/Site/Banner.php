@@ -9,6 +9,7 @@ class Banner extends Model{
 
     protected $moduleMethods = [
         'index' => 'getActiveBanners',
+        'show' => 'getBannerByNameIfActive',
     ];
 
     public function getModuleMethods($moduleMethod)
@@ -16,40 +17,35 @@ class Banner extends Model{
         return $this->moduleMethods[$moduleMethod];
     }
 
-    public function getActiveBanners(){
-        $banners = self::select(
-            'id',
-            'source',
-            'img',
-            'title'
-        )
-            ->where('active', 1)
-            ->get();
-
-        return $this->composeSourceBanners($banners);
-
+    public function slides()
+    {
+        return $this->hasMany('App\Models\Site\BannerSlide');
     }
 
-    private function composeSourceBanners($banners){
+    public function getActiveBanners()
+    {
+        return self::select(
+            'id',
+            'name'
+        )
+            ->with(['slides' => function($query)
+            {
+                $query->where('active', 1);
+            }])
+            ->where('active', 1)
+            ->get();
+    }
 
-        foreach($banners as $banner){
-            //list( $banner->component, $banner->resource, $banner->resource_id) = explode('|', $banner->source);
-
-            $matches = explode('|', $banner->source);
-
-            if( count($matches) === 1 ){
-                $banner->type = 'static';
-            }else{
-                $banner->type = 'dinamic';
-                switch($banner->resource){
-                    case 'product' :
-                        $products = new Product();
-
-                        $banner->data = $products->getActiveProduct($banner->resource_id);
-                }
-            }
-        }
-        return $banners;
+    public function getBannerByNameIfActive($name)
+    {
+        return self::select(
+            'id',
+            'name'
+        )
+            ->with('slides')
+            ->where('active', 1)
+            ->where('name', $name)
+            ->get();
     }
 
 }

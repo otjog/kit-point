@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shipment extends Model{
 
+    protected $moduleMethods = [
+        'index' => 'getShipmentServices',
+        'show' => 'getShipmentServiceByAlias',
+    ];
+
+    public function getModuleMethods($moduleMethod)
+    {
+        return $this->moduleMethods[$moduleMethod];
+    }
+
     public function shopOrders(){
         return $this->hasMany('App\Models\Shop\Order\Order');
     }

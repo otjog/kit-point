@@ -71,10 +71,10 @@
                 <div class="row no-gutters align-items-center my-2 border-bottom py-2 ">
 
                     <div class="col-lg-1 py-1 px-2">
-                        @if( isset($product->images[0]->name) && $product->images[0]->name !== null )
+                        @if( isset($product->images[0]->src) && $product->images[0]->src !== null )
                             <img
                                     class="img-fluid mx-auto my-auto d-block"
-                                    src="{{route('models.sizes.images.show', ['product', 's', $product->images[0]->name])}}"
+                                    src="{{route('models.sizes.images.show', ['product', 's', $product->images[0]->src])}}"
                                     alt=""
                             />
                         @else

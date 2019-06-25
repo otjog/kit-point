@@ -18,10 +18,10 @@
                                 <td class="text-center">
                                     <a href="{{ route( 'products.show', $product->id ) }}">
 
-                                        @if( isset($product->images[0]->name) && $product->images[0]->name !== null )
+                                        @if( isset($product->images[0]->src) && $product->images[0]->src !== null )
                                             <img
                                                     class="img-fluid"
-                                                    src="{{ URL::asset('storage/img/shop/product/xxs/' . $product->images[0]->name) }}"
+                                                    src="{{ URL::asset('storage/img/shop/product/xxs/' . $product->images[0]->src) }}"
                                                     alt="product"
                                             />
                                         @else

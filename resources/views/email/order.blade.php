@@ -5,7 +5,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
     <body>
-
+        <p>
+            {{$order->comment}}
+        </p>
         <table
                 border="3"
                 cellpadding="0"

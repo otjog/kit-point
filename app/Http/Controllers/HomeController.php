@@ -8,37 +8,18 @@ use App\Models\Site\Template;
 
 class HomeController extends Controller{
 
-    protected $data;
-
-    protected $template;
-
-    protected $globalData;
-
     protected $settings;
 
-    protected $module;
-
-    public function __construct(Template $template, Module $module){
-
+    public function __construct()
+    {
         $this->settings = Settings::getInstance();
-
-        $this->module = $module;
-
-        $this->globalData = $this->settings->getParameters();
-
-        $this->data =& $this->globalData['global_data'];
-
-        $this->template = $template;
-
     }
 
-    public function index(){
+    public function index()
+    {
+        $globalData = $this->settings->getParametersForController([],'home');
 
-        $this->data['template'] = $this->template->getTemplateData($this->data,'home');
-
-        $this->data['modules'] = $this->module->getModulesData($this->data['template']['schema']);
-
-        return view( $this->data['template']['name'] . '.index', $this->globalData);
+        return view($globalData['template']['name'] . '.index', ['global_data' => $globalData]);
     }
 
 }

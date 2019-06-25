@@ -37,7 +37,7 @@ class AjaxController extends Controller{
 
                     $ds = new Delivery();
 
-                    $this->data['service'] = $ds->getPrices($this->request['parcel'], $this->request['alias'], $this->request['type']);
+                    $this->data = $ds->getPrices($this->request['parcel'], $this->request['alias'], $this->request['type'], $this->request['product_ids']);
 
                     break;
 
@@ -53,24 +53,14 @@ class AjaxController extends Controller{
 
                     $products = new Product();
 
-                    $result = $products->getFilteredProducts([], $request->toArray());
+                    $this->data['products'] = $products->getFilteredProducts([], $request->toArray());
 
-                    $url = stristr($request->session()->previousUrl(), '?', true);
-
-                    if($url === false){
-                        $url = $request->session()->previousUrl();
-                    }
+                    $url = $request->headers->get('x-previous-url');
 
                     //Настройка URI для вывода ссылок. Для работы постраничного вывода отфильтрованных товаров
-                    $result->setPath($url);
+                    $this->data['products']->setPath($url);
 
-                    $this->data['filtered_products'] = $result;
-
-                    $this->data['data'] = ['parameters' => $request->toArray()];
-
-                    //Получаем обновленные данные из Глобального массива для передачи во фронт
-                    $settings = Settings::getInstance();
-                    $this->data = $settings->getParameters();
+                    $this->data['parameters'] = $request->toArray();
 
                     //Добавляем заголовки в массив
                     $this->headers['Cache-Control'] = 'no-store';
@@ -123,13 +113,16 @@ class AjaxController extends Controller{
 
         if($this->request['response'] === 'view'){
 
+            $data['ajax'] = $this->data;
+
             //Получаем обновленные данные из Глобального массива для передачи во фронт
             $settings = Settings::getInstance();
-            $this->data = $settings->getParameters();
+            $globalData = $settings->pushArrayParameters($data);
 
-            $view = $this->data['global_data']['template']['name'] . '.modules.' . $this->request['module'] . '.reload.' . $this->request['view'];
+            $view = $globalData['template']['name'] . '.modules.shop.' . $this->request['module'] . '._reload.' . $this->request['view'];
+
             //Добавляем к ответу Представление и обновленную переменную с данными
-            $this->response = $this->response->view( $view, $this->data);
+            $this->response = $this->response->view($view, ['global_data' => $globalData]);
         }
 
         if( count($this->headers) > 0){

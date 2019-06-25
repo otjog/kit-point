@@ -4,7 +4,7 @@
 
         <h1>{{$header_page}}</h1>
 
-        <!--div class="shop_bar clearfix mb-3">
+        <!--    div class="shop_bar clearfix mb-3">
             <div class="shop_product_count"><span>186</span> products found</div>
             <div class="shop_sorting">
                 <span>Sort by:</span>

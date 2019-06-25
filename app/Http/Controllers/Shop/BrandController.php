@@ -15,39 +15,18 @@ class BrandController extends Controller{
 
     protected $brands;
 
-    protected $baskets;
-
     protected $settings;
-
-    protected $data;
-
-    protected $globalData;
-
-    protected $template;
-
-    protected $module;
 
     /**
      * Создание нового экземпляра контроллера.
      *
      * @return void
      */
-    public function __construct(Brand $brands, Basket $baskets, Template $template, Module $module)
+    public function __construct(Brand $brands)
     {
-
         $this->settings = Settings::getInstance();
 
-        $this->globalData = $this->settings->getParameters();
-
-        $this->data =& $this->globalData['global_data'];
-
-        $this->template = $template;
-
-        $this->module = $module;
-
         $this->brands = $brands;
-
-        $this->baskets = $baskets;
 
     }
 
@@ -56,38 +35,15 @@ class BrandController extends Controller{
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-
-        $this->data['shop']['brands']  = $this->brands->getActiveBrands();
-
-        $this->data['header_page'] =  'Бренды';
-
-        $this->data['template'] = $this->template->getTemplateData($this->data, 'shop', 'brand', 'list');
-
-        $this->data['modules'] = $this->module->getModulesData($this->data['template']['schema']);
-
-        return view( $this->data['template']['viewKey'], $this->globalData);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function index()
     {
-        //
-    }
+        $data['shop']['brands']  = $this->brands->getActiveBrands();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $data['header_page'] =  'Бренды';
+
+        $globalData = $this->settings->getParametersForController($data, 'shop', 'brand', 'list');
+
+        return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
 
     /**
@@ -96,13 +52,13 @@ class BrandController extends Controller{
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Product $products, $name){
-
+    public function show(Request $request, Product $products, $name)
+    {
         $brand = $this->brands->getBrand($name);
 
-        $this->data['shop']['brand']       = $brand;
-        $this->data['shop']['parameters']  = [];
-        $this->data['header_page'] = 'Товары бренда ' . $brand[0]->name;
+        $data['shop']['brand']       = $brand;
+        $data['shop']['parameters']  = [];
+        $data['header_page'] = 'Товары бренда ' . $brand[0]->name;
 
         if (count($request->query) > 0) {
 
@@ -110,50 +66,14 @@ class BrandController extends Controller{
 
             $filterData = $request->toArray();
 
-            $this->data['shop']['products'] = $products->getFilteredProducts($routeData, $filterData);
+            $data['shop']['products'] = $products->getFilteredProducts($routeData, $filterData);
         } else {
-            $this->data['shop']['products'] = $products->getActiveProductsOfBrand($name);
+            $data['shop']['products'] = $products->getActiveProductsOfBrand($name);
         }
 
-        $this->data['template'] = $this->template->getTemplateData($this->data, 'shop', 'brand', 'show');
+        $globalData = $this->settings->getParametersForController($data, 'shop', 'brand', 'show');
 
-        $this->data['modules'] = $this->module->getModulesData($this->data['template']['schema']);
-
-        return view( $this->data['template']['viewKey'], $this->globalData);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
 
 }

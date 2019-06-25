@@ -1,13 +1,11 @@
-<div class="owl-banner owl-theme bg-success">
-    @foreach($banners as $banner)
-        @if($banner->img !== null)
-            <div class="item">
-                <a href="{{$banner->source}}">
-                    <img src="{{route('models.sizes.images.show', ['banner', 'main', $banner->img])}}">
-                </a>
-            </div>
+@foreach($banners as $banner)
+    <div class="owl-banner owl-theme bg-success">
+        @if($banner->slides !== null)
+            @foreach($banner->slides as $slide)
+                <div class="item">
+                    @include('_raduga.modules.banner._slides_templates.' . $slide['template'])
+                </div>
+            @endforeach
         @endif
-    @endforeach
-
-</div>
-
+    </div>
+@endforeach

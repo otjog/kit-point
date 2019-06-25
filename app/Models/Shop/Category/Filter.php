@@ -2,12 +2,20 @@
 
 namespace App\Models\Shop\Category;
 
-use http\Env\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop\Product\Product;
 use App\Models\Settings;
 
 class Filter extends Model{
+
+    protected $moduleMethods = [
+        'show' => 'getActiveFiltersWithParameters',
+    ];
+
+    public function getModuleMethods($moduleMethod)
+    {
+        return $this->moduleMethods[$moduleMethod];
+    }
 
     protected $prefix;
 
@@ -20,7 +28,9 @@ class Filter extends Model{
 
     }
 
-    public function getActiveFiltersWithParameters( $request, Product $products){
+    public function getActiveFiltersWithParameters(){
+
+        $products = new Product();
 
         $filters =  self::select(
             'filters.id',
@@ -33,17 +43,17 @@ class Filter extends Model{
             ->orderBy('filters.sort')
             ->get();
 
-        return $this->getParametersForFilters($request, $products, $filters);
+        return $this->getParametersForFilters($products, $filters);
 
     }
 
-    public function getParametersForFilters( $request, Product $products, $filters ){
+    public function getParametersForFilters(Product $products, $filters ){
 
         $temporary = [];
 
-        $routeData = $request->route()->parameters;
+        $routeData = request()->route()->parameters;
 
-        $old_values     = $request->toArray();
+        $old_values     = request()->toArray();
 
         $productsOfRoute = $products->getActiveProductsWithFilterParameters($routeData);
 
@@ -176,7 +186,8 @@ class Filter extends Model{
             }
 
         }
-        return $temporary;
+
+        return ['filters' => $temporary, 'routeData' => $routeData];
     }
 
     private function addOldValues($old_values, $filter_alias){

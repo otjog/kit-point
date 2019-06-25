@@ -57,7 +57,6 @@
             return back();
         })->name('GetGeo');
 
-
     });
 
     //Ajax
@@ -74,4 +73,6 @@
 
     Route::get('/parse/{from}', 'Parse\ParseController@load');
     Route::get('/curs', 'Price\CurrencyController@getCur');
+    Route::get('/test', function(){
 
+    });

@@ -28,8 +28,14 @@ class Category extends Model{
 
     }
 
-    public function products(){
+    public function products()
+    {
         return $this->hasMany('App\Models\Shop\Product\Product');
+    }
+
+    public function images()
+    {
+        return $this->morphToMany('App\Models\Site\Image', 'imageable');
     }
 
     public function getAllCategories(){
@@ -38,7 +44,6 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
-            'img',
             'url'
             )
             ->orderBy('name')
@@ -51,11 +56,11 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
-            'img',
             'url'
         )
             ->where('active', 1)
             ->orderBy('sort')
+            ->with('images')
             ->get();
     }
 
@@ -65,12 +70,12 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
-            'img',
             'url'
         )
             ->where('active', 1)
             ->whereIn('id', $ids)
             ->orderBy('sort')
+            ->with('images')
             ->get();
     }
 
@@ -80,11 +85,11 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
-            'img',
             'url'
         )
             ->where('parent_id', $parent_id)
             ->orderBy('sort')
+            ->with('images')
             ->get();
     }
 
@@ -94,12 +99,12 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
-            'img',
             'url'
         )
             ->where('active', 1)
             ->where('parent_id', $parent_id)
             ->orderBy('sort')
+            ->with('images')
             ->get();
     }
 
@@ -109,11 +114,11 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
-            'img',
             'url'
         )
             ->where('id', $id)
             ->orderBy('name')
+            ->with('images')
             ->get();
     }
 
@@ -123,16 +128,17 @@ class Category extends Model{
             'parent_id',
             'name',
             'original_name',
-            'img',
             'url'
         )
             ->where('id', $id)
             ->where('active', 1)
             ->orderBy('name')
+            ->with('images')
             ->get();
     }
 
-    public function getCategoriesTree($parent_id = 0){
+    public function getCategoriesTree($parent_id = 0)
+    {
 
         if($this->settings->getParameter('models.category.categoriesTree')){
             return $this->settings->getParameter('models.category.categoriesTree');
@@ -147,10 +153,11 @@ class Category extends Model{
 
         foreach($categories as $category){
             $cur =& $allCat[$category['id']];
+
             $cur['id'] = $category['id'];
             $cur['parent_id'] = $category['parent_id'];
             $cur['name'] = $category['name'];
-            $cur['img'] = $category['img'];
+            $cur['images'] = $category->images;
 
             if($category['parent_id'] == $parent_id){ /* id категории, с которой начинается дерево */
                 $tree[$category['id']] =& $cur;

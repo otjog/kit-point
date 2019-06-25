@@ -21,15 +21,26 @@ class Image extends Model{
 
     }
 
-    public function products(){
-        return $this->belongsToMany('App\Models\Shop\Product\Product', 'product_has_image')->withTimestamps();
+    public function products()
+    {
+        return $this->belongsToMany('App\Models\Shop\Product\Product', 'imageable')->withTimestamps();
+    }
+
+    public function categories()
+    {
+        return $this->morphedByMany('App\Models\Shop\Category\Category', 'imageable')->withTimestamps();
+    }
+
+    public function banner_slides()
+    {
+        return $this->morphedByMany('App\Models\Site\BannerSlide', 'imageable')->withTimestamps();
     }
 
     public function getAllImages(){
         return self::select(
             'images.id',
-            'images.alias',
-            'images.name'
+            'images.alt',
+            'images.src'
         )
             ->get();
     }

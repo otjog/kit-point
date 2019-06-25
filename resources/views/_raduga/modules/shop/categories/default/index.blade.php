@@ -13,7 +13,7 @@
                         <div class="card mb-4 rounded-0">
                             <a href="{{Route('categories.show', $item['id'])}}">
                                 <img
-                                        src="{{route('models.sizes.images.show', ['category', 's', $item['img']])}}"
+                                        src="{{route('models.sizes.images.show', ['category', 's', $item['images'][0]->src])}}"
                                         class="card-img-top"
                                         alt="{{$item['name']}}"
                                 >

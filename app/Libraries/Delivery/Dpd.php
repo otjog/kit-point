@@ -9,17 +9,17 @@ class Dpd {
 
     private $soapClient;
 
-    private $clientNumber       = '1051001516';
+    private $clientNumber;
 
-    private $clientKey          = '8491BA30A5AE7FBBEEFD7099D9B6249358478A94';
+    private $clientKey;
 
-    private $pickUpCity         = 'Белгород';
+    private $pickUpCity;
 
-    private $pickUpRegionCode   = '31';
+    private $pickUpRegionCode;
 
-    private $pickUpCountryCode  = 'RU';
+    private $pickUpCountryCode;
 
-    private $test = 0;
+    private $test;
 
     private $dpdHosts = [
         0 => 'http://ws.dpd.ru/services/', //рабочий хост
@@ -59,13 +59,27 @@ class Dpd {
 
         $this->geoData = $this->prepareGeoData($geoData);
 
+        $this->clientNumber         = env('SHOP_DELIVERY_DPD_CLIENT_NUMBER', '');
+
+        $this->clientKey            = env('SHOP_DELIVERY_DPD_CLIENT_KEY','');
+
+        $this->pickUpCity           = env('SHOP_DELIVERY_DPD_PICKUP_CITY', 'Москва');
+
+        $this->pickUpRegionCode     = env('SHOP_DELIVERY_DPD_PICKUP_REGION_CODE', '77');
+
+        $this->pickUpCountryCode    = env('SHOP_DELIVERY_DPD_PICKUP_COUNTRY_CODE', 'RU');
+
+        $this->test                 = env('SHOP_DELIVERY_DPD_TEST', '1');
+
     }
 
     public function getDeliveryCost($parcelParameters, $destinationType){
 
+        $this->destinationType = $destinationType;
+
         $data = [];
 
-        switch($destinationType){
+        switch($this->destinationType){
             case 'toTerminal'   : $selfDelivery = true; break;
             case 'toDoor'       : $selfDelivery = false; break;
             default :   break;

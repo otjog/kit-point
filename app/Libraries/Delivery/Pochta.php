@@ -5,17 +5,17 @@ namespace App\Libraries\Delivery;
 
 class Pochta {
 
-    private $apiToken       = 'lHZg26eOBqfhy_PFe0i0GY3pi9S8qQDB';
+    private $apiToken;
 
-    private $clientKey      = 'aW5mb0BhbGwtdGVybW8ucnU6WWVnYnBsdHcx';
+    private $clientKey;
 
-    private $indexFrom      = '308011';
+    private $indexFrom;
 
-    private $maxMass        = '20'; //кг
+    private $maxMass; //кг
 
-    private $maxVolume      = '8,645'; //350 × 190 × 130 см
+    private $maxVolume; //350 × 190 × 130 см
 
-    private $pochtaHost     = 'https://otpravka-api.pochta.ru';
+    private $pochtaHost = 'https://otpravka-api.pochta.ru';
 
     private $pochtaServices = [
         //расчет стоимости пересылк.
@@ -30,6 +30,16 @@ class Pochta {
     public function __construct($geoData){
 
         $this->geoData = $this->prepareGeoData($geoData);
+
+        $this->apiToken       = env('SHOP_DELIVERY_POCHTA_API_TOKEN');
+
+        $this->clientKey      = env('SHOP_DELIVERY_POCHTA_CLIENT_KEY');
+
+        $this->indexFrom      = env('SHOP_DELIVERY_POCHTA_INDEX_FROM');
+
+        $this->maxMass        = env('SHOP_DELIVERY_POCHTA_MAX_MASS');
+
+        $this->maxVolume      = env('SHOP_DELIVERY_POCHTA_MAX_VOLUME');
 
     }
 

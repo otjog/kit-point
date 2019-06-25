@@ -1,29 +1,26 @@
-<div class="product-list" id="product-list">
-    <div class="container">
+@extends('_kp.index')
 
-        <h1>Запчасти для котлов</h1>
+@section('component')
+    <?php
+        $brands =& $global_data['shop']['brands'];
 
-        @if(isset($brands) && count($brands) > 0)
+    ?>
+    <h1>{{$global_data['header_page']}}</h1>
+        <div class="card-columns">
+            @foreach($brands->chunk($global_data['components']['shop']['chunk_categories']) as $brands_row)
 
-            @foreach($brands->chunk($components['shop']['chunk_category']) as $brands_row)
+                @foreach($brands_row as $key => $brand)
 
-                <div class="card-group">
+                    <div class="card rounded-0">
+                        <div class="card-body px-2">
+                            <a href="{{ route( 'brands.show', $brand['name'] ) }}">
+                                <h6 class="card-title text-dark text-center"><u>{{$brand['name']}}</u></h6>
+                            </a>
 
-                    @foreach($brands_row as $key => $brand)
-
-                        <div class="card rounded-0">
-                            <div class="card-body px-2">
-                                <a href="../brands/{{$brand->id}}">
-                                    <img
-                                            class="img-fluid mx-auto d-block"
-                                            src="{{ URL::asset('storage/img/shop/brands/'.mb_strtolower($brand->name).'-logo.png') }}">
-
-                                </a>
-                            </div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
+
             @endforeach
-        @endif
-    </div>
-</div>
+        </div>
+@endsection

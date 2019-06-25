@@ -20,7 +20,7 @@ class Brand extends Parameter {
             })
 
             ->distinct()
-            ->paginate(15);
+            ->get();
 
     }
 
@@ -40,7 +40,7 @@ class Brand extends Parameter {
             })
 
             ->distinct()
-            ->paginate(15);
+            ->get();
 
     }
 

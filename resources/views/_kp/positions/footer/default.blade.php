@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container">
     <div class="row">
 
@@ -42,3 +43,34 @@
 
     </div>
 </div>
+=======
+@php
+    $template = $global_data['template']['schema']['current']['footer'];
+    $modules = $global_data['modules'];
+@endphp
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+
+            @if(isset($template['top']) && $template['top'] !== null)
+                @foreach($template['top'] as $module)
+                    @if(count($module) > 0)
+                        @include('_kp.modules.' . $module['module'] . '.index' , ['module' => $module])
+                    @endif
+                @endforeach
+            @endif
+
+        </div>
+    </div>
+</footer>
+
+@if(isset($template['bottom']) && $template['bottom'] !== null)
+    @foreach($template['bottom'] as $module)
+        @if(count($module) > 0)
+            @include('_kp.modules.' . $module['module'] . '.index' , ['module' => $module])
+        @endif
+    @endforeach
+@endif
+>>>>>>> c41f8355ca57175a5f15327fb781ff1c4b3ccbeb
