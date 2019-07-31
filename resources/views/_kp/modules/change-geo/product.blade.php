@@ -1,5 +1,6 @@
-@if(isset($global_data['geo']['city_name']) && $global_data['geo']['city_name'] !== null)
-    <div>Способы доставки в
+<div>
+    @if(isset($global_data['geo']['city_name']) && $global_data['geo']['city_name'] !== null)
+        Способы доставки в
         <a href="#" class="geo-location-link border-bottom-dotted " data-toggle="modal" data-target="#change-city-form">
             <span class="city_type">
                 @isset($global_data['geo']['city_type']){{$global_data['geo']['city_type'] . ' '}}@endif
@@ -14,11 +15,14 @@
             </span>
             )
         </a>
-    </div>
-@else
-    <div>Выберите
+
+    @else
+        Выберите
         <a href="#" class="geo-location-link border-bottom-dotted " data-toggle="modal" data-target="#change-city-form">
             город доставки
         </a>
-    </div>
-@endif
+
+    @endif
+    <br>
+    <span class="text-muted small">(Можете указать адрес до улицы или номера дома, чтобы увидеть ближайшие пункты выдачи)</span>
+</div>

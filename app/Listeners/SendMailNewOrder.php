@@ -41,6 +41,7 @@ class SendMailNewOrder{
         $globalData = $settings->getParametersForController($data,'shop', 'order', 'show', $event->orderId);
 
         Mail::to(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
+            ->cc($data['order']->customer->email, $data['order']->customer->full_name )
             ->send(new OrderShipped(['global_data' => $globalData]));
     }
 }

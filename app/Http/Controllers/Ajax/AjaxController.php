@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Models\Shop\Product\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Shop\Services\Delivery;
+use App\Models\Shop\Services\ShipmentService;
 use App\Models\Geo\GeoData;
 use App\Models\Settings;
 
@@ -35,15 +35,15 @@ class AjaxController extends Controller{
 
                 case 'shipment' :
 
-                    $ds = new Delivery();
+                    $ds = new ShipmentService();
 
-                    $this->data = $ds->getPrices($this->request['parcel'], $this->request['alias'], $this->request['type'], $this->request['product_ids']);
+                    $this->data = $ds->getPrices($this->request);
 
                     break;
 
                 case 'points' :
 
-                    $ds = new Delivery();
+                    $ds = new ShipmentService();
 
                     $this->data = $ds->getPoints($this->request['alias']);
 

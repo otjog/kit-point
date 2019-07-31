@@ -45,7 +45,9 @@
     });
 
     //Image
-    Route::resource('models.sizes.images',     'Image\ImageController',    [ 'only' => [ 'show' ]]);
+    Route::get('/models/{models}/sizes/{sizes}/images/{images}/modelid/{modelId?}/extension/{extension?}',     'Image\ImageController@show')
+        ->where('images', '.*')
+        ->name('getImage');
 
     //Forms
     Route::group(['prefix' => 'form'], function () {
@@ -62,17 +64,5 @@
     //Ajax
     Route::match(['get', 'post'], '/ajax', 'Ajax\AjaxController@index');
 
-    /************************Админка*************************************************/
-
-    Route::group(['prefix' => 'admin'], function () {
-        Voyager::routes();
-    });
-
-
-    /******************Конец*Админка*************************************************/
-
     Route::get('/parse/{from}', 'Parse\ParseController@load');
     Route::get('/curs', 'Price\CurrencyController@getCur');
-    Route::get('/test', function(){
-
-    });

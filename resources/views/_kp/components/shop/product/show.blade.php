@@ -4,6 +4,7 @@
 
     <?php
         $product =& $global_data['shop']['product'];
+        $parcelData =& $global_data['shop']['parcelData'];
     ?>
 
     <div class="single_product">
@@ -140,7 +141,7 @@
                         {{-- Description Tab --}}
                         <div class="tab-data data-description">
                             @if(isset( $product->description ))
-                                <p>{{ $product->description }}</p>
+                                <p>{!! $product->description !!}</p>
                             @endif
 
                             @if( isset($product->parameters) && count($product->parameters) > 0)
@@ -165,12 +166,11 @@
                         {{-- Shipment Tab --}}
                         <div class="tab-data data-shipment">
                             @if(isset($global_data['modules']['shop.order.shipment.index']))
-                                @php $module['template'] = 'product'; @endphp
                                 @include(
                                     $global_data['template']['name']. '.modules.shop.shipment.index',
                                         [
-                                            'shipment' => $global_data['modules']['shop.order.shipment.index'],
-                                            'module' => $module
+                                            'shipments' => $global_data['modules']['shop.order.shipment.index'],
+                                            'module' => ['template' =>'product']
                                         ]
                                 )
                             @endif

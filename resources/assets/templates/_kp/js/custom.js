@@ -106,15 +106,23 @@ $(".image_selected a").click(function() {
 });
 
 //обрежем высоту галереи по высоте основного изображения. !!!Временное решение
-let mainImg     = $("div.single_product div.image_selected");
-let listThumb   = $("div.single_product ul.image_list");
-let mainImgOutHeight    = mainImg.outerHeight();
-let listThumbOutHeight  = listThumb.outerHeight();
+let mainImg     = $("div.single_product div.image_selected img");
 
-if(listThumbOutHeight > mainImgOutHeight){
-    let listThumbHeight = listThumb.height();
-    let diff = listThumbOutHeight - mainImgOutHeight;
-    listThumb.height(listThumbHeight - diff).css('overflow', 'hidden');
+if (mainImg[0] !== undefined && mainImg[0] !== null) {
+    mainImg[0].addEventListener('load', function()
+    {
+        let mainImgWrap     = $("div.single_product div.image_selected");
+        let listThumb   = $("div.single_product ul.image_list");
+
+        let mainImgOutHeight    = mainImgWrap.outerHeight();
+        let listThumbOutHeight  = listThumb.outerHeight();
+
+        if(listThumbOutHeight > mainImgOutHeight){
+            let listThumbHeight = listThumb.height();
+            let diff = listThumbOutHeight - mainImgOutHeight;
+            listThumb.height(listThumbHeight - diff).css('overflow', 'hidden');
+        }
+    });
 }
 //END FancyBox
 

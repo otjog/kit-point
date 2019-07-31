@@ -1,6 +1,5 @@
 @php
     $categories = $modules[$module['resource']];
-
 @endphp
 @if(isset($categories) && $categories !== null)
 <!-- Popular Categories -->
@@ -26,13 +25,21 @@
                         @foreach($categories as $category)
                             <div class="owl-item">
                                 <div class="popular_category d-flex flex-column align-items-center justify-content-center">
-                                    <span class="popular_category_image">
-                                        <a href="{{route('categories.show', $category['id'])}}">
-                                            <img
-                                                    src="{{route('models.sizes.images.show', ['category', 's', $category['images'][0]->src])}}"
-                                                    alt="{{$category['images'][0]->src}}">
-                                        </a>
-                                    </span>
+                                    @if(isset($category['images']) && $category['images'] !== null && count($category['images']) > 0)
+                                        <span class="popular_category_image">
+                                            @php
+                                                if (count($category['images']) > 0)
+                                                    $imageSrc = $category['images'][0]->src;
+                                                else
+                                                    $imageSrc = 'noimage';
+                                            @endphp
+                                            <a href="{{route('categories.show', $category['id'])}}">
+                                                <img
+                                                        src="{{route('getImage', ['category', 's', $imageSrc, $category['id']])}}"
+                                                        alt="{{$category['images'][0]->alt or $category['name']}}">
+                                            </a>
+                                        </span>
+                                    @endif
                                     <span class="popular_category_text">
                                         <a href="{{route('categories.show', $category['id'])}}">
                                             {{$category['name']}}

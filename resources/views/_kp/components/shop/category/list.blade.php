@@ -7,19 +7,21 @@
     <h1>{{$global_data['header_page']}}</h1>
     <div class="card-columns">
         @foreach($categories->chunk($global_data['components']['shop']['chunk_categories']) as $categories_row)
-
             @foreach($categories_row as $key => $category)
-
                 <div class="card rounded-0">
-                    @if( isset($category->images[0]->src) && $category->images[0]->src !== null )
-                        <a href="{{ route( 'categories.show', $category['id'] ) }}">
-                            <img
-                                    src="{{route('models.sizes.images.show', ['category', 's', $category['images'][0]->src])}}"
-                                    class="card-img-top"
-                                    alt="{{$category['name']}}"
-                            >
-                        </a>
-                    @endif
+                    <a href="{{ route( 'categories.show', $category['id'] ) }}">
+                        @php
+                            if (count($category['images']) > 0)
+                                $imageSrc = $category['images'][0]->src;
+                            else
+                                $imageSrc = 'noimage';
+                        @endphp
+                        <img
+                                class="card-img-top"
+                                src="{{route('getImage', ['category', 's', $imageSrc, $category['id']])}}"
+                                alt="{{$category['images'][0]->alt or $category['name']}}"
+                        >
+                    </a>
                     <div class="card-body px-2">
                         <a href="{{ route( 'categories.show', $category['id'] ) }}">
                             <h6 class="card-title text-dark text-center"><u>{{$category['name']}}</u></h6>
@@ -40,7 +42,6 @@
                     </div>
                 </div>
             @endforeach
-
         @endforeach
     </div>
 @endsection

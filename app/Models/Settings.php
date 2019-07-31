@@ -9,6 +9,7 @@ use App\Models\Geo\GeoData;
 use App\Models\Site\Template;
 use App\Models\Site\Metatags;
 use App\Models\Site\Module;
+use Illuminate\Support\Facades\DB;
 
 class Settings {
 
@@ -25,7 +26,13 @@ class Settings {
 
     private function __construct()
     {
-        $this->data = config('global-data');
+        $json = DB::table('global_data')
+            ->select('options')
+            ->first();
+
+        $this->data = json_decode($json->options, true);
+
+        $this->data['today'] = date('Y-m-d');
 
         /* Add Currency */
         $currency = new Currency();
@@ -119,17 +126,17 @@ class Settings {
     {
         /* Add Template */
         $template = new Template();
-        $this->data['template'] = $template->getTemplateData($component, $model, $view, $id);
+        $data['template'] = $template->getTemplateData($component, $model, $view, $id);
         /* End Template */
 
         /* Add Metatags */
         $metatags = new Metatags();
-        $this->data['template']['metatags'] = $metatags->getTagsForPage($this->data);
+        $data['template']['metatags'] = $metatags->getTagsForPage($data);
         /* End Metatags */
 
         /* Add Modules */
         $module = new Module();
-        $this->data['modules'] = $module->getModulesData($this->data['template']['schema']);
+        $data['modules'] = $module->getModulesData($data['template']['schema']);
         /* End Modules */
 
         return $this->pushArrayParameters($data);

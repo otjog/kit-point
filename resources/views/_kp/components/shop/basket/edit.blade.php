@@ -4,7 +4,6 @@
 
     <?php
         $basket =& $global_data['shop']['basket'];
-        $parcels =& $global_data['shop']['parcels'];
     ?>
 
     @if( isset($basket->products) )
@@ -20,20 +19,17 @@
 
                         <div class="row align-items-center my-2 border-bottom py-2">
                             <div class="order-1 col-6   order-lg-1 col-lg-1     py-lg-1 px-lg-2">
-                                @if( isset($product->images[0]->src) && $product->images[0]->src !== null )
+                                @php
+                                    if (count($product->images) > 0)
+                                        $imageSrc = $product->images[0]->src;
+                                    else
+                                        $imageSrc = 'noimage';
+                                @endphp
                                     <img
                                             class="img-fluid"
-                                            src="{{route('models.sizes.images.show', ['product', 's', $product->images[0]->src])}}"
-                                            alt=""
+                                            src="{{route('getImage', ['product', 's', $imageSrc, $product->id])}}"
+                                            alt="{{$product->images[0]->alt or $product->name}}"
                                     />
-                                @else
-                                    <img
-                                            class="img-fluid"
-                                            src="{{route('models.sizes.images.show', ['product', 's', 'no_image.jpg'])}}"
-                                            alt=""
-                                    />
-                                @endif
-
                             </div>
                             <div class="order-3 col-12  order-lg-2 col-lg-5 ">
                                 <a href="{{ route('products.show', $product->id) }}">

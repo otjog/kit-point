@@ -19,20 +19,17 @@
                         @foreach( $categories_row as $key => $category )
                             <div class="card">
                                 <a href="{{ route( 'categories.show', $category->id ) }}">
-
-                                    @if( isset($category->images[0]->src) && $category->images[0]->src !== null )
-                                        <img
-                                                class="img-fluid"
-                                                src="{{route('models.sizes.images.show', ['categories', 's', $category->images[0]->src])}}"
-                                                alt=""
-                                        />
-                                    @else
-                                        <img
-                                                class="img-fluid"
-                                                src="{{route('models.sizes.images.show', ['categories', 's', 'no_image.jpg'])}}"
-                                                alt=""
-                                        />
-                                    @endif
+                                    @php
+                                        if (count($category->images) > 0)
+                                            $imageSrc = $category->images[0]->src;
+                                        else
+                                            $imageSrc = 'noimage';
+                                    @endphp
+                                    <img
+                                            class="img-fluid"
+                                            src="{{route('getImage', ['category', 's', $imageSrc, $category->id])}}"
+                                            alt="{{$category->images[0]->alt or $category->name}}"
+                                    />
 
                                 </a>
                                 <div class="card-body">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Libraries\Services\Pay\Contracts\OnlinePayment;
 use App\Models\Shop\Customer;
 use App\Models\Shop\Order\Payment;
+use App\Models\Shop\Services\PaymentService;
 use App\Models\Site\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -68,11 +69,15 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Payment $payments)
+    public function create(PaymentService $payments)
     {
         $data['shop']['basket']   = $this->baskets->getActiveBasketWithProductsAndRelations();
 
-        $data['shop']['payments'] = $payments->getActiveMethods();
+        $data['shop']['payments'] = $payments->getActiveMethodsWithTax($data['shop']['basket']['total']);
+
+        $products = new Product();
+
+        $data['shop']['parcelData'] = $products->getJsonParcelParameters($data['shop']['basket']->products);
 
         $globalData = $this->settings->getParametersForController($data, 'shop', 'order', 'create');
 

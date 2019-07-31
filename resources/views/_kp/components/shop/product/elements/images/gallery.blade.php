@@ -4,18 +4,17 @@
         <ul class="image_list">
 
             @foreach( $product->images as $image)
-
                 <li>
                     <a
-                            href="{{route('models.sizes.images.show', ['product', 'l', $image->src])}}"
+                            href="{{route('getImage', ['product', 'l', $image->src, $product->id])}}"
                             class="fancybox"
                             data-fancybox="product_images"
                             rel="product_images"
                             title=""
                     >
                         <img
-                                src="{{route('models.sizes.images.show', ['product', 'm', $image->src])}}"
-                                alt=""
+                                src="{{route('getImage', ['product', 'xs', $image->src, $product->id])}}"
+                                alt="{{$image->alt or $product->name}}"
                         />
                     </a>
                 </li>
@@ -29,22 +28,21 @@
 <!-- Main Image -->
 <div class="col-lg-9 order-lg-2 order-1">
     <div class="image_selected">
-        @if( isset($product->images[0]->src) && $product->images[0]->src !== null)
-            <a
-                    rel="product_images"
-                    href="{{route('models.sizes.images.show', ['product', 'l', $product->images[0]->src])}}"
-                    title=""
-            >
-                <img
-                        src="{{route('models.sizes.images.show', ['product', 'm', $product->images[0]->src])}}"
-                        alt=""
-                />
-            </a>
-        @else
+        @php
+            if (count($product->images) > 0)
+                $imageSrc = $product->images[0]->src;
+            else
+                $imageSrc = 'noimage';
+        @endphp
+        <a
+                rel="product_images"
+                href="{{route('getImage', ['product', 'l', $imageSrc, $product->id])}}"
+                title=""
+        >
             <img
-                    src="{{route('models.sizes.images.show', ['product', 'm', 'no_image.jpg'])}}"
-                    alt=""
+                    src="{{route('getImage', ['product', 'm', $imageSrc, $product->id])}}"
+                    alt="{{$product->images[0]->alt or $product->name}}"
             />
-        @endif
+        </a>
     </div>
 </div>

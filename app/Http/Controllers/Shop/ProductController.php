@@ -44,6 +44,8 @@ class ProductController extends Controller{
 
         $data['photo360'] = $photo360->getPhotos($data['shop']['product']['scu']);
 
+        $data['shop']['parcelData'] = $this->products->getJsonParcelParameters([$data['shop']['product']]);
+
         $globalData = $this->settings->getParametersForController($data,'shop', 'product', 'show', $id);
 
         return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
