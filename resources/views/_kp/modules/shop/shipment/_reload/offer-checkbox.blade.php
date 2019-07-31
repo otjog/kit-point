@@ -28,7 +28,7 @@
                 <label
                         for="shipment_{{$global_data['ajax']->offer['id_response']}}"
                         class="custom-control-label">
-                    {{$global_data['ajax']['description']}}
+                    {{$global_data['ajax']['name']}}
                 </label>
             </div>
         </div>

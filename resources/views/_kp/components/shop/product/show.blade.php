@@ -141,7 +141,7 @@
                         {{-- Description Tab --}}
                         <div class="tab-data data-description">
                             @if(isset( $product->description ))
-                                <p>{{ $product->description }}</p>
+                                <p>{!! $product->description !!}</p>
                             @endif
 
                             @if( isset($product->parameters) && count($product->parameters) > 0)
