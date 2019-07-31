@@ -126,17 +126,17 @@ class Settings {
     {
         /* Add Template */
         $template = new Template();
-        $this->data['template'] = $template->getTemplateData($component, $model, $view, $id);
+        $data['template'] = $template->getTemplateData($component, $model, $view, $id);
         /* End Template */
 
         /* Add Metatags */
         $metatags = new Metatags();
-        $this->data['template']['metatags'] = $metatags->getTagsForPage($this->data);
+        $data['template']['metatags'] = $metatags->getTagsForPage($data);
         /* End Metatags */
 
         /* Add Modules */
         $module = new Module();
-        $this->data['modules'] = $module->getModulesData($this->data['template']['schema']);
+        $data['modules'] = $module->getModulesData($data['template']['schema']);
         /* End Modules */
 
         return $this->pushArrayParameters($data);
