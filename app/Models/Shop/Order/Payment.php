@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model{
 
-    public function shopOrders(){
+    public function shopOrders()
+    {
         return $this->hasMany('App\Models\Shop\Order\Order');
+    }
+
+    public function images()
+    {
+        return $this->morphToMany('App\Models\Site\Image', 'imageable');
     }
 
     public function getActiveMethods(){
@@ -15,9 +21,9 @@ class Payment extends Model{
             'id',
             'alias',
             'name',
-            'description',
-            'img'
+            'description'
         )
+            ->with('images')
             ->where('active', 1)
             ->get();
     }
@@ -27,9 +33,9 @@ class Payment extends Model{
             'id',
             'alias',
             'name',
-            'description',
-            'img'
+            'description'
         )
+            ->with('images')
             ->where('active', 1)
             ->where('id', $id)
             ->get();

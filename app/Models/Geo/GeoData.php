@@ -47,6 +47,8 @@ class GeoData extends Model{
                 'city_kladr_id' => $objectData->city_kladr_id,
                 'street_name'   => $objectData->street,
                 'street_type'   => $objectData->street_type,
+                'house_number'  => $objectData->house,
+                'house_type'    => $objectData->house_type,
                 'latitude'      => $objectData->geo_lat,
                 'longitude'     => $objectData->geo_lon,
             ];

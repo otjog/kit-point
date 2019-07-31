@@ -23,8 +23,7 @@
         "maxmind-db/reader": "~1.0",
         "phpoffice/phpspreadsheet": "^1.3",
         "predis/predis": "^1.1",
-        "sngrl/sphinxsearch": "dev-master",
-        "tcg/voyager": "^1.2"
+        "sngrl/sphinxsearch": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",

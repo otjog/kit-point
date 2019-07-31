@@ -11,32 +11,7 @@ class Product extends Model{
 
     use PaginationWithHavings;
 
-    /******/
-
     protected $fillable = ['brand_id', 'category_id', 'manufacturer_id', 'active', 'name', 'scu'];
-
-    protected $settings;
-
-    protected $price_id;
-
-    protected $pagination;
-
-    protected $today;
-
-    /***Relations***/
-
-    public function __construct(array $attributes = []){
-        parent::__construct($attributes);
-
-        $settings = Settings::getInstance();
-
-        $this->price_id = $settings->getParameter('components.shop.price.id');
-
-        $this->pagination = $settings->getParameter('components.shop.pagination');
-
-        $this->today = $settings->getParameter('today');
-
-    }
 
     public function images()
     {
@@ -119,7 +94,6 @@ class Product extends Model{
 
             if( isset($products[0])){
                 $products = $this->addRelationCollections($products);
-
                 return $products[0];
             }else{
                 return null;
@@ -127,7 +101,11 @@ class Product extends Model{
 
     }
 
-    public function getActiveProductsFromCategory($category_id){
+    public function getActiveProductsFromCategory($category_id)
+    {
+        $settings = Settings::getInstance();
+
+        $pagination = $settings->getParameter('components.shop.pagination');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -139,13 +117,19 @@ class Product extends Model{
 
             ->orderBy('products.name')
 
-            ->paginate($this->pagination);
+            ->paginate($pagination);
 
         return $this->addRelationCollections($products);
 
     }
 
-    public function getActiveProductsWithFilterParameters($routeData){
+    public function getActiveProductsWithFilterParameters($routeData)
+    {
+        $settings = Settings::getInstance();
+
+        $today = $settings->getParameter('today');
+
+        $price_id = $settings->getParameter('components.shop.price.id');
 
         $products = self::select(
             'products.id',
@@ -193,10 +177,10 @@ class Product extends Model{
         $products = $products->where('products.active', 1)
 
             /************PRICE*******************/
-            ->leftJoin('product_has_price', function ($join) {
+            ->leftJoin('product_has_price', function ($join) use ($price_id) {
                 $join->on('products.id', '=', 'product_has_price.product_id')
                     ->where('product_has_price.active', '=', '1')
-                    ->where('product_has_price.price_id', '=', $this->price_id);
+                    ->where('product_has_price.price_id', '=', $price_id);
             })
             ->leftJoin('prices','prices.id', '=', 'product_has_price.price_id')
 
@@ -205,10 +189,10 @@ class Product extends Model{
 
             /************DISCOUNT****************/
             ->leftJoin('product_has_discount', 'products.id', '=', 'product_has_discount.product_id')
-            ->leftJoin('discounts', function ($join) {
+            ->leftJoin('discounts', function ($join) use ($today) {
                 $join->on('discounts.id', '=', 'product_has_discount.discount_id')
                     ->where('discounts.active', '=', '1')
-                    ->whereDate('to_date', '>=', $this->today);
+                    ->whereDate('to_date', '>=', $today);
             })
 
             /************PARAMETER***************/
@@ -228,7 +212,11 @@ class Product extends Model{
 
     }
 
-    public function getFilteredProducts($routeData, $filterData){
+    public function getFilteredProducts($routeData, $filterData)
+    {
+        $settings = Settings::getInstance();
+
+        $pagination = $settings->getParameter('components.shop.pagination');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -291,13 +279,17 @@ class Product extends Model{
 
                 ->orderBy('products.name')
 
-                ->paginate($this->pagination);
+                ->paginate($pagination);
 
         return $this->addRelationCollections($products);
 
     }
 
-    public function getActiveProductsOfBrand($brandName){
+    public function getActiveProductsOfBrand($brandName)
+    {
+        $settings = Settings::getInstance();
+
+        $pagination = $settings->getParameter('components.shop.pagination');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -319,13 +311,17 @@ class Product extends Model{
 
             ->orderBy('products.name')
 
-            ->paginate($this->pagination);
+            ->paginate($pagination);
 
         return $this->addRelationCollections($products);
 
     }
 
-    public function getProductsById($idProducts){
+    public function getProductsById($idProducts)
+    {
+        $settings = Settings::getInstance();
+
+        $pagination = $settings->getParameter('components.shop.pagination');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -337,7 +333,7 @@ class Product extends Model{
 
             ->orderBy('products.name')
 
-            ->paginate($this->pagination);
+            ->paginate($pagination);
 
         return $this->addRelationCollections($products);
 
@@ -435,31 +431,34 @@ class Product extends Model{
 
     }
 
-    public function getParcelParameters($products){
+    public function getJsonParcelParameters($products)
+    {
+        $parcelData = [
+            'products_id' => [],
+            'parcel' => [],
+            'declaredValue' => 0
+        ];
 
-        $parameters = [];
-
-        foreach($products as $key=>$product){
-
-            $parameters[] = $this->getParametersForParcel($product);
-
+        foreach ($products as $product) {
+            $parcelData['products_id'][] = $product->id;
+            $parcelData['parcel'][] = $this->getParametersForParcel($product);
+            $parcelData['declaredValue'] += $product->price['value'];
         }
 
-        return $parameters;
+        return json_encode($parcelData);
     }
 
-    private function getParametersForParcel($product, $quantity = 1){
+    private function getParametersForParcel($product){
 
-        if( isset($product->baskets['pivot']['quantity']) ){
-            $quantity = $product->baskets['pivot']['quantity'];
-        }
+        if(!isset($product->quantity) && $product->quantity === null)
+            $product->quantity = 1;
 
         return [
-            'weight'    => $product['weight'],
-            'length'    => $product['length'],
-            'width'     => $product['width'],
-            'height'    => $product['height'],
-            'quantity'  => $quantity,
+            'weight'    => $product->weight,
+            'length'    => $product->length,
+            'width'     => $product->width,
+            'height'    => $product->height,
+            'quantity'  => $product->quantity,
 
         ];
     }
@@ -534,6 +533,12 @@ class Product extends Model{
 
     private function getDefaultProductQuery(){
 
+        $settings = Settings::getInstance();
+
+        $today = $settings->getParameter('today');
+
+        $price_id = $settings->getParameter('components.shop.price.id');
+
         return self::select(
             'products.id',
             'products.manufacturer_id',
@@ -577,10 +582,10 @@ class Product extends Model{
         )
 
             /************PRICE******************/
-            ->leftJoin('product_has_price', function ($join) {
+            ->leftJoin('product_has_price', function ($join) use ($price_id) {
                 $join->on('products.id', '=', 'product_has_price.product_id')
                     ->where('product_has_price.active', '=', '1')
-                    ->where('product_has_price.price_id', '=', $this->price_id);
+                    ->where('product_has_price.price_id', '=', $price_id);
             })
             ->leftJoin('prices','prices.id', '=', 'product_has_price.price_id')
 
@@ -589,10 +594,10 @@ class Product extends Model{
 
             /************DISCOUNT***************/
             ->leftJoin('product_has_discount', 'products.id', '=', 'product_has_discount.product_id')
-            ->leftJoin('discounts', function ($join) {
+            ->leftJoin('discounts', function ($join) use ($today) {
                 $join->on('discounts.id', '=', 'product_has_discount.discount_id')
                     ->where('discounts.active', '=', '1')
-                    ->whereDate('to_date', '>=', $this->today);
+                    ->whereDate('to_date', '>=', $today);
             })
 
             /************MANUFACTURER***********/

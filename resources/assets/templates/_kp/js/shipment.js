@@ -1,5 +1,7 @@
 import Ajax from './ajax';
 import InitMap from './googlemap';
+import MarkerClusterer from '@google/markerclusterer/src/markerclusterer';
+
 
 export default function Shipment(){
 
@@ -9,11 +11,7 @@ export default function Shipment(){
 
         if(offers.elements.wrapBlock !== null && offers.elements.wrapBlock !== undefined){
 
-            let parcelAttributes = offers.elements.wrapBlock.attributes;
-
-            let queryString = setQueryString(parcelAttributes);
-
-            queryString += setQueryString(offers.qsParams, queryString);
+            let queryString = setQueryString(offers.qsParams);
 
             let requests = offers.elements.wrapBlock.getElementsByClassName('reload');
 
@@ -30,7 +28,7 @@ export default function Shipment(){
                         let offerAttributes = requests[i].attributes;
 
                         requestData.queryString = setQueryString(offerAttributes, queryString);
-                        requestData.requestName = setRequestName(offerAttributes, requestData.requestName);
+                        requestData.requestName += offerAttributes['data-alias']['nodeValue'] + '_' + offerAttributes['data-type']['nodeValue'];
                         requestData.reloadBlock = requests[i];
 
                     sendRequest(requestData);
@@ -88,32 +86,41 @@ export default function Shipment(){
 
     }
 
-    function getMarkerOnMap(map, json) {
+    function getMarkerOnMap(map, json, controls = null) {
 
-        for(let company in json.points){
+        let markers = [];
 
-            if(json.points.hasOwnProperty(company)){
+        let companyAlias = '';
 
-                for(let terminalType in json.points[company]){
+        for(let company in json){
 
-                    if(json.points[company].hasOwnProperty(terminalType)){
+            companyAlias = company;
 
-                        for( let terminal in json.points[company][terminalType] ){
+            if(json.hasOwnProperty(company)){
 
-                            if(json.points[company][terminalType].hasOwnProperty(terminal)){
+                for(let i in json[company].points){
 
-                                let geoShop = json.points[company][terminalType][terminal].geoCoordinates;
+                    if(json[company].points.hasOwnProperty(i)){
 
-                                let locationShop = {lat: +geoShop.latitude, lng: +geoShop.longitude};
+                        let geoShop = json[company].points[i].geoCoordinates;
 
-                                let image = 'https://myshop.loc/storage/img/elements/delivery/' + company + '/marker-' + terminalType + '.png';
+                        let locationShop = {lat: +geoShop.latitude, lng: +geoShop.longitude};
 
-                                let marker = new google.maps.Marker({position: locationShop, map: map, icon: image});
+                        let image = location.origin + '/' + json[company].mapMarker;
 
-                            }
+                        let point = json[company].points[i];
 
-                        }
+                        let infowindow = new google.maps.InfoWindow({
+                            content: point.markerInfo
+                        });
 
+                        let marker = new google.maps.Marker({position: locationShop, map: map, icon: image});
+
+                        markers.push(marker);
+
+                        marker.addListener('click', function() {
+                            infowindow.open(map, marker);
+                        });
 
                     }
 
@@ -123,30 +130,60 @@ export default function Shipment(){
 
         }
 
+        let markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+        if (controls !== null) {
+            let input = controls.querySelector("input[type=checkbox][value=" + companyAlias + "]");
+
+            if(input !== null && input !== undefined){
+
+                if(markers.length > 0){
+                    input.removeAttribute('disabled');
+                    input.setAttribute('checked', 'checked');
+                }
+                input.addEventListener('change', function(e) {
+                    if(input.checked){
+                        markerCluster.addMarkers(markers);
+                    }else{
+                        for (let i = 0; i < markers.length; i++) {
+                            markerCluster.removeMarker(markers[i]);
+                        }
+                    }
+                });
+            }
+        }
     }
 
+    /**
+     * Добавляет или создает новую строку запроса с переданными параметрами
+     *
+     * @param {Object} attributes - атрибуты для добавления параметров
+     * @param {String} [queryString] - строка, к которой нужно добавить параметры. Не обязательный параметр
+     * @returns {string}
+     */
     function setQueryString(attributes, queryString = ''){
 
         if(attributes.length !== undefined && attributes.length !== null && attributes.length > 0 ){
         //для атрибутов ДОМ-Элемента
-            for(let i = 0; i < attributes.length; i++){
+            for (let i = 0; i < attributes.length; i++) {
 
-                if(queryString !== ''){
-                    queryString += '&';
-                }
+                if (attributes[i].name !== 'id' && attributes[i].name !== 'class' && attributes[i].name !== 'style') {
 
-                if(attributes[i].name !== 'id' && attributes[i].name !== 'class' && attributes[i].name !== 'style'){
+                    if (queryString !== '') {
+                        queryString += '&';
+                    }
 
                     queryString += attributes[i].name.replace('data-', '');
                     queryString += '=';
                     queryString += attributes[i].nodeValue;
-
                 }
             }
 
-        }else{
+        } else {
             //для нашего объекта
-            for(let attribute in attributes){
+            for (let attribute in attributes)
+            {
 
                 if(queryString !== ''){
                     queryString += '&';
@@ -161,27 +198,6 @@ export default function Shipment(){
         return queryString;
     }
 
-    function setRequestName(attributes, string = ''){
-
-        if(attributes.length > 0 ){
-
-            for(let i = 0; i < attributes.length; i++){
-
-                if(attributes[i].name !== 'id' && attributes[i].name !== 'class'){
-
-                    string += attributes[i].nodeValue;
-
-                    if(i !== attributes.length - 1){
-                        string += '_';
-                    }
-                }
-            }
-
-        }
-
-        return string;
-    }
-
     function getOffersRequestData() {
         return {
             method : 'GET',
@@ -193,6 +209,10 @@ export default function Shipment(){
             elements : {
                 wrapBlock : document.getElementById('shipment-offers'),
                 shipmentBestOfferWrap   : document.getElementById('shipment-best-offer'),
+                shipmentDefaultMethods  : {
+                    'toTerminal'    : document.querySelector('[data-alias="toTerminal"]'),
+                    'toDoor'        : document.querySelector('[data-alias="toDoor"]'),
+                }
             },
             functions : {
                 onloadstart : function (self) {
@@ -224,7 +244,20 @@ export default function Shipment(){
                 },
                 onreadystatechange :function(self, ajaxReq) {
 
-                    self.reloadBlock.innerHTML = String(ajaxReq.req.responseText);
+                    let result = String(ajaxReq.req.responseText);
+                    self.reloadBlock.innerHTML = result;
+                    if(result !== ''){
+
+                        let arrayReqName = self.requestName.split('_');
+
+                        if (arrayReqName[arrayReqName.length -1 ] === 'toDoor' && arrayReqName[arrayReqName.length - 2 ] !== 'toDoor') {
+                            self.elements.shipmentDefaultMethods.toDoor.style.display = 'none';
+
+                        } else if (arrayReqName[arrayReqName.length -1 ] === 'toTerminal' && arrayReqName[arrayReqName.length - 2 ] !== 'toTerminal') {
+                            self.elements.shipmentDefaultMethods.toTerminal.style.display = 'none';
+                        }
+
+                    }
 
                     sendRequestCount++;
                     if(sendRequestCount === allRequestCount){
@@ -311,6 +344,7 @@ export default function Shipment(){
             },
             elements    : {
                 wrapBlock : document.getElementById('map'),
+                wrapCheckbox : document.getElementById('mapShipmentCheckbox')
             },
             functions : {
                 onloadstart : function (self) {},
@@ -324,7 +358,16 @@ export default function Shipment(){
 
                     points.elements.wrapBlock = self.elements.wrapBlock.parentElement;
 
-                    points.map = InitMap(json, 12);
+                    let zoom = 4;
+
+                    if (json.region_code !== undefined && json.region_code !== null)
+                        zoom = 12;
+                    if (json.street_name !== undefined && json.street_name !== null)
+                        zoom = 15;
+                    if (json.house_number !== undefined && json.house_number !== null)
+                        zoom = 18;
+
+                    points.map = InitMap(json, zoom);
 
                     if(self.elements.wrapBlock.hasAttribute('data-alias')){
 
@@ -365,40 +408,38 @@ export default function Shipment(){
             },
             queryString : '',
             requestName : 'points_',
-            elements    : {},
+            elements    : {
+                wrapCheckbox : document.getElementById('mapShipmentCheckbox')
+            },
             functions : {
-                onloadstart : function (self) {
-                    self.elements = {
-                        loadingBlock    : self.elements.wrapBlock.getElementsByClassName('loading'),
-                        errorBlock      : self.elements.wrapBlock.getElementsByClassName('error'),
-                        contentBlock    : self.elements.wrapBlock.getElementsByClassName('blur'),
-                    };
+                onloadstart : function (self)
+                {
+                    self.elements.loadingBlock = self.elements.wrapBlock.getElementsByClassName('loading');
+                    self.elements.errorBlock = self.elements.wrapBlock.getElementsByClassName('error');
+                    self.elements.contentBlock = self.elements.wrapBlock.getElementsByClassName('blur');
                     self.elements.loadingBlock[0].style.display = 'block';
                     self.elements.errorBlock[0].style.display = 'none';
                     self.elements.contentBlock[0].style.opacity = 0.75;
 
                 },
-                ontimeout : function (self) {
-
+                ontimeout : function (self)
+                {
                     self.elements.loadingBlock[0].style.display = 'none';
                     self.elements.errorBlock[0].style.display = 'block';
                 },
-                onreadystatechange :function(self, ajaxReq) {
-
+                onreadystatechange :function(self, ajaxReq)
+                {
                     let json  = JSON.parse(ajaxReq.req.responseText);
 
-                    getMarkerOnMap(self.map, json);
+                    getMarkerOnMap(self.map, json, self.elements.wrapCheckbox);
 
                     self.elements.loadingBlock[0].style.display   = 'none';
                     self.elements.errorBlock[0].style.display = 'none';
                     self.elements.contentBlock[0].style.opacity = 1;
-
 
                 },
             },
 
         };
     }
-
-
 }

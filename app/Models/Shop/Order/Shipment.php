@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Shipment extends Model{
 
     protected $moduleMethods = [
-        'index' => 'getShipmentServices',
+        'index' => 'getActiveShipmentMethods',
         'show' => 'getShipmentServiceByAlias',
     ];
 
@@ -20,29 +20,41 @@ class Shipment extends Model{
         return $this->hasMany('App\Models\Shop\Order\Order');
     }
 
-    public function getActiveMethods(){
+    public function images()
+    {
+        return $this->morphToMany('App\Models\Site\Image', 'imageable');
+    }
+
+    public function getActiveShipmentMethods(){
         return self::select(
             'id',
             'alias',
             'name',
             'description',
-            'img'
+            'is_service'
         )
+            ->with('images')
             ->where('active', 1)
             ->get();
     }
 
     public function getShipmentServices(){
-        return self::select(
+        $services =  self::select(
             'id',
             'alias',
             'name',
             'description',
-            'img'
+            'is_service'
         )
+            ->with('images')
             ->where('active', 1)
             ->where('is_service', 1)
             ->get();
+
+        if (count($services) === 0)
+            return $this->getDefaultShipments();
+
+        return $services;
     }
 
     public function getDefaultShipments(){
@@ -51,8 +63,9 @@ class Shipment extends Model{
             'alias',
             'name',
             'description',
-            'img'
+            'is_service'
         )
+            ->with('images')
             ->whereIn('alias', ['self', 'delivery'])
             ->get();
     }
@@ -63,10 +76,25 @@ class Shipment extends Model{
             'alias',
             'name',
             'description',
-            'img'
+            'is_service'
         )
+            ->with('images')
             ->where('active', 1)
             ->where('is_service', 1)
+            ->where('alias', $alias)
+            ->get();
+    }
+
+    public function getShipmentMethodByAlias($alias){
+        return self::select(
+            'id',
+            'alias',
+            'name',
+            'description',
+            'is_service'
+        )
+            ->with('images')
+            ->where('active', 1)
             ->where('alias', $alias)
             ->get();
     }

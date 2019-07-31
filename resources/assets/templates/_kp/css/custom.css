@@ -96,3 +96,7 @@ ul.child {
 .fancybox-navigation {
     height: 100%;
 }
+
+.nav-tabs .nav-item {
+    cursor: pointer;
+}

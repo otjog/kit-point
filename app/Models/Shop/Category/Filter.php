@@ -17,17 +17,6 @@ class Filter extends Model{
         return $this->moduleMethods[$moduleMethod];
     }
 
-    protected $prefix;
-
-    public function __construct(array $attributes = []){
-        parent::__construct($attributes);
-
-        $settings = Settings::getInstance();
-
-        $this->prefix = $settings->getParameter('components.shop.filter_prefix');
-
-    }
-
     public function getActiveFiltersWithParameters(){
 
         $products = new Product();
@@ -48,6 +37,10 @@ class Filter extends Model{
     }
 
     public function getParametersForFilters(Product $products, $filters ){
+
+        $settings = Settings::getInstance();
+
+        $prefix = $settings->getParameter('components.shop.filter_prefix');
 
         $temporary = [];
 
@@ -167,7 +160,7 @@ class Filter extends Model{
                                 }
                             }
 
-                            $filter['alias']        = $this->prefix . $filter['alias'];
+                            $filter['alias']        = $prefix . $filter['alias'];
 
                             $filter['values']       = array_flip($values);
 

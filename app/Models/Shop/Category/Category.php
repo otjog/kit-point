@@ -18,16 +18,6 @@ class Category extends Model{
 
     protected $fillable = ['active', 'name'];
 
-    protected $settings;
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->settings = Settings::getInstance();
-
-    }
-
     public function products()
     {
         return $this->hasMany('App\Models\Shop\Product\Product');
@@ -139,9 +129,10 @@ class Category extends Model{
 
     public function getCategoriesTree($parent_id = 0)
     {
+        $settings = Settings::getInstance();
 
-        if($this->settings->getParameter('models.category.categoriesTree')){
-            return $this->settings->getParameter('models.category.categoriesTree');
+        if($settings->getParameter('models.category.categoriesTree')){
+            return $settings->getParameter('models.category.categoriesTree');
         }
 
         /**
@@ -169,7 +160,7 @@ class Category extends Model{
 
         $result = collect($tree);
 
-        $this->settings->addParameter('models.category.categoriesTree', $result);
+        $settings->addParameter('models.category.categoriesTree', $result);
 
         return $result;
     }

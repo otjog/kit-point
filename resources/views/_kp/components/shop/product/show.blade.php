@@ -4,6 +4,7 @@
 
     <?php
         $product =& $global_data['shop']['product'];
+        $parcelData =& $global_data['shop']['parcelData'];
     ?>
 
     <div class="single_product">
@@ -165,12 +166,11 @@
                         {{-- Shipment Tab --}}
                         <div class="tab-data data-shipment">
                             @if(isset($global_data['modules']['shop.order.shipment.index']))
-                                @php $module['template'] = 'product'; @endphp
                                 @include(
                                     $global_data['template']['name']. '.modules.shop.shipment.index',
                                         [
-                                            'shipment' => $global_data['modules']['shop.order.shipment.index'],
-                                            'module' => $module
+                                            'shipments' => $global_data['modules']['shop.order.shipment.index'],
+                                            'module' => ['template' =>'product']
                                         ]
                                 )
                             @endif

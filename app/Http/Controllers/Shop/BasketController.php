@@ -47,15 +47,11 @@ class BasketController extends Controller{
      */
     public function edit($token)
     {
-        $products = new Product();
-
         $basket = $this->baskets->getActiveBasketWithProductsAndRelations($token);
 
         if ($basket->order_id === null) {
 
             $data['shop']['basket']   = $basket;
-
-            $data['shop']['parcels'] = $products->getParcelParameters($basket->products);
 
             $globalData = $this->settings->getParametersForController($data, 'shop', 'basket', 'edit');
 

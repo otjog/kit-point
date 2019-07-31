@@ -4,23 +4,19 @@
         <!--span class="bg-light small px-1 py-1 w-50 rounded-bottom-right">Артикул: {{$product->scu or ''}}</span-->
             <div class="product-item pb-1 pt-3 px-2">
                 <!-- Image-->
+                @php
+                    if (count($product->images) > 0)
+                        $imageSrc = $product->images[0]->src;
+                    else
+                        $imageSrc = 'noimage';
+                @endphp
                 <div class="product-image text-center">
                     <a href="{{ route( 'products.show', $product->id ) }}">
-
-                        @if( isset($product->images[0]->src) && $product->images[0]->src !== null )
-                            <img
-                                    class="img-fluid"
-                                    src="{{route('models.sizes.images.show', ['product', 's', $product->images[0]->src])}}"
-                                    alt=""
-                            />
-                        @else
-                            <img
-                                    class="img-fluid"
-                                    src="{{route('models.sizes.images.show', ['product', 's', 'no_image.jpg'])}}"
-                                    alt=""
-                            />
-                        @endif
-
+                        <img
+                                class="img-fluid"
+                                src="{{route('getImage',['product', 's', $imageSrc, $product->id])}}"
+                                alt="{{$product->images[0]->alt or $product->name}}"
+                        />
                     </a>
                 </div>
                 <!--Price-->

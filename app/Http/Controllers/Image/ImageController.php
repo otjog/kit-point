@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Image;
 
-use App\Models\Settings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Site\Image;
@@ -53,9 +52,9 @@ class ImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($model, $size, $name)
+    public function show($model, $size, $name, $modelId = null, $extension = null)
     {
-        return $this->image->showImage($model, $size, $name);
+        return $this->image->showImage($model, $size, $name, $modelId, $extension);
     }
 
     /**

@@ -30,6 +30,9 @@ class OrderShipped extends Mailable
      */
     public function build()
     {
-        return $this->view('email.order')->with($this->data);
+        return $this
+            ->from(env('MAIL_FROM_ADDRESS'))
+            ->subject('Ваш заказ на '. env('APP_NAME'))
+            ->view('email.order')->with($this->data);
     }
 }

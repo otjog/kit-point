@@ -9,6 +9,7 @@ use App\Models\Geo\GeoData;
 use App\Models\Site\Template;
 use App\Models\Site\Metatags;
 use App\Models\Site\Module;
+use Illuminate\Support\Facades\DB;
 
 class Settings {
 
@@ -25,7 +26,13 @@ class Settings {
 
     private function __construct()
     {
-        $this->data = config('global-data');
+        $json = DB::table('global_data')
+            ->select('options')
+            ->first();
+
+        $this->data = json_decode($json->options, true);
+
+        $this->data['today'] = date('Y-m-d');
 
         /* Add Currency */
         $currency = new Currency();

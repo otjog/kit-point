@@ -76,19 +76,17 @@
                 <div class="row no-gutters align-items-center my-2 border-bottom py-2 ">
 
                     <div class="col-lg-1 py-1 px-2">
-                        @if( isset($product->images[0]->src) && $product->images[0]->src !== null )
-                            <img
-                                    class='img-fluid mx-auto my-auto d-block'
-                                    src="{{route('models.sizes.images.show', ['product', 'xs', $product->images[0]->src])}}"
-                                    alt=""
-                            />
-                        @else
-                            <img
-                                    class='img-fluid mx-auto my-auto d-block'
-                                    src="{{route('models.sizes.images.show', ['product', 'xs', 'no_image.jpg'])}}"
-                                    alt=""
-                            />
-                        @endif
+                        @php
+                            if (count($product->images) > 0)
+                                $imageSrc = $product->images[0]->src;
+                            else
+                                $imageSrc = 'noimage';
+                        @endphp
+                        <img
+                                class='img-fluid mx-auto my-auto d-block'
+                                src="{{route('getImage', ['product', 'xs', $imageSrc, $product->id])}}"
+                                alt="{{$product->images[0]->alt or $product->name}}"
+                        />
                     </div>
 
                     <div class="col-lg-5">
