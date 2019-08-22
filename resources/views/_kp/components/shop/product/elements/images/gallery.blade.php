@@ -1,10 +1,14 @@
 @if( isset( $product->images ) && count( $product->images ) > 1)
     <!-- List -->
     <div class="col-lg-3 order-lg-1 order-2 d-none d-lg-block">
-        <ul class="image_list">
+        {{-- Для вертикального слайдера используется плагин TinySlider на базе OwlCarousel.
+         Если будем переделывать на горизонтальный слайдер, то используем Owl Carousel, а этот удалить --}}
+        <div class="tiny_slider_arrow" data-direction="prev"></div>
+
+        <div class="image_list thumbnail-carousel owl-theme">
 
             @foreach( $product->images as $image)
-                <li>
+                <div class="item">
                     <a
                             href="{{route('getImage', ['product', 'l', $image->src, $product->id])}}"
                             class="fancybox"
@@ -17,10 +21,14 @@
                                 alt="{{$image->alt or $product->name}}"
                         />
                     </a>
-                </li>
+                </div>
 
             @endforeach
-        </ul>
+
+        </div>
+
+        <div class="tiny_slider_arrow" data-direction="next"></div>
+
     </div>
 
 @endif

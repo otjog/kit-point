@@ -66,3 +66,7 @@
 
     Route::get('/parse/{from}', 'Parse\ParseController@load');
     Route::get('/curs', 'Price\CurrencyController@getCur');
+
+    Auth::routes();
+
+

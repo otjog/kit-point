@@ -13,7 +13,7 @@ use App\Models\Shop\Order\Basket;
 use App\Models\Shop\Order\Order;
 use App\Models\Shop\Product\Product;
 use App\Models\Settings;
-use App\Models\Site\Module;
+use App\Events\NewOrder;
 
 class OrderController extends Controller
 {
@@ -30,7 +30,6 @@ class OrderController extends Controller
         $this->orders   = $orders;
 
         $this->baskets  = $baskets;
-
     }
 
     /**
@@ -55,9 +54,11 @@ class OrderController extends Controller
 
             $basket = $this->baskets->getActiveBasket( $token );
 
-            $customer = $customers->findOrCreateCustomer( $request->all() );
+            $customer = $customers->getAuthCustomer($request->all());
 
             $order = $this->orders->storeOrder( $request->all(), $basket, $customer, $products );
+
+            event(new NewOrder($order->id));
 
             return redirect('orders/'.$order->id)->with('status', 'Заказ оформлен! Скоро с вами свяжется наш менеджер');
         }

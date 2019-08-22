@@ -60,8 +60,10 @@
 
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
 
-                {{-- FULL NAME --}}
-                <div class="mb-3">
+                @guest
+
+                    {{-- FULL NAME --}}
+                    <div class="mb-3">
                     <label for="full_name">Фамилия Имя Отчество</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -73,7 +75,7 @@
                                 id="full_name"
                                 name="full_name"
                                 placeholder="Иванов Петр Владимирович"
-                                value=""
+                                value="{{ old('full_name') }}"
                                 required=""
                                 data-suggestion="NAME">
                         <!--input type="hidden" id="full_name_json" name="full_name_json"-->
@@ -83,8 +85,8 @@
                     </div>
                 </div>
 
-                {{-- E-MAIL --}}
-                <div class="mb-3">
+                    {{-- E-MAIL --}}
+                    <div class="mb-3">
                     <label for="email">Email</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -97,15 +99,17 @@
                                 name="email"
                                 placeholder="you@mail.ru"
                                 required=""
-                                data-suggestion="EMAIL">
+                                value="{{ old('email') }}"
+                                data-suggestion="EMAIL"
+                        >
                         <div class="invalid-feedback" style="width: 100%;">
                             Пожалуйста, укажите корректный email
                         </div>
                     </div>
                 </div>
 
-                {{-- PHONE --}}
-                <div class="mb-3">
+                    {{-- PHONE --}}
+                    <div class="mb-3">
                     <label for="phone">Телефон</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -117,12 +121,16 @@
                                 id="phone"
                                 name="phone"
                                 placeholder="+79087830911"
-                                required="">
+                                required=""
+                                value="{{ old('phone') }}"
+                        >
                         <div class="invalid-feedback" style="width: 100%;">
                             Пожалуйста, укажите корректный телефонный номер
                         </div>
                     </div>
                 </div>
+
+                @endguest
 
                 {{-- ADDRESS --}}
                 <div class="mb-3">
@@ -138,6 +146,11 @@
                                 name="address"
                                 placeholder="308011 г.Белгород ул.Садовая д.118"
                                 required=""
+                                @guest
+                                    value="{{ old('phone') }}"
+                                @else
+                                    value="{{ Auth::user()->address }}"
+                                @endguest
                                 data-suggestion="ADDRESS">
                         <!--input type="hidden" id="address_json" name="address_json"-->
                         <div class="invalid-feedback">
