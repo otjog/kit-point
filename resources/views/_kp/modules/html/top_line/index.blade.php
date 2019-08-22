@@ -20,6 +20,34 @@
                     </div>
                     @include($global_data['template']['name'] .'.modules.change-geo.header')
                 </div>
+                <div class="top_bar_content ml-auto">
+                    <div class="top_bar_user">
+                        <div class="user_icon"><img src="{{asset('storage/_kp/images/user.svg')}}" alt=""></div>
+                        @guest
+                            <div>
+                                <a href="{{ route('register') }}">Регистрация</a>
+                            </div>
+                            <div>
+                                <a href="{{ route('login') }}">Войти</a>
+                            </div>
+                        @else
+                            <div>
+                                {{ Auth::user()->full_name }} <span class="caret"></span>
+                            </div>
+                            <div>
+                                <a href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    Выйти
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        @endguest
+                    </div>
+                </div>
             </div>
         </div>
     </div>

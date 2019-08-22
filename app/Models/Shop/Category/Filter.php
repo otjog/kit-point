@@ -46,7 +46,7 @@ class Filter extends Model{
 
         $routeData = request()->route()->parameters;
 
-        $old_values     = request()->toArray();
+        $old_values = request()->toArray();
 
         $productsOfRoute = $products->getActiveProductsWithFilterParameters($routeData);
 
@@ -162,6 +162,7 @@ class Filter extends Model{
 
                             $filter['alias']        = $prefix . $filter['alias'];
 
+                            asort($values);
                             $filter['values']       = array_flip($values);
 
                             $filter['old_values']   = $this->addOldValues($old_values, $filter['alias']);

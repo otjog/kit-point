@@ -33,6 +33,7 @@ class Category extends Model{
             'id',
             'parent_id',
             'name',
+            'description',
             'original_name',
             'url'
             )
@@ -45,6 +46,7 @@ class Category extends Model{
             'id',
             'parent_id',
             'name',
+            'description',
             'original_name',
             'url'
         )
@@ -59,6 +61,7 @@ class Category extends Model{
             'id',
             'parent_id',
             'name',
+            'description',
             'original_name',
             'url'
         )
@@ -74,6 +77,7 @@ class Category extends Model{
             'id',
             'parent_id',
             'name',
+            'description',
             'original_name',
             'url'
         )
@@ -88,6 +92,7 @@ class Category extends Model{
             'id',
             'parent_id',
             'name',
+            'description',
             'original_name',
             'url'
         )
@@ -103,6 +108,7 @@ class Category extends Model{
             'id',
             'parent_id',
             'name',
+            'description',
             'original_name',
             'url'
         )
@@ -117,6 +123,7 @@ class Category extends Model{
             'id',
             'parent_id',
             'name',
+            'description',
             'original_name',
             'url'
         )

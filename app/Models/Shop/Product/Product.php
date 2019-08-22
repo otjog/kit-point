@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use JustBetter\PaginationWithHavings\PaginationWithHavings;
 use App\Models\Settings;
+use Illuminate\Support\Facades\Auth;
 
-class Product extends Model{
-
+class Product extends Model
+{
     use PaginationWithHavings;
 
     protected $fillable = ['brand_id', 'category_id', 'manufacturer_id', 'active', 'name', 'scu'];
@@ -31,6 +32,11 @@ class Product extends Model{
     public function prices()
     {
         return $this->belongsToMany('App\Models\Shop\Price\Price', 'product_has_price')->withPivot('value', 'currency_id')->withTimestamps();
+    }
+
+    public function stores()
+    {
+        return $this->belongsToMany('App\Models\Shop\Store\Store', 'shop_store_has_product')->withPivot('quantity')->withTimestamps();
     }
 
     public function discounts()
@@ -81,8 +87,8 @@ class Product extends Model{
             ->get();
     }
 
-    public function getActiveProduct($id){
-
+    public function getActiveProduct($id)
+    {
         $productsQuery = $this->getOneProductQuery();
 
         $products = $productsQuery
@@ -92,13 +98,11 @@ class Product extends Model{
 
             ->get();
 
-            if( isset($products[0])){
+            if (isset($products[0])) {
                 $products = $this->addRelationCollections($products);
                 return $products[0];
-            }else{
-                return null;
             }
-
+            return null;
     }
 
     public function getActiveProductsFromCategory($category_id)
@@ -129,7 +133,12 @@ class Product extends Model{
 
         $today = $settings->getParameter('today');
 
-        $price_id = $settings->getParameter('components.shop.price.id');
+        $customer = Auth::user();
+
+        if($customer === null)
+            $price_id = $settings->getParameter('components.shop.price.id');
+        else
+            $price_id = $customer->price_id;
 
         $products = self::select(
             'products.id',
@@ -218,6 +227,8 @@ class Product extends Model{
 
         $pagination = $settings->getParameter('components.shop.pagination');
 
+        $filter_prefix = $settings->getParameter('components.shop.filter_prefix');
+
         $productsQuery = $this->getListProductQuery();
 
         $products = $productsQuery
@@ -264,8 +275,8 @@ class Product extends Model{
             /************PARAMETERS*************/
             foreach($filterData as $key => $parameter){
 
-                if(strpos($key, 'p_') === 0){
-                    $key = str_replace('p_', '', $key);
+                if(strpos($key, $filter_prefix) === 0){
+                    $key = str_replace($filter_prefix, '', $key);
 
                     $products = $products->whereHas('parameters', function($query) use ($parameter, $key) {
                         $query->where('product_parameters.alias', '=', $key)
@@ -463,8 +474,8 @@ class Product extends Model{
         ];
     }
 
-    private function addRelationCollections($products){
-
+    private function addRelationCollections($products)
+    {
         foreach ( $products as $product){
 
             foreach ($product->original as $key => $value){
@@ -537,7 +548,12 @@ class Product extends Model{
 
         $today = $settings->getParameter('today');
 
-        $price_id = $settings->getParameter('components.shop.price.id');
+        $customer = Auth::user();
+
+        if($customer === null)
+            $price_id = $settings->getParameter('components.shop.price.id');
+        else
+            $price_id = $customer->price_id;
 
         return self::select(
             'products.id',
@@ -606,6 +622,13 @@ class Product extends Model{
             /************PARAMETERS*************/
             ->with(['basket_parameters' => function ($query) {
                 $query->where('product_parameters.order_attr', '=', 1);
+            }])
+
+            /************STORES*****************/
+            ->with(['stores' => function ($query) {
+                $query->where('shop_stores.active', '=', 1)
+                    ->where('shop_store_has_product.active', '=', 1)
+                    ->where('shop_store_has_product.quantity', '>', 0);
             }])
 
             /************CATEGORY***************/

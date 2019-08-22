@@ -87,7 +87,7 @@ $(".fancybox").fancybox(fancyOptions);
 //создает галерею по клику на главном изображении
 $(".image_selected a").click(function() {
 
-    let imageLinks = $("div.single_product ul.image_list a.fancybox");
+    let imageLinks = $("div.single_product div.image_list a.fancybox");
 
     if(imageLinks.length === 0){
         imageLinks = $("div.single_product div.image_selected a");
@@ -105,47 +105,58 @@ $(".image_selected a").click(function() {
 
 });
 
-//обрежем высоту галереи по высоте основного изображения. !!!Временное решение
-let mainImg     = $("div.single_product div.image_selected img");
-
-if (mainImg[0] !== undefined && mainImg[0] !== null) {
-    mainImg[0].addEventListener('load', function()
-    {
-        let mainImgWrap     = $("div.single_product div.image_selected");
-        let listThumb   = $("div.single_product ul.image_list");
-
-        let mainImgOutHeight    = mainImgWrap.outerHeight();
-        let listThumbOutHeight  = listThumb.outerHeight();
-
-        if(listThumbOutHeight > mainImgOutHeight){
-            let listThumbHeight = listThumb.height();
-            let diff = listThumbOutHeight - mainImgOutHeight;
-            listThumb.height(listThumbHeight - diff).css('overflow', 'hidden');
-        }
-    });
-}
 //END FancyBox
 
+/*Tiny Slider*/
+
+import {tns} from 'tiny-slider/src/tiny-slider';
+
+let slider = document.getElementsByClassName('thumbnail-carousel');
+
+if(slider.length > 0){
+
+    let slider = tns(
+        {
+            "container": ".thumbnail-carousel",
+            "items": 3,
+            "axis": "vertical",
+            "swipeAngle": false,
+            "arrowKeys": false,
+            "loop": false,
+            "rewind": true,
+            "controls": false,
+            "nav": false,
+        });
+
+    document.querySelector('.tiny_slider_arrow[data-direction=next]').onclick = function () {
+        slider.goTo('next');
+    };
+    document.querySelector('.tiny_slider_arrow[data-direction=prev]').onclick = function () {
+        slider.goTo('prev');
+    };
+}
+
+/*End TinySlider*/
 
 //Tabs
 let tabs = document.getElementById('tabs');
 
 if(tabs !== null && tabs !== undefined){
-    let activeTab       = tabs.getElementsByClassName('active');
+
+    let activeTab       = tabs.getElementsByClassName('nav-link')[0];
+    activeTab.className += ' active';
     let content         = document.getElementById('tab-data');
     let contentDatas    = content.getElementsByClassName('tab-data');
 
-    if(activeTab[0].nodeName === 'A'){
+    if(activeTab.nodeName === 'A'){
 
-        let tabIndex = activeTab[0].dataset.tabindex;
+        let tabIndex = activeTab.dataset.tabindex;
 
         if(tabIndex !== undefined && tabIndex !== null) {
-            toogelDisplayStyle(content, contentDatas, activeTab[0].dataset.tabindex);
+            toogelDisplayStyle(content, contentDatas, activeTab.dataset.tabindex);
         }
 
     }
-
-
 
     tabs.addEventListener('click', function (e) {
 
@@ -157,8 +168,8 @@ if(tabs !== null && tabs !== undefined){
 
             if(tabIndex !== undefined && tabIndex !== null){
                 //включаем у вкладки класс active
-                activeTab[0].classList.toggle('active');
-
+                activeTab.classList.toggle('active');
+                activeTab = e.target;
                 e.target.classList.toggle('active');
 
                 toogelDisplayStyle(content, contentDatas, tabIndex)

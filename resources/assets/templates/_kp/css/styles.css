@@ -81,16 +81,9 @@ ul
 	list-style: none;
 	margin-bottom: 0px;
 }
-p
+a
 {
-	font-family: 'Rubik', sans-serif;
-	font-size: 14px;
-	line-height: 1.7;
-	font-weight: 400;
-	color: #828282;
-	-webkit-font-smoothing: antialiased;
-	-webkit-text-shadow: rgba(0,0,0,.01) 0 0 1px;
-	text-shadow: rgba(0,0,0,.01) 0 0 1px;
+	cursor: pointer;
 }
 p a
 {
@@ -1511,7 +1504,7 @@ select option
 {
 	width: 100%;
 	height: 50px;
-	margin-top: 80px;
+	margin-top: 40px;
 }
 .shop_content .page_prev,
 .shop_content .page_next
@@ -2206,6 +2199,16 @@ select option
 11. Single Product
 *********************************/
 
+.single_product .product_parameter_name
+{
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAABCAAAAAA+i0toAAAAAnRSTlMA/1uRIrUAAAAMSURBVHheY7j1/z8ABY8C2UtBe8oAAAAASUVORK5CYII=) 0px 14px repeat-x
+}
+
+.single_product .product_parameter_name span
+{
+	background-color: #ffffff;
+}
+
 .single_product .image_list li
 {
 	display: -webkit-box;
@@ -2271,11 +2274,7 @@ select option
 {
 	padding-left: 50px;
 }
-.single_product .product_category
-{
-	font-size: 12px;
-	color: rgba(0,0,0,0.5);
-}
+
 .single_product .product_name
 {
 	font-size: 30px;

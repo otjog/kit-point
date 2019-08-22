@@ -55,13 +55,13 @@ class Image extends Model
 
     public function showImage($model, $size, $pathToImage, $modelId, $extension)
     {
-        $imagesSettings = $this->getImagesSettings($model, $size, $pathToImage, $modelId, $extension);
+        $imageSettings = $this->getImagesSettings($model, $size, $pathToImage, $modelId, $extension);
 
-        if (is_file($imagesSettings['path_to_sized_image'])) {
+        if (is_file($imageSettings['path_to_sized_image'])) {
             $imageManager = new ImageManager(array('driver' => 'imagick'));
-            $sizedImg = $imageManager->make($imagesSettings['path_to_sized_image']);
+            $sizedImg = $imageManager->make($imageSettings['path_to_sized_image']);
         } else {
-            $sizedImg = $this->makeNewImage($imagesSettings);
+            $sizedImg = $this->makeNewImage($imageSettings);
         }
 
         return $sizedImg->response();
@@ -86,8 +86,8 @@ class Image extends Model
 
         $sizedImg = null;
 
-        if (!is_dir( $imageSettings['path_to_image_folder'] . $size['string'])) {
-            mkdir( $imageSettings['path_to_image_folder'] . $size['string'], 0777, true);
+        if (!is_dir( $imageSettings['path_to_image_folder'] . $size['name'])) {
+            mkdir( $imageSettings['path_to_image_folder'] . $size['name'], 0777, true);
         }
 
         if (is_file($imageSettings['path_to_original_image'])) {
@@ -110,8 +110,8 @@ class Image extends Model
                     break;
             }
 
-            if (isset($imageSettings['changes'][$size['string']]) && $imageSettings['changes'][$size['string']] !== null) {
-                switch ($imageSettings['changes'][$size['string']]) {
+            if (isset($imageSettings['changes'][$size['name']]) && $imageSettings['changes'][$size['name']] !== null) {
+                switch ($imageSettings['changes'][$size['name']]) {
                     case 'rounded' :
                         $radius = $size['width']/1.4142*2-1;
 
@@ -132,6 +132,21 @@ class Image extends Model
 
                         $canvas->insert($sizedImg, 'center');
                         $sizedImg = $canvas;
+
+                        break;
+                    case 'watermark' :
+
+                        $settings = Settings::getInstance();
+
+                        $logoPath = $settings->getParameter('info.logotype');
+
+                        $canvas = $imageManager->canvas($size['width']/4, $size['height']/4, 'ffffff')->opacity(75);
+
+                        $logoImg = $imageManager->make($logoPath)->gamma(0.6);
+
+                        $canvas->mask($logoImg, false);
+
+                        $sizedImg->insert($canvas,  'center');
 
                         break;
 
@@ -191,7 +206,7 @@ class Image extends Model
 
         $imageSettings['path_to_original_image'] = $imageSettings['path_info']['dirname'] . '/' .$imageSettings['name_original_image'];
 
-        $imageSettings['current_size']['string'] = $size;
+        $imageSettings['current_size']['name'] = $size;
 
         list($imageSettings['current_size']['width'], $imageSettings['current_size']['height']) = explode('x', $imageSettings['size'][$size]);
         

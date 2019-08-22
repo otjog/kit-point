@@ -2,38 +2,51 @@
 
 namespace App\Models\Shop;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Settings;
+use Illuminate\Support\Facades\Auth;
 
-class Customer extends Model{
+class Customer extends Authenticatable{
+
+    use Notifiable;
+
+    protected $table = 'shop_customers';
 
     protected $fillable = [
         'full_name',
         'email',
         'phone',
+        'price_id',
         'address',
         'full_name_json',
-        'address_json'
+        'address_json',
+        'password'
     ];
 
-    public function shopOrders(){
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    public function shopOrders()
+    {
         return $this->hasMany('App\Order');
     }
 
-
-    public function storeCustomer($data){
-
+    public function storeCustomer($data)
+    {
         $data_customer = $this->prepareData($data);
 
         return self::create($data_customer);
-
     }
 
     public function updateCustomer(){
 
     }
 
-    public function findOrCreateCustomer($data){
-
+    public function findOrCreateCustomer($data)
+    {
         $email = $data['email'];
 
         $customer = $this->getCustomerByEmail($email);
@@ -46,7 +59,18 @@ class Customer extends Model{
 
     }
 
-    public function getCustomerByEmail($email){
+    public function getAuthCustomer($data)
+    {
+        $customer = Auth::user();
+
+        if($customer === null)
+            return $this->findOrCreateCustomer($data);
+        else
+            return $customer;
+    }
+
+    public function getCustomerByEmail($email)
+    {
         return self::select(
             'id',
             'full_name',
@@ -60,22 +84,50 @@ class Customer extends Model{
             ->get();
     }
 
-    public function prepareData($data){
-
+    public function prepareData($data)
+    {
         $data_customer = [];
 
         foreach( $data as $key => $value ){
             switch($key){
-                case 'full_name'        :
-                case 'email'            :
-                case 'phone'            :
-                case 'address'          :
-                case 'address_json'     :
-                case 'full_name_json'   : $data_customer[$key] = $value;
+                case 'full_name' :
+                case 'email' :
+                case 'phone' :
+                case 'address' :
+                case 'address_json' :
+                case 'full_name_json' :
+                    $data_customer[$key] = $value;
+                    break;
+                case 'password' :
+                    $data_customer[$key] = Hash::make($data['password']);
+                    break;
             }
         }
 
+        $settings = Settings::getInstance();
+
+        $data_customer['price_id'] = $settings->getParameter('components.shop.price.id');
+
+        if(!isset($data_customer['password']))
+            $data_customer['password'] = Hash::make($this->getRandomPassword());
+
         return $data_customer;
+    }
+
+    private function getRandomPassword()
+    {
+        $passwordSymbols = "qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP!@#$%^&*()_+!";
+
+        $passwordLength = 10;
+
+        $passwordSymbolsLength = StrLen($passwordSymbols)-1;
+
+        $password = null;
+
+        while($passwordLength--)
+            $password .= $passwordSymbols[rand(0, $passwordSymbolsLength)];
+
+        return $password;
     }
 
 }
