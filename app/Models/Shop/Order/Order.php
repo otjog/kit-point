@@ -3,7 +3,6 @@
 namespace App\Models\Shop\Order;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Events\NewOrder;
 use App\Models\Shop\Product\Product;
 use Illuminate\Support\Facades\DB;
 
@@ -122,8 +121,6 @@ class Order extends Model{
         $basket->order_id = $order->id;
 
         $basket->save();
-
-        event(new NewOrder($order->id));
 
         return $order;
     }

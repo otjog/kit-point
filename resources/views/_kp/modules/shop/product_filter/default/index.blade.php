@@ -1,5 +1,5 @@
 @if (isset($filters) && count($filters) > 0 )
-    <div class="product-filter px-4">
+    <div class="product-filter">
         <form name="product_filter" role="form" method="GET">
 
             @foreach ($filters as $filter)

@@ -1,7 +1,7 @@
 @extends($global_data['template']['name'] . '.index')
 
 @php
-    $category =& $global_data['shop']['category'];
+    $currentCategory =& $global_data['shop']['category'][0];
     $categories =& $global_data['shop']['childrenCategories'];
     $products =& $global_data['shop']['products'];
     $parameters =& $global_data['shop']['parameters'];
@@ -62,6 +62,12 @@
         </div-->
 
         @include( $global_data['template']['name'] . '.components.shop.product.list')
+
+        @if(isset($currentCategory->description ))
+            <div>
+                <p>{!! $currentCategory->description  !!}</p>
+            </div>
+        @endif
 
     </div>
 @endsection

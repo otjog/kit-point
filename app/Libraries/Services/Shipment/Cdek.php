@@ -216,6 +216,8 @@ class Cdek implements ShipmentServices
         $jsonData = $this->getCdekData('cities', $cdekGeoData);
         $cityParam = json_decode($jsonData);
 
+        if(isset($cityParam->alerts[0]))
+            return null;
         if (isset($cityParam[0]->cityCode))
             return $cityParam[0]->cityCode;
         return null;

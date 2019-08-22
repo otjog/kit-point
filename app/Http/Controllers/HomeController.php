@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Settings;
-use App\Models\Site\Module;
-use App\Models\Site\Template;
 
 class HomeController extends Controller{
 
@@ -21,5 +19,4 @@ class HomeController extends Controller{
 
         return view($globalData['template']['name'] . '.index', ['global_data' => $globalData]);
     }
-
 }

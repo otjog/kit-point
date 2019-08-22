@@ -100,3 +100,19 @@ ul.child {
 .nav-tabs .nav-item {
     cursor: pointer;
 }
+.tiny_slider_arrow {
+    width: 0;
+    height: 0;
+    border: 25px solid transparent;
+    margin: auto;
+    cursor: pointer;
+}
+.tiny_slider_arrow[data-direction=prev]{
+    border-bottom-color: steelblue;
+    border-top: 0;
+}
+
+.tiny_slider_arrow[data-direction=next]{
+    border-top-color: steelblue;
+    border-bottom: 0;
+}

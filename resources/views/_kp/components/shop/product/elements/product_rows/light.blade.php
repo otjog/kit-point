@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <!--Price-->
-                @if( isset($product->price['value']) && $product->price['value'] !== null)
+                @if( isset($product->price['value']) && $product->price['value'] !== null && $product->price['value'] !== 0.00)
                     <div class="bg-white pt-3 pb-2">
                         <div class="row">
                             <div class="col-12 price category-product text-center">
@@ -41,9 +41,8 @@
                             </div>
                         </div>
                     </div>
-            @endif
+                @endif
 
-            <!--Name-->
                 <!--Name-->
                 <div class="product-name">
                     <a class="text-dark" href="{{ route( 'products.show', $product->id ) }}">
@@ -60,17 +59,25 @@
                 </div>
                 <!--Action-->
                 <div class="product-action w-100 text-center border-top mt-2">
-                    @if( !isset($product->basket_parameters) || count($product->basket_parameters) === 0)
-                        <form method="post" role="form" action="{{route('baskets.store')}}">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <input type="hidden" name="product_id"       value="{{ $product->id}}">
-                            <input type="hidden" name="quantity" value="1" >
-                            <input class="btn btn-link pb-0" type="submit" value="В корзину" />
-                        </form>
+                    @if( isset($product->stores) && $product->stores !== null && count($product->stores) > 0 )
+                        @if( isset($product->price['value']) && $product->price['value'] !== null && $product->price['value'] !== 0.00)
+
+                                @if( !isset($product->basket_parameters) || count($product->basket_parameters) === 0)
+                                    <form method="post" role="form" action="{{route('baskets.store')}}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="product_id"       value="{{ $product->id}}">
+                                        <input type="hidden" name="quantity" value="1" >
+                                        <input class="btn btn-link pb-0" type="submit" value="В корзину" />
+                                    </form>
+                                @else
+                                    <a class="pt-2 d-block" href="{{ route( 'products.show', $product->id ) }}">
+                                        Выбрать размер
+                                    </a>
+                                @endif
+
+                        @endif
                     @else
-                        <a class="pt-2 d-block" href="{{ route( 'products.show', $product->id ) }}">
-                            Выбрать размер
-                        </a>
+                        <div class="text-muted py-2">Нет в наличии</div>
                     @endif
                 </div>
             </div>

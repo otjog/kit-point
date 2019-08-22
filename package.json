@@ -32,6 +32,7 @@
         "jquery-ui": "^1.12.1",
         "scrollmagic": "^2.0.6",
         "suggestions-jquery": "^19.2.0",
+        "tiny-slider": "^2.9.2",
         "tridi": "^1.0.0"
     }
 }
