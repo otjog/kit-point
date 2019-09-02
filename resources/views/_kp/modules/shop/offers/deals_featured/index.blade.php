@@ -1,20 +1,20 @@
-<!-- Deals of the week -->
+{{-- Deals of the week --}}
 
 <div class="deals_featured">
     <div class="container">
         <div class="row">
             <div class="col d-flex flex-lg-row flex-column align-items-center justify-content-start">
 
-                <!-- Deals -->
+                {{-- Deals --}}
 
                 <div class="deals">
                     <div class="deals_title">Deals of the Week</div>
                     <div class="deals_slider_container">
 
-                        <!-- Deals Slider -->
+                        {{-- Deals Slider --}}
                         <div class="owl-carousel owl-theme deals_slider">
 
-                            <!-- Deals Item -->
+                            {{-- Deals Item --}}
                             <div class="owl-item deals_item">
                                 <div class="deals_image"><img src="{{asset('storage/_kp/images/deals.png')}}" alt=""></div>
                                 <div class="deals_content">
@@ -58,7 +58,7 @@
                                 </div>
                             </div>
 
-                            <!-- Deals Item -->
+                            {{-- Deals Item --}}
                             <div class="owl-item deals_item">
                                 <div class="deals_image"><img src="{{asset('storage/_kp/images/deals.png')}}" alt=""></div>
                                 <div class="deals_content">
@@ -102,7 +102,7 @@
                                 </div>
                             </div>
 
-                            <!-- Deals Item -->
+                            {{-- Deals Item --}}
                             <div class="owl-item deals_item">
                                 <div class="deals_image"><img src="{{asset('storage/_kp/images/deals.png')}}" alt=""></div>
                                 <div class="deals_content">
@@ -156,7 +156,7 @@
                     </div>
                 </div>
 
-                <!-- Featured -->
+                {{-- Featured --}}
                 <div class="featured">
                     <div class="tabbed_container">
                         <div class="tabs">
@@ -168,11 +168,11 @@
                             <div class="tabs_line"><span></span></div>
                         </div>
 
-                        <!-- Product Panel -->
+                        {{-- Product Panel --}}
                         <div class="product_panel panel active">
                             <div class="featured_slider slider">
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
@@ -197,7 +197,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -247,7 +247,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
@@ -272,7 +272,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -297,7 +297,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -322,7 +322,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -347,7 +347,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -372,7 +372,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -397,7 +397,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -422,7 +422,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -447,7 +447,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -472,7 +472,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -497,7 +497,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -522,7 +522,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -547,7 +547,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -576,12 +576,12 @@
                             <div class="featured_slider_dots_cover"></div>
                         </div>
 
-                        <!-- Product Panel -->
+                        {{-- Product Panel --}}
 
                         <div class="product_panel panel">
                             <div class="featured_slider slider">
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
@@ -606,7 +606,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -631,7 +631,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -656,7 +656,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
@@ -681,7 +681,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -706,7 +706,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -731,7 +731,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -756,7 +756,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -781,7 +781,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -806,7 +806,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -831,7 +831,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -856,7 +856,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -881,7 +881,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -906,7 +906,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -931,7 +931,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -956,7 +956,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -985,12 +985,12 @@
                             <div class="featured_slider_dots_cover"></div>
                         </div>
 
-                        <!-- Product Panel -->
+                        {{-- Product Panel --}}
 
                         <div class="product_panel panel">
                             <div class="featured_slider slider">
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
@@ -1015,7 +1015,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1040,7 +1040,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1065,7 +1065,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item discount d-flex flex-column align-items-center justify-content-center text-center">
@@ -1090,7 +1090,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1115,7 +1115,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1140,7 +1140,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1165,7 +1165,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1190,7 +1190,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1215,7 +1215,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1240,7 +1240,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1265,7 +1265,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1290,7 +1290,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1315,7 +1315,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1340,7 +1340,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">
@@ -1365,7 +1365,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Slider Item -->
+                                {{-- Slider Item --}}
                                 <div class="featured_slider_item">
                                     <div class="border_active"></div>
                                     <div class="product_item d-flex flex-column align-items-center justify-content-center text-center">

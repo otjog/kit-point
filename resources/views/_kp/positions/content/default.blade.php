@@ -1,6 +1,7 @@
 @php
     $template = $global_data['template']['schema']['current']['content'];
     $modules = $global_data['modules'];
+    $breadcrumbs = $global_data['breadcrumbs'];
 @endphp
 
     @if(isset($template['top']) && $template['top'] !== null)
@@ -12,6 +13,9 @@
     @endif
 
     <div class="container my-3">
+
+        @include('_kp.modules.breadcrumbs.index')
+
         <div class="row">
             @if(isset($template['left']) && $template['left'] !== null)
                 <div class="col-lg-3 col-12">

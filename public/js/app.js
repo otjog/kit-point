@@ -78161,6 +78161,7 @@ function changeElementsBodyAfterRequest(target) {
 }
 
 function setDefaultValueForm(target) {
+  console.log(target);
   var filterName = target[0].dataset.filterName;
   var filterValue = target[0].dataset.filterValue || target[i].value;
   var filterType = target[0].dataset.filterType; //todo подобное определение переменных есть в другой функции
@@ -78168,19 +78169,18 @@ function setDefaultValueForm(target) {
   var filter = document.getElementsByClassName('filter-' + filterName);
   var inputs = filter[0].getElementsByTagName('input');
 
-  for (var i = 0; i < inputs.length; i++) {
-    var inputsFilterValue = inputs[i].dataset.filterValue || inputs[i].value;
+  for (var _i4 = 0; _i4 < inputs.length; _i4++) {
+    var inputsFilterValue = inputs[_i4].dataset.filterValue || inputs[_i4].value;
 
     if (inputsFilterValue === filterValue) {
-      switch (inputs[i].type) {
+      switch (inputs[_i4].type) {
         case 'checkbox':
-          inputs[i].checked = false;
+          inputs[_i4].checked = false;
           break;
 
         case 'text':
-          inputs[i].value = inputs[i].dataset.filterDefaultValue || '';
+          inputs[_i4].value = inputs[_i4].dataset.filterDefaultValue || '';
         //todo описать для остальных полей
-        //todo ползунок слайдера не меняет позицию
       }
     }
   }
@@ -78224,8 +78224,8 @@ function sendAjaxRequest(queryString, target) {
       var filters = document.getElementsByClassName('filter-action-delete');
       /*Вешаем события на динамически появившиеся иконки удаления параметров фильтра*/
 
-      for (var _i4 = 0; _i4 < filters.length; _i4++) {
-        filters[_i4].addEventListener('click', function (e) {
+      for (var _i5 = 0; _i5 < filters.length; _i5++) {
+        filters[_i5].addEventListener('click', function (e) {
           prepareRequest(e);
         });
       }
@@ -78241,9 +78241,9 @@ function sendAjaxRequest(queryString, target) {
 
 var sliders = $('.filter-slider');
 
-for (var i = 0; i < sliders.length; i++) {
-  var values = getValues(sliders[i]);
-  getSliderShow(sliders[i]).slider({
+for (var _i6 = 0; _i6 < sliders.length; _i6++) {
+  var values = getValues(sliders[_i6]);
+  getSliderShow(sliders[_i6]).slider({
     range: true,
     min: values.range[0],
     max: values.range[1],
@@ -78330,44 +78330,58 @@ function changeSliderValue(values, slider) {
 
 $('.filter-clear').on('click', function (e) {
   var filter = e.target.closest('.filter');
+
+  if (filter !== null && filter !== undefined) {
+    clearOneFilter(filter);
+  } else {
+    var filterWrap = e.target.closest('.product-filter');
+    var filters = $(filterWrap).find('.filter');
+
+    for (var _i7 = 0; _i7 < filters.length; _i7++) {
+      clearOneFilter(filters[_i7]);
+    }
+  }
+});
+
+function clearOneFilter(filter) {
   var inputs = $(filter).find('[data-filter-type]');
 
-  for (var _i5 = 0; _i5 < inputs.length; _i5++) {
-    switch (inputs[_i5].type) {
+  for (var _i8 = 0; _i8 < inputs.length; _i8++) {
+    switch (inputs[_i8].type) {
       case 'checkbox':
-        if (inputs[_i5].checked === true) {
-          inputs[_i5].checked = false;
+        if (inputs[_i8].checked === true) {
+          inputs[_i8].checked = false;
         }
 
         break;
 
       case 'text':
-        if (inputs[_i5].dataset.filterType === 'slider') {
+        if (inputs[_i8].dataset.filterType === 'slider') {
           var _values = [];
-          _values[0] = inputs[_i5].min;
-          _values[1] = inputs[_i5].max;
+          _values[0] = inputs[_i8].min;
+          _values[1] = inputs[_i8].max;
           changeInputValue([0, 1], _values, filter);
           changeSliderValue(_values, filter);
         } else {
-          inputs[_i5].value = '';
+          inputs[_i8].value = '';
         }
 
         break;
 
       case 'select':
       case 'select-multiple':
-        var options = inputs[_i5];
+        var options = inputs[_i8];
 
-        for (var _i6 = 0; _i6 < options.length; _i6++) {
-          if (options[_i6].selected === true) {
-            options[_i6].selected = false;
+        for (var _i9 = 0; _i9 < options.length; _i9++) {
+          if (options[_i9].selected === true) {
+            options[_i9].selected = false;
           }
         }
 
         break;
     }
   }
-});
+}
 
 /***/ }),
 

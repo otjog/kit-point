@@ -2,10 +2,9 @@
 
 @section('component')
     <?php
-        $brands =& $global_data['shop']['brands'];
-
+        $brands =& $global_data['shop']['brand']['children'];
     ?>
-    <h1>{{$global_data['header_page']}}</h1>
+    <h1>{{$global_data['shop']['brand']['name']}}</h1>
         <div class="card-columns">
             @foreach($brands->chunk($global_data['components']['shop']['chunk_categories']) as $brands_row)
 

@@ -2,26 +2,18 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Models\Shop\Product\Product;
 use App\Models\Shop\Order\Basket;
-use App\Models\Site\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Settings;
-use App\Models\Site\Module;
+use App\Facades\GlobalData;
 
 class BasketController extends Controller{
 
     protected $baskets;
 
-    protected $settings;
-
     public function __construct(Basket $baskets)
     {
-        $this->settings = Settings::getInstance();
-
         $this->baskets = $baskets;
-
     }
 
     /**
@@ -53,7 +45,7 @@ class BasketController extends Controller{
 
             $data['shop']['basket']   = $basket;
 
-            $globalData = $this->settings->getParametersForController($data, 'shop', 'basket', 'edit');
+            $globalData = GlobalData::getParametersForController($data, 'shop', 'basket', 'edit');
 
             return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
 

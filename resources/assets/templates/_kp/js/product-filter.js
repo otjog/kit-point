@@ -172,21 +172,23 @@ function changeElementsBodyAfterRequest(target){
 }
 
 function setDefaultValueForm(target){
-    var filterName = target[0].dataset.filterName;
-    var filterValue = target[0].dataset.filterValue || target[i].value;
-    var filterType = target[0].dataset.filterType;
+    console.log(target);
+    let filterName = target[0].dataset.filterName;
+    let filterValue = target[0].dataset.filterValue || target[i].value;
+    let filterType = target[0].dataset.filterType;
     //todo подобное определение переменных есть в другой функции
-    var filter = document.getElementsByClassName('filter-' + filterName);
-    var inputs = filter[0].getElementsByTagName('input');
-    for(var i = 0; i < inputs.length; i++){
-        var inputsFilterValue = inputs[i].dataset.filterValue || inputs[i].value;
+    let filter = document.getElementsByClassName('filter-' + filterName);
+    let inputs = filter[0].getElementsByTagName('input');
+    for(let i = 0; i < inputs.length; i++){
+        let inputsFilterValue = inputs[i].dataset.filterValue || inputs[i].value;
         if(inputsFilterValue === filterValue){
             switch (inputs[i].type){
-                case 'checkbox' : inputs[i].checked = false;
+                case 'checkbox' :
+                    inputs[i].checked = false;
                     break;
-                case 'text' : inputs[i].value = inputs[i].dataset.filterDefaultValue || '';
+                case 'text' :
+                    inputs[i].value = inputs[i].dataset.filterDefaultValue || '';
                 //todo описать для остальных полей
-                //todo ползунок слайдера не меняет позицию
             }
         }
     }
@@ -259,9 +261,9 @@ function sendAjaxRequest(queryString, target) {
     Product Filter
 *****************************************************/
 
-var sliders = $('.filter-slider');
-for(var i = 0; i < sliders.length; i++){
-    var values = getValues(sliders[i]);
+let sliders = $('.filter-slider');
+for(let i = 0; i < sliders.length; i++){
+    let values = getValues(sliders[i]);
 
     getSliderShow(sliders[i]).slider({
         range: true,
@@ -341,8 +343,22 @@ function changeSliderValue(values, slider){
 }
 
 /*Очистка фильтра. Для каждого типа фильтра */
-$('.filter-clear').on('click', function(e){
+$('.filter-clear').on('click', function(e) {
     let filter = e.target.closest('.filter');
+
+    if (filter !== null && filter !== undefined) {
+        clearOneFilter(filter);
+    } else {
+        let filterWrap = e.target.closest('.product-filter');
+        let filters = $(filterWrap).find('.filter');
+        for (let i = 0; i < filters.length; i++) {
+            clearOneFilter(filters[i]);
+        }
+    }
+});
+
+function clearOneFilter(filter)
+{
     let inputs = $(filter).find('[data-filter-type]');
 
     for(let i = 0; i < inputs.length; i++){
@@ -377,4 +393,4 @@ $('.filter-clear').on('click', function(e){
         }
 
     }
-});
+}

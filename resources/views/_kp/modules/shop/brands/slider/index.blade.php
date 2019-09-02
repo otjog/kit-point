@@ -1,4 +1,4 @@
-<!-- Brands -->
+{{-- Brands --}}
 
 <div class="brands">
     <div class="container">
@@ -6,7 +6,7 @@
             <div class="col">
                 <div class="brands_slider_container">
 
-                    <!-- Brands Slider -->
+                    {{-- Brands Slider --}}
 
                     <div class="owl-carousel owl-theme brands_slider">
 
@@ -21,7 +21,7 @@
 
                     </div>
 
-                    <!-- Brands Slider Navigation -->
+                    {{-- Brands Slider Navigation --}}
                     <div class="brands_nav brands_prev"><i class="fas fa-chevron-left"></i></div>
                     <div class="brands_nav brands_next"><i class="fas fa-chevron-right"></i></div>
 

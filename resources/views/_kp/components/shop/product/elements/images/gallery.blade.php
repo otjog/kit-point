@@ -1,5 +1,5 @@
 @if( isset( $product->images ) && count( $product->images ) > 1)
-    <!-- List -->
+    {{-- List --}}
     <div class="col-lg-3 order-lg-1 order-2 d-none d-lg-block">
         {{-- Для вертикального слайдера используется плагин TinySlider на базе OwlCarousel.
          Если будем переделывать на горизонтальный слайдер, то используем Owl Carousel, а этот удалить --}}
@@ -33,7 +33,7 @@
 
 @endif
 
-<!-- Main Image -->
+{{-- Main Image --}}
 <div class="col-lg-9 order-lg-2 order-1">
     <div class="image_selected">
         @php

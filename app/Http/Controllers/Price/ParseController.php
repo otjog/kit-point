@@ -509,7 +509,6 @@ class ParseController extends Controller{
     }
 
     private function addTimeStamp($currentParameters){
-        //todo неверная локализация даты!
         $currentParameters['created_at'] = date('Y-m-d H:i:s',time());
         $currentParameters['updated_at'] = date('Y-m-d H:i:s',time());
 

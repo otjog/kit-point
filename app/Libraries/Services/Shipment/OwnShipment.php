@@ -4,7 +4,7 @@
 namespace App\Libraries\Services\Shipment;
 
 use App\Libraries\Services\Shipment\Contracts\ShipmentServices;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 use App\Models\Shop\Product\Product;
 
 class OwnShipment implements ShipmentServices
@@ -60,12 +60,11 @@ class OwnShipment implements ShipmentServices
 
     public function getPointsInCity()
     {
-        $settings = Settings::getInstance();
         $data = [];
 
         $dataMarker = [
-            'title' => 'Офис компании ' . $settings->getParameter('info.company_name'),
-            'address' => $settings->getParameter('info.address'),
+            'title' => 'Офис компании ' . GlobalData::getParameter('info.company_name'),
+            'address' => GlobalData::getParameter('info.address'),
             'timeTable' => $this->getTimeTablePoint(),
         ];
 

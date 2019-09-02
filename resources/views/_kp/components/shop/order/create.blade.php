@@ -78,7 +78,7 @@
                                 value="{{ old('full_name') }}"
                                 required=""
                                 data-suggestion="NAME">
-                        <!--input type="hidden" id="full_name_json" name="full_name_json"-->
+                        {{--input type="hidden" id="full_name_json" name="full_name_json"--}}
                         <div class="invalid-feedback">
                             Пожалуйста, укажите ваше ФИО полностью
                         </div>
@@ -152,7 +152,7 @@
                                     value="{{ Auth::user()->address }}"
                                 @endguest
                                 data-suggestion="ADDRESS">
-                        <!--input type="hidden" id="address_json" name="address_json"-->
+                        {{--input type="hidden" id="address_json" name="address_json"--}}
                         <div class="invalid-feedback">
                             Пожалуйста, укажите корректный адрес
                         </div>

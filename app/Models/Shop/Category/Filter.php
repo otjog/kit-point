@@ -4,7 +4,7 @@ namespace App\Models\Shop\Category;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop\Product\Product;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 
 class Filter extends Model{
 
@@ -36,11 +36,9 @@ class Filter extends Model{
 
     }
 
-    public function getParametersForFilters(Product $products, $filters ){
-
-        $settings = Settings::getInstance();
-
-        $prefix = $settings->getParameter('components.shop.filter_prefix');
+    public function getParametersForFilters(Product $products, $filters )
+    {
+        $prefix = GlobalData::getParameter('components.shop.filter_prefix');
 
         $temporary = [];
 

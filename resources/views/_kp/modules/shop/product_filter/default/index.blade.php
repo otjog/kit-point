@@ -1,5 +1,5 @@
 @if (isset($filters) && count($filters) > 0 )
-    <div class="product-filter">
+    <div class="product-filter d-none d-md-block">
         <form name="product_filter" role="form" method="GET">
 
             @foreach ($filters as $filter)
@@ -47,7 +47,7 @@
                                     </span>
                             </a>
                             </span>
-                            <small class="filter-clear float-right">Очистить</small>
+                            <small class="filter-clear float-right border-bottom-dotted">Очистить</small>
                         </div>
                         <div class="collapse pb-3 @if($filter['expanded'] === 'true') show @endif"  id="collapse-{{$filter['alias']}}">
                             @include( $global_data['template']['name'] .'.modules.shop.product_filter.elements.'.$filter['type'], [$filter])
@@ -58,9 +58,12 @@
 
             @endforeach
 
-        <!-- Filter's Button -->
+        {{-- Filter's Button --}}
             @include( $global_data['template']['name'] .'.modules.shop.product_filter.elements.button')
 
         </form>
     </div>
+    {{-- Фильтр для мобильных --}}
+    @include( $global_data['template']['name'] .'.modules.shop.product_filter.responsive.index')
+
 @endif

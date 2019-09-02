@@ -27,14 +27,14 @@
                     @endif
                 </h1>
 
-                <!-- Images -->
+                {{-- Images --}}
                 <div class="col-lg-7">
                     <div class="row">
                         @include( $global_data['template']['name']. '.components.shop.product.elements.images.gallery')
                     </div>
                 </div>
 
-                <!-- Right Column -->
+                {{-- Right Column --}}
                 <div class="col-lg-5 order-3">
                     <div class="product_description">
                         <div>Категория: <span class="text-muted">{{$product->category['name']}}</span></div>
@@ -140,7 +140,7 @@
                     </div>
                 </div>
 
-                <!-- TABS -->
+                {{-- TABS --}}
                 <div class="col-lg-12 order-4 my-4">
 
                     <ul class="nav nav-tabs" id="tabs">

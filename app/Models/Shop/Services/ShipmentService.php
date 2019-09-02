@@ -12,7 +12,7 @@ use App\Libraries\Services\Shipment\DefaultShipment;
 use App\Libraries\Helpers\DeclesionsOfWord;
 use App\Models\Geo\GeoData;
 use App\Models\Site\Image;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 
 class ShipmentService extends Model
 {
@@ -30,7 +30,7 @@ class ShipmentService extends Model
             $data = $serviceObj->getDeliveryCost($shipmentData['parcel_data'], $shipmentData['type']);
             if ($data !== null ) {
                 $data['days'][] = $this->getDeclisionOfDays($data['days'][0]);
-                $data['price'][] = $this->getCurrency();
+                $data['price'][] = GlobalData::getParameter('components.shop.currency.symbol');
                 $shipmentService[0]->offer = $data;
             }
         }
@@ -129,13 +129,6 @@ class ShipmentService extends Model
             $maxDay = (int)$daysArray[0];
 
         return DeclesionsOfWord::make($maxDay, ['день', 'дня', 'дней']);
-    }
-
-    private function getCurrency()
-    {
-        $settings = Settings::getInstance();
-
-        return $settings->getParameter('components.shop.currency.symbol');
     }
 
     private function getParcelParameters($json)

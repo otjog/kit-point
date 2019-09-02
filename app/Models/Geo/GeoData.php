@@ -17,8 +17,8 @@ class GeoData extends Model{
     }
 
     /** @return array */
-    public function getGeoData(){
-
+    public function getGeoData()
+    {
         return session()->get('geoInput', function() {
 
             if(session()->get('geoIp') === null){
@@ -28,8 +28,8 @@ class GeoData extends Model{
         });
     }
 
-    public function setGeoInput($json){
-
+    public function setGeoInput($json)
+    {
         if($json !== null){
             $objectData = json_decode($json);
 
@@ -65,18 +65,12 @@ class GeoData extends Model{
 
     }
 
-    public function setGeoIp(){
-
-        $ipAddress = $_SERVER['REMOTE_ADDR'];
-
-        if($_SERVER['REMOTE_ADDR'] === '127.0.0.1'){
-
-            //$ipAddress = '213.87.147.113'; //Москва
-            //$ipAddress = '178.216.79.66'; //Белгород
-            //$ipAddress = '92.37.241.243'; //Комсомольск-на-Амуре (Хабаровский край)
-            $ipAddress = '94.243.63.255'; //Чита (Забайкальский край)
-
-        }
+    public function setGeoIp()
+    {
+        if (!isset($_SERVER['REMOTE_ADDR']) || $_SERVER['REMOTE_ADDR'] === '127.0.0.1')
+            $ipAddress = '213.87.147.113'; //Москва
+        else
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
 
         $geolite = new GeoLite();
 
@@ -100,23 +94,20 @@ class GeoData extends Model{
             session(['geoIp' => $geoData]);
 
         }else{
-
             session(['geoIp' => null]);// todo что отдавать, если geoIp NULL????
-
         }
-
-
     }
 
-    private function getCountryCode($countryName){
+    private function getCountryCode($countryName)
+    {
         switch($countryName){
             case 'Россия'   : return 'RU';
             case 'Украина'  : return 'UA';
         }
     }
 
-    private function getRegionData($fullRegionName){
-
+    private function getRegionData($fullRegionName)
+    {
         $regionTypes = [
             'АО' => 'АО', 'край' => 'край', 'Аобл' => 'Автономная область', 'обл' => 'область'
         ];
@@ -135,7 +126,8 @@ class GeoData extends Model{
         return $data;
     }
 
-    private function getRegionCodeByShortRegionName($regionName){
+    private function getRegionCodeByShortRegionName($regionName)
+    {
         switch($regionName){
             case 'Адыгея'                   : return '01'; break;
             case 'Башкортостан'             : return '02'; break;
@@ -223,7 +215,6 @@ class GeoData extends Model{
             case 'Ямало-Ненецкий'           : return '89'; break;
             case 'Севастополь'              : return '91'; break;
             default : return null;
-
         }
     }
 
