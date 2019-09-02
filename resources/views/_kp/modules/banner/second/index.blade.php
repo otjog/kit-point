@@ -1,14 +1,14 @@
-<!-- Banner -->
+{{-- Banner --}}
 
 <div class="banner_2">
     <div class="banner_2_background" style="background-image:url({{asset('storage/_kp/images/banner_2_background.jpg')}})"></div>
     <div class="banner_2_container">
         <div class="banner_2_dots"></div>
-        <!-- Banner 2 Slider -->
+        {{-- Banner 2 Slider --}}
 
         <div class="owl-carousel owl-theme banner_2_slider">
 
-            <!-- Banner 2 Slider Item -->
+            {{-- Banner 2 Slider Item --}}
             <div class="owl-item">
                 <div class="banner_2_item">
                     <div class="container fill_height">
@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <!-- Banner 2 Slider Item -->
+            {{-- Banner 2 Slider Item --}}
             <div class="owl-item">
                 <div class="banner_2_item">
                     <div class="container fill_height">
@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <!-- Banner 2 Slider Item -->
+            {{-- Banner 2 Slider Item --}}
             <div class="owl-item">
                 <div class="banner_2_item">
                     <div class="container fill_height">

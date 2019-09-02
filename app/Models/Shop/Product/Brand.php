@@ -6,7 +6,22 @@ use App\Models\Shop\Parameter\Parameter;
 
 class Brand extends Parameter {
 
-    public function getActiveBrands(){
+    public function getNameAttribute($value)
+    {
+        if($value === null)
+            return 'Бренды';
+        return $value;
+    }
+
+    public function getRoot()
+    {
+        $brands = new self();
+        $brands->children = $this->getActiveBrands();
+        return $brands;
+    }
+
+    public function getActiveBrands()
+    {
         return self::select(
 
             'product_has_parameter.value as name'

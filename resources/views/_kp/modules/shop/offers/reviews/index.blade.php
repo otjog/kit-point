@@ -1,4 +1,4 @@
-<!-- Reviews -->
+{{-- Reviews --}}
 
 <div class="reviews">
     <div class="container">
@@ -12,10 +12,10 @@
 
                 <div class="reviews_slider_container">
 
-                    <!-- Reviews Slider -->
+                    {{-- Reviews Slider --}}
                     <div class="owl-carousel owl-theme reviews_slider">
 
-                        <!-- Reviews Slider Item -->
+                        {{-- Reviews Slider Item --}}
                         <div class="owl-item">
                             <div class="review d-flex flex-row align-items-start justify-content-start">
                                 <div><div class="review_image"><img src="{{asset('storage/_kp/images/review_1.jpg')}}" alt=""></div></div>
@@ -30,7 +30,7 @@
                             </div>
                         </div>
 
-                        <!-- Reviews Slider Item -->
+                        {{-- Reviews Slider Item --}}
                         <div class="owl-item">
                             <div class="review d-flex flex-row align-items-start justify-content-start">
                                 <div><div class="review_image"><img src="{{asset('storage/_kp/images/review_2.jpg')}}" alt=""></div></div>
@@ -45,7 +45,7 @@
                             </div>
                         </div>
 
-                        <!-- Reviews Slider Item -->
+                        {{-- Reviews Slider Item --}}
                         <div class="owl-item">
                             <div class="review d-flex flex-row align-items-start justify-content-start">
                                 <div><div class="review_image"><img src="{{asset('storage/_kp/images/review_3.jpg')}}" alt=""></div></div>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
 
-                        <!-- Reviews Slider Item -->
+                        {{-- Reviews Slider Item --}}
                         <div class="owl-item">
                             <div class="review d-flex flex-row align-items-start justify-content-start">
                                 <div><div class="review_image"><img src="{{asset('storage/_kp/images/review_1.jpg')}}" alt=""></div></div>
@@ -75,7 +75,7 @@
                             </div>
                         </div>
 
-                        <!-- Reviews Slider Item -->
+                        {{-- Reviews Slider Item --}}
                         <div class="owl-item">
                             <div class="review d-flex flex-row align-items-start justify-content-start">
                                 <div><div class="review_image"><img src="{{asset('storage/_kp/images/review_2.jpg')}}" alt=""></div></div>
@@ -90,7 +90,7 @@
                             </div>
                         </div>
 
-                        <!-- Reviews Slider Item -->
+                        {{-- Reviews Slider Item --}}
                         <div class="owl-item">
                             <div class="review d-flex flex-row align-items-start justify-content-start">
                                 <div><div class="review_image"><img src="{{asset('storage/_kp/images/review_3.jpg')}}" alt=""></div></div>

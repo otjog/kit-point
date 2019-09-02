@@ -1,4 +1,4 @@
-<!-- Recently Viewed -->
+{{-- Recently Viewed --}}
 
 <div class="viewed">
     <div class="container">
@@ -14,11 +14,11 @@
 
                 <div class="viewed_slider_container">
 
-                    <!-- Recently Viewed Slider -->
+                    {{-- Recently Viewed Slider --}}
 
                     <div class="owl-carousel owl-theme viewed_slider">
 
-                        <!-- Recently Viewed Item -->
+                        {{-- Recently Viewed Item --}}
                         <div class="owl-item">
                             <div class="viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
                                 <div class="viewed_image"><img src="{{asset('storage/_kp/images/view_1.jpg')}}" alt=""></div>
@@ -33,7 +33,7 @@
                             </div>
                         </div>
 
-                        <!-- Recently Viewed Item -->
+                        {{-- Recently Viewed Item --}}
                         <div class="owl-item">
                             <div class="viewed_item d-flex flex-column align-items-center justify-content-center text-center">
                                 <div class="viewed_image"><img src="{{asset('storage/_kp/images/view_2.jpg')}}" alt=""></div>
@@ -48,7 +48,7 @@
                             </div>
                         </div>
 
-                        <!-- Recently Viewed Item -->
+                        {{-- Recently Viewed Item --}}
                         <div class="owl-item">
                             <div class="viewed_item d-flex flex-column align-items-center justify-content-center text-center">
                                 <div class="viewed_image"><img src="{{asset('storage/_kp/images/view_3.jpg')}}" alt=""></div>
@@ -63,7 +63,7 @@
                             </div>
                         </div>
 
-                        <!-- Recently Viewed Item -->
+                        {{-- Recently Viewed Item --}}
                         <div class="owl-item">
                             <div class="viewed_item is_new d-flex flex-column align-items-center justify-content-center text-center">
                                 <div class="viewed_image"><img src="{{asset('storage/_kp/images/view_4.jpg')}}" alt=""></div>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <!-- Recently Viewed Item -->
+                        {{-- Recently Viewed Item --}}
                         <div class="owl-item">
                             <div class="viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
                                 <div class="viewed_image"><img src="{{asset('storage/_kp/images/view_5.jpg')}}" alt=""></div>
@@ -93,7 +93,7 @@
                             </div>
                         </div>
 
-                        <!-- Recently Viewed Item -->
+                        {{-- Recently Viewed Item --}}
                         <div class="owl-item">
                             <div class="viewed_item d-flex flex-column align-items-center justify-content-center text-center">
                                 <div class="viewed_image"><img src="{{asset('storage/_kp/images/view_6.jpg')}}" alt=""></div>

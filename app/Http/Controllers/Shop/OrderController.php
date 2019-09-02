@@ -6,13 +6,12 @@ use App\Libraries\Services\Pay\Contracts\OnlinePayment;
 use App\Models\Shop\Customer;
 use App\Models\Shop\Order\Payment;
 use App\Models\Shop\Services\PaymentService;
-use App\Models\Site\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Shop\Order\Basket;
 use App\Models\Shop\Order\Order;
 use App\Models\Shop\Product\Product;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 use App\Events\NewOrder;
 
 class OrderController extends Controller
@@ -21,12 +20,8 @@ class OrderController extends Controller
 
     protected $baskets;
 
-    protected $settings;
-
     public function __construct(Order $orders, Basket $baskets)
     {
-        $this->settings = Settings::getInstance();
-
         $this->orders   = $orders;
 
         $this->baskets  = $baskets;
@@ -70,17 +65,11 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(PaymentService $payments)
+    public function create()
     {
-        $data['shop']['basket']   = $this->baskets->getActiveBasketWithProductsAndRelations();
+        $data['shop'] = $this->orders->getDataForCreateOrder();
 
-        $data['shop']['payments'] = $payments->getActiveMethodsWithTax($data['shop']['basket']['total']);
-
-        $products = new Product();
-
-        $data['shop']['parcelData'] = $products->getJsonParcelParameters($data['shop']['basket']->products);
-
-        $globalData = $this->settings->getParametersForController($data, 'shop', 'order', 'create');
+        $globalData = GlobalData::getParametersForController($data, 'shop', 'order', 'create');
 
         return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }
@@ -95,7 +84,7 @@ class OrderController extends Controller
     {
         $data['shop']['order']    = $this->orders->getOrderById($products, $id);
 
-        $globalData = $this->settings->getParametersForController($data, 'shop', 'order', 'show');
+        $globalData = GlobalData::getParametersForController($data, 'shop', 'order', 'show');
 
         return view($globalData['template']['viewKey'], ['global_data' => $globalData]);
     }

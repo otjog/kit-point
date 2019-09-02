@@ -20,6 +20,13 @@ class Basket extends Model
 
     protected $table = 'shop_baskets';
 
+    public function getNameAttribute($value)
+    {
+        if($value === null)
+            return 'Ваша корзина';
+        return $value;
+    }
+
     public function products()
     {
         return $this->belongsToMany('App\Models\Shop\Product\Product', 'shop_basket_has_product', 'basket_id', 'product_id')

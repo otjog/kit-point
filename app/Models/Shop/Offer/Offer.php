@@ -18,17 +18,10 @@ class Offer extends Model{
 
     protected $table = 'shop_offers';
 
-    public function products(){
+    public function products()
+    {
         return $this->belongsToMany('App\Models\Shop\Product\Product', 'shop_offer_has_product', 'offer_id', 'product_id')
             ->withTimestamps();
-    }
-
-    public function getProductsOffers($take = 10){
-
-        $offers = $this->getActiveOffers();
-
-        return $this->addProductsToOffers($offers, $take);
-
     }
 
     //TODO поле name сделать уникальным
@@ -45,7 +38,15 @@ class Offer extends Model{
 
     }
 
-    public function getActiveOfferByName($name, $take=6){
+    public function getProductsOffers($take = 10)
+    {
+        $offers = $this->getActiveOffers();
+
+        return $this->addProductsToOffers($offers, $take);
+
+    }
+
+    public function getActiveOfferByName($name, $take = 6){
 
         $offers = self::select(
             'id',
@@ -70,11 +71,13 @@ class Offer extends Model{
         foreach($offers as $offer){
 
             if($offer->related){
+                /*Выводит товары из предложения созданного нами*/
                 $offerProducts = $products->getCustomProductsOffer($offer->id, $take);
 
                 $offer->relations = ['products' => $offerProducts];
 
             }else{
+                /*Выводит товары из предложения созданного автоматически*/
                 $offerProducts = $products->getProductsPrepareOffer($offer->name, $take);
 
                 $offer->relations = ['products' => $offerProducts];
@@ -82,7 +85,9 @@ class Offer extends Model{
 
             $newOffers->put($offer->name, $offer);
         }
+
         unset($offers);
+
         return $newOffers;
     }
 }

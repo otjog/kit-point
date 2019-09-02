@@ -1,4 +1,4 @@
-<!-- Banner -->
+{{-- Banner --}}
 
 <div class="banner">
     <div class="banner_background" style="background-image:url({{asset('storage/_kp/images/banner_background.jpg')}})"></div>

@@ -25,20 +25,20 @@
 
 <div class="super_container">
 
-	<!-- Modals -->
+	{{-- Modals --}}
 @include('_kp.positions.modals.default')
 
-<!-- Header Section Starts -->
+{{-- Header Section Starts --}}
 @include('_kp.positions.header.default')
-<!-- Header Section Ends -->
+{{-- Header Section Ends --}}
 
-	<!-- Main Container Starts -->
+	{{-- Main Container Starts --}}
 @include('_kp.positions.content.default')
-<!-- Main Container Ends -->
+{{-- Main Container Ends --}}
 
-	<!-- Footer Section Starts -->
+	{{-- Footer Section Starts --}}
 @include('_kp.positions.footer.default')
-<!-- Footer Section Ends -->
+{{-- Footer Section Ends --}}
 
 </div>
 

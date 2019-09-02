@@ -2,9 +2,11 @@
 
 namespace App\Console;
 
+use App\Models\Site\Mailling;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\Price\CurrencyController;
+use App\Events\MaillingForRegister;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,10 +27,49 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
+        /*Обновляем Курсы Валют*/
+        $schedule->call(function ()
+        {
             $cur = New CurrencyController();
+
             $cur->getCur();
-        })->everyMinute();
+
+        })->daily();
+
+        /*Отправка рассылок клиентам*/
+        $schedule->call(function ()
+        {
+            $maillingModel = new Mailling();
+
+            $maillings = $maillingModel->getActiveMaillings();
+
+            $roundToHour = 3600;
+            $roundToMinute = 60;
+
+            $roundTo = $roundToHour;
+
+            /**
+             * Мы округляем timestamp, до 1 часа. Т.е любое время указанное в пределах одного
+             * округлится по математическим законам в к ближайщему часу.
+             */
+            $timestampNow = round((time())/$roundTo)*$roundTo;
+
+            $today = date('N');
+
+            foreach ($maillings as $mailling) {
+
+                if ($today === $mailling->dayOfWeek) {
+
+                    $timestampEvent = round( $mailling->timestamp/$roundTo)*$roundTo;
+
+                    if ($timestampNow === $timestampEvent) {
+                        event(new MaillingForRegister($mailling));
+                    }
+                }
+
+            }
+
+        })->hourly();
     }
 
     /**

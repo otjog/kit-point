@@ -3,11 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\NewCustomer;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomerCreate;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 
 class SendMailNewCustomer
 {
@@ -29,11 +27,9 @@ class SendMailNewCustomer
      */
     public function handle(NewCustomer $event)
     {
-        $settings = Settings::getInstance();
-
         $data['customer'] = $event->customer;
 
-        $globalData = $settings->getParametersForController($data,'shop', 'customer', 'show', $event->customer->id);
+        $globalData = GlobalData::pushArrayParameters($data);
 
         Mail::to(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
             ->cc($event->customer->email, $event->customer->full_name )

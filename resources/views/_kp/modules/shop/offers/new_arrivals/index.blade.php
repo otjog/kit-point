@@ -1,4 +1,4 @@
-<!-- Hot New Arrivals -->
+{{-- Hot New Arrivals --}}
 
 <div class="new_arrivals">
     <div class="container">
@@ -17,11 +17,11 @@
                     <div class="row">
                         <div class="col-lg-9" style="z-index:1;">
 
-                            <!-- Product Panel -->
+                            {{-- Product Panel --}}
                             <div class="product_panel panel active">
                                 <div class="arrivals_slider slider">
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -71,7 +71,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -96,7 +96,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -121,7 +121,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -146,7 +146,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -171,7 +171,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -196,7 +196,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -221,7 +221,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -246,7 +246,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -271,7 +271,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -296,7 +296,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -321,7 +321,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -346,7 +346,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -371,7 +371,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -396,7 +396,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -424,11 +424,11 @@
                                 <div class="arrivals_slider_dots_cover"></div>
                             </div>
 
-                            <!-- Product Panel -->
+                            {{-- Product Panel --}}
                             <div class="product_panel panel">
                                 <div class="arrivals_slider slider">
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -453,7 +453,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -478,7 +478,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -503,7 +503,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -528,7 +528,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -553,7 +553,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -578,7 +578,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -603,7 +603,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -628,7 +628,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -653,7 +653,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -678,7 +678,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -703,7 +703,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -728,7 +728,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -753,7 +753,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -778,7 +778,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -803,7 +803,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -831,11 +831,11 @@
                                 <div class="arrivals_slider_dots_cover"></div>
                             </div>
 
-                            <!-- Product Panel -->
+                            {{-- Product Panel --}}
                             <div class="product_panel panel">
                                 <div class="arrivals_slider slider">
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -860,7 +860,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -885,7 +885,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -910,7 +910,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -935,7 +935,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -960,7 +960,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -985,7 +985,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1010,7 +1010,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1035,7 +1035,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1060,7 +1060,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1085,7 +1085,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1110,7 +1110,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1135,7 +1135,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1160,7 +1160,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1185,7 +1185,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">
@@ -1210,7 +1210,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Slider Item -->
+                                    {{-- Slider Item --}}
                                     <div class="arrivals_slider_item">
                                         <div class="border_active"></div>
                                         <div class="product_item is_new d-flex flex-column align-items-center justify-content-center text-center">

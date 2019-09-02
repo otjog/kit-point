@@ -1,5 +1,5 @@
 
-<!-- Trends -->
+{{-- Trends --}}
 
 <div class="trends">
     <div class="trends_background" style="background-image:url({{asset('storage/_kp/images/trends_background.jpg')}})"></div>
@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
 
-            <!-- Trends Content -->
+            {{-- Trends Content --}}
             <div class="col-lg-3">
                 <div         class="trends_container">
                     <h2 class="trends_title">Trends 2018</h2>
@@ -19,15 +19,15 @@
                 </div>
             </div>
 
-            <!-- Trends Slider -->
+            {{-- Trends Slider --}}
             <div class="col-lg-9">
                 <div class="trends_slider_container">
 
-                    <!-- Trends Slider -->
+                    {{-- Trends Slider --}}
 
                     <div class="owl-carousel owl-theme trends_slider">
 
-                        <!-- Trends Slider Item -->
+                        {{-- Trends Slider Item --}}
                         <div class="owl-item">
                             <div class="trends_item is_new">
                                 <div class="trends_image d-flex flex-column align-items-center justify-content-center"><img src="{{asset('storage/_kp/images/trends_1.jpg')}}" alt=""></div>
@@ -46,7 +46,7 @@
                             </div>
                         </div>
 
-                        <!-- Trends Slider Item -->
+                        {{-- Trends Slider Item --}}
                         <div class="owl-item">
                             <div class="trends_item">
                                 <div class="trends_image d-flex flex-column align-items-center justify-content-center"><img src="{{asset('storage/_kp/images/trends_2.jpg')}}" alt=""></div>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
 
-                        <!-- Trends Slider Item -->
+                        {{-- Trends Slider Item --}}
                         <div class="owl-item">
                             <div class="trends_item is_new">
                                 <div class="trends_image d-flex flex-column align-items-center justify-content-center"><img src="{{asset('storage/_kp/images/trends_3.jpg')}}" alt=""></div>
@@ -84,7 +84,7 @@
                             </div>
                         </div>
 
-                        <!-- Trends Slider Item -->
+                        {{-- Trends Slider Item --}}
                         <div class="owl-item">
                             <div class="trends_item is_new">
                                 <div class="trends_image d-flex flex-column align-items-center justify-content-center"><img src="{{asset('storage/_kp/images/trends_1.jpg')}}" alt=""></div>
@@ -103,7 +103,7 @@
                             </div>
                         </div>
 
-                        <!-- Trends Slider Item -->
+                        {{-- Trends Slider Item --}}
                         <div class="owl-item">
                             <div class="trends_item">
                                 <div class="trends_image d-flex flex-column align-items-center justify-content-center"><img src="{{asset('storage/_kp/images/trends_2.jpg')}}" alt=""></div>
@@ -122,7 +122,7 @@
                             </div>
                         </div>
 
-                        <!-- Trends Slider Item -->
+                        {{-- Trends Slider Item --}}
                         <div class="owl-item">
                             <div class="trends_item is_new">
                                 <div class="trends_image d-flex flex-column align-items-center justify-content-center"><img src="{{asset('storage/_kp/images/trends_3.jpg')}}" alt=""></div>
