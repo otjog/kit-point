@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Price;
 
-use App\Models\Shop\Product\Product;
+use App\Models\Shop\Price\Currency;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
@@ -10,17 +10,25 @@ class CurrencyController extends Controller{
 
     private $url = 'http://www.cbr.ru/scripts/XML_daily.asp';
 
-    public function getCur(Product $products){
+    public function getCur(){
 
         $xmlString = $this->connectToSite();
 
         $sxml = simplexml_load_string($xmlString);
 
-        foreach ($sxml->Valute as $cur){
-            switch($cur->CharCode){
-                case 'USD' :
-                case 'EUR' : $this->updateCur($cur); break;
+        $currencyModel = new Currency();
+
+        $currencies = $currencyModel->getAllCurrencies();
+
+        foreach ($sxml->Valute as $XmlCurrency){
+
+            foreach ($currencies as $BdCurrency) {
+                /* Через if сравнение не срабатывает*/
+                switch($XmlCurrency->CharCode){
+                    case $BdCurrency->char_code : $this->updateCur($XmlCurrency); break;
+                }
             }
+
         }
 
     }
@@ -39,14 +47,16 @@ class CurrencyController extends Controller{
 
         $time = time();
 
-        $floatValue = str_replace(',', '.', $curXml->Value);
+        $nominal = (int)$curXml->Nominal;
+
+        $value = (float)str_replace(',', '.', $curXml->Value) / $nominal;
 
         if($cur === null){
             DB::table('currency')->insert(
                 [
                     'name' => $curXml->Name,
                     'char_code' => $curXml->CharCode,
-                    'value' => $floatValue,
+                    'value' => $value,
                     'created_at' => date('Y-m-d H:i:s',$time),
                     'updated_at' => date('Y-m-d H:i:s',$time)
                 ]
@@ -54,7 +64,7 @@ class CurrencyController extends Controller{
         }else{
             DB::table('currency')
                 ->where('char_code', $curXml->CharCode)
-                ->update(['value' => $floatValue, 'updated_at' => date('Y-m-d H:i:s',$time)]);
+                ->update(['value' => $value, 'updated_at' => date('Y-m-d H:i:s',$time)]);
         }
 
     }

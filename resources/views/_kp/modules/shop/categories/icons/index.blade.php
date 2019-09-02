@@ -2,7 +2,7 @@
     $categories = $modules[$module['resource']];
 @endphp
 @if(isset($categories) && $categories !== null)
-<!-- Popular Categories -->
+{{-- Popular Categories --}}
     <div class="popular_categories">
     <div class="container">
         <div class="row">
@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <!-- Popular Categories Slider -->
+            {{-- Popular Categories Slider --}}
 
             <div class="col-lg-9">
                 <div class="popular_categories_slider_container">

@@ -3,7 +3,7 @@
 namespace App\Models\Site;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 use Intervention\Image\ImageManager;
 
 class Image extends Model
@@ -136,9 +136,7 @@ class Image extends Model
                         break;
                     case 'watermark' :
 
-                        $settings = Settings::getInstance();
-
-                        $logoPath = $settings->getParameter('info.logotype');
+                        $logoPath = GlobalData::getParameter('info.logotype');
 
                         $canvas = $imageManager->canvas($size['width']/4, $size['height']/4, 'ffffff')->opacity(75);
 
@@ -161,9 +159,7 @@ class Image extends Model
 
     protected function getImagesSettings($model, $size, $pathToImage, $modelId, $extension)
     {
-        $settings = Settings::getInstance();
-
-        $imageSettings = $settings->getParameter('images.models.' . $model);
+        $imageSettings = GlobalData::getParameter('images.models.' . $model);
 
         if (!is_file($pathToImage)) {
             switch ($imageSettings['if_not']['action']) {

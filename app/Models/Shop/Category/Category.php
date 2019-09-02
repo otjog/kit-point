@@ -3,12 +3,12 @@
 namespace App\Models\Shop\Category;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 
 class Category extends Model{
 
     protected $moduleMethods = [
-        'index' => 'getCategoriesTree',
+        'index' => 'getActiveChildrenCategories',
     ];
 
     public function getModuleMethods($moduleMethod)
@@ -18,6 +18,13 @@ class Category extends Model{
 
     protected $fillable = ['active', 'name'];
 
+    public function getNameAttribute($value)
+    {
+        if($value === null)
+            return 'Категории магазина';
+        return $value;
+    }
+
     public function products()
     {
         return $this->hasMany('App\Models\Shop\Product\Product');
@@ -26,6 +33,16 @@ class Category extends Model{
     public function images()
     {
         return $this->morphToMany('App\Models\Site\Image', 'imageable');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(    'App\Models\Shop\Category\Category');
+    }
+
+    public function children()
+    {
+        return $this->hasMany('App\Models\Shop\Category\Category', 'parent_id');
     }
 
     public function getAllCategories(){
@@ -53,6 +70,8 @@ class Category extends Model{
             ->where('active', 1)
             ->orderBy('sort')
             ->with('images')
+            ->with('parent')
+            ->with('children')
             ->get();
     }
 
@@ -87,7 +106,7 @@ class Category extends Model{
             ->get();
     }
 
-    public function getActiveChildrenCategories($parent_id){
+    public function getActiveChildrenCategories($parent_id = 0){
         return self::select(
             'id',
             'parent_id',
@@ -115,7 +134,16 @@ class Category extends Model{
             ->where('id', $id)
             ->orderBy('name')
             ->with('images')
+            ->with('parent')
+            ->with('children')
             ->get();
+    }
+
+    public function getRootCategory()
+    {
+        $rootCategory = new self();
+        $rootCategory->children = $this->getActiveChildrenCategories(0);
+        return $rootCategory;
     }
 
     public function getCategoryIfActive($id){
@@ -136,12 +164,10 @@ class Category extends Model{
 
     public function getCategoriesTree($parent_id = 0)
     {
-        $settings = Settings::getInstance();
-
-        if($settings->getParameter('models.category.categoriesTree')){
-            return $settings->getParameter('models.category.categoriesTree');
+        if(GlobalData::getParameter('models.category.categoriesTree')){
+            return GlobalData::getParameter('models.category.categoriesTree');
         }
-
+dd(1);
         /**
          * http://forum.php.su/topic.php?forum=71&topic=4385
          */
@@ -167,7 +193,7 @@ class Category extends Model{
 
         $result = collect($tree);
 
-        $settings->addParameter('models.category.categoriesTree', $result);
+        GlobalData::addParameter('models.category.categoriesTree', $result);
 
         return $result;
     }

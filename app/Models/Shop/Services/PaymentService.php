@@ -4,7 +4,7 @@ namespace App\Models\Shop\Services;
 
 
 use App\Models\Shop\Order\Payment;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 
 class PaymentService extends Payment
 {
@@ -14,9 +14,7 @@ class PaymentService extends Payment
 
         $services = $payments->getActiveMethods();
 
-        $settings = Settings::getInstance();
-
-        $currencySymbol = $settings->getParameter('components.shop.currency.symbol');
+        $currencySymbol = GlobalData::getParameter('components.shop.currency.symbol');
 
         foreach ($services as $service) {
             switch ($service->alias) {

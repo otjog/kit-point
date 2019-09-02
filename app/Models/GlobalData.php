@@ -2,29 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Shop\CustomerGroup;
 use App\Models\Shop\Price\Currency;
-use App\Models\Shop\Price\Price;
+use App\Models\Site\Breadcrumb;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Geo\GeoData;
 use App\Models\Site\Template;
 use App\Models\Site\Metatags;
 use App\Models\Site\Module;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
-class Settings {
-
-    private static $instance = null;
-
+class GlobalData
+{
     public $data;
 
-    public static function getInstance(){
-        if (null === self::$instance) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    private function __construct()
+    public function __construct()
     {
         $json = DB::table('global_data')
             ->select('options')
@@ -46,60 +39,46 @@ class Settings {
             });
         /* End Currency */
 
-        /* Add Price */
-        $price = new Price();
-
-        $this->data['components']['shop']['price'] =
-            $price
-                ->select('id', 'name')
-                ->where('name', 'retail')
-                ->first();
-        /* End Price */
-
-    }
-
-    private function __clone(){}
-
-    public function addParameter($name, $value)
-    {
-        $nameArray = explode('.', $name);
-
-        $max = count($nameArray)-1;
-
-        if ($max === 0) {
-            $this->data[$name] = $value;
-        } else {
-            $result = array($nameArray[$max] => $value);
-            for($i=$max-1; $i>0; $result = array($nameArray[$i--] => $result));
-
-            $this->data[$nameArray[0]] = $result;
-        }
-    }
-
-    public function pushArrayParameters($addData)
-    {
-        $this->data = $this->getParameters();
-
-        return array_merge($this->data, $addData);
-    }
-
-    public function getParameters()
-    {
         /* Add Geo */
         $geoData = new GeoData();
 
         $this->data['geo'] = $geoData->getGeoData();
         /* End Geo */
 
+        $customer = Auth::user();
+
+        $this->data['components']['shop']['customer'] = $customer;
+
+        $customerGroup = new CustomerGroup();
+
+        $this->data['components']['shop']['default_customer_group'] = $customerGroup->getDefaultCustomerGroup();
+
+        if(isset($this->data['components']['shop']['customer']) && $this->data['components']['shop']['customer'] !== null)
+            $this->data['components']['shop']['customer_group'] = $this->data['components']['shop']['customer']->customer_group;
+        else
+            $this->data['components']['shop']['customer_group'] = $this->data['components']['shop']['default_customer_group'];
+
+    }
+
+    public function addParameter($name, $value)
+    {
+        array_set($this->data, $name, $value);
+    }
+
+    public function pushArrayParameters($addData)
+    {
+        $this->data = array_merge($this->data, $addData);
+
+        return $this->data;
+    }
+
+    public function getParameters()
+    {
         return $this->data;
     }
 
     public function getParameter($path)
     {
-        if ($this->data === null) {
-            $this->data = $this->getParameters();
-        }
-
         $pathArray = explode('.', $path);
 
         $temporary = [];
@@ -139,7 +118,15 @@ class Settings {
         $data['modules'] = $module->getModulesData($data['template']['schema']);
         /* End Modules */
 
-        return $this->pushArrayParameters($data);
+        $this->pushArrayParameters($data);
+
+        /* Add Breadcrumbs */
+        $breadcrumbs = new Breadcrumb();
+        $modelCollection = $this->getParameter($component.'.'.$model);
+        $this->data['breadcrumbs'] = $breadcrumbs->getBreadcrumbs($modelCollection, $component);
+        /* End Breadcrumbs */
+
+        return $this->data;
     }
 
 }

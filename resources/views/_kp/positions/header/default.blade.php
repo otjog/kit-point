@@ -2,7 +2,7 @@
     $template = $global_data['template']['schema']['current']['header'];
     $modules = $global_data['modules'];
 @endphp
-<!-- Header -->
+{{-- Header --}}
 <header class="header">
 
 @if(isset($template['top']) && $template['top'] !== null)
@@ -13,7 +13,7 @@
     @endforeach
 @endif
 
-<!-- Header Main -->
+{{-- Header Main --}}
     <div class="header_main">
         <div class="container">
             <div class="row">
@@ -36,8 +36,8 @@
     @endforeach
 @endif
 
-<!-- Menu -->
-    <!--div class="page_menu">
+{{-- Menu --}}
+    {{--div class="page_menu">
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -119,6 +119,6 @@
                 </div>
             </div>
         </div>
-    </div-->
+    </div--}}
 
 </header>

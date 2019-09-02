@@ -5,8 +5,7 @@ namespace App\Models\Shop\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use JustBetter\PaginationWithHavings\PaginationWithHavings;
-use App\Models\Settings;
-use Illuminate\Support\Facades\Auth;
+use App\Facades\GlobalData;
 
 class Product extends Model
 {
@@ -21,7 +20,7 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(    'App\Models\Shop\Category\Category');
+        return $this->belongsTo('App\Models\Shop\Category\Category', 'category_id');
     }
 
     public function manufacturer()
@@ -70,7 +69,6 @@ class Product extends Model
             ->withPivot('quantity', 'price_id', 'currency_id', 'price_value', 'order_attributes')
             ->withTimestamps();
     }
-
     /***Function***/
     public function getAllProducts(){
         return self::select(
@@ -107,9 +105,7 @@ class Product extends Model
 
     public function getActiveProductsFromCategory($category_id)
     {
-        $settings = Settings::getInstance();
-
-        $pagination = $settings->getParameter('components.shop.pagination');
+        $pagination = GlobalData::getParameter('components.shop.pagination');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -129,24 +125,17 @@ class Product extends Model
 
     public function getActiveProductsWithFilterParameters($routeData)
     {
-        $settings = Settings::getInstance();
+        $today = GlobalData::getParameter('today');
 
-        $today = $settings->getParameter('today');
-
-        $customer = Auth::user();
-
-        if($customer === null)
-            $price_id = $settings->getParameter('components.shop.price.id');
-        else
-            $price_id = $customer->price_id;
+        $price_id = GlobalData::getParameter('components.shop.customer_group.price_id');
 
         $products = self::select(
             'products.id',
             'product_has_price.value        as price|pivot|value',
             'manufacturers.id               as manufacturer|id',
             'manufacturers.name             as manufacturer|name',
-            'categories.id                  as category|id',
-            'categories.name                as category|name',
+            //'categories.id                  as category|id',
+            //'categories.name                as category|name',
 
             DB::raw(
                 'CASE discounts.type
@@ -211,7 +200,8 @@ class Product extends Model
             ->leftJoin('manufacturers', 'manufacturers.id', '=', 'products.manufacturer_id')
 
             /************CATEGORY***************/
-            ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+            //->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+            ->with('category')
 
             ->orderBy('products.name')
 
@@ -223,11 +213,9 @@ class Product extends Model
 
     public function getFilteredProducts($routeData, $filterData)
     {
-        $settings = Settings::getInstance();
+        $pagination = GlobalData::getParameter('components.shop.pagination');
 
-        $pagination = $settings->getParameter('components.shop.pagination');
-
-        $filter_prefix = $settings->getParameter('components.shop.filter_prefix');
+        $filter_prefix = GlobalData::getParameter('components.shop.filter_prefix');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -298,9 +286,7 @@ class Product extends Model
 
     public function getActiveProductsOfBrand($brandName)
     {
-        $settings = Settings::getInstance();
-
-        $pagination = $settings->getParameter('components.shop.pagination');
+        $pagination = GlobalData::getParameter('components.shop.pagination');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -330,9 +316,7 @@ class Product extends Model
 
     public function getProductsById($idProducts)
     {
-        $settings = Settings::getInstance();
-
-        $pagination = $settings->getParameter('components.shop.pagination');
+        $pagination = GlobalData::getParameter('components.shop.pagination');
 
         $productsQuery = $this->getListProductQuery();
 
@@ -544,16 +528,9 @@ class Product extends Model
 
     private function getDefaultProductQuery(){
 
-        $settings = Settings::getInstance();
+        $today = GlobalData::getParameter('today');
 
-        $today = $settings->getParameter('today');
-
-        $customer = Auth::user();
-
-        if($customer === null)
-            $price_id = $settings->getParameter('components.shop.price.id');
-        else
-            $price_id = $customer->price_id;
+        $price_id = GlobalData::getParameter('components.shop.customer_group.price_id');
 
         return self::select(
             'products.id',
@@ -574,8 +551,8 @@ class Product extends Model
             'product_has_discount.value     as discounts|pivot|value',
             'manufacturers.id               as manufacturer|id',
             'manufacturers.name             as manufacturer|name',
-            'categories.id                  as category|id',
-            'categories.name                as category|name',
+            //'categories.id                  as category|id',
+            //'categories.name                as category|name',
 
             DB::raw(
                 'CASE discounts.type
@@ -632,8 +609,8 @@ class Product extends Model
             }])
 
             /************CATEGORY***************/
-            ->leftJoin('categories', 'categories.id', '=', 'products.category_id');
-
+            //->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+            ->with('category');
     }
 
     public function getCustomProductsOffer($offer_id, $take){

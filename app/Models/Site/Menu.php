@@ -71,7 +71,7 @@ class Menu extends Model
                         $idsArray = explode('|', $model->ids);
 
                         if($idsArray[0] === '0'){
-                            $model->relations['categories'] = $category->getCategoriesTree();
+                            $model->relations['categories'] = $category->getActiveChildrenCategories();
                         }else{
                             $model->relations['categories'] = $category->getActiveCategoriesById($idsArray);
                         }

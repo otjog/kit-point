@@ -8,8 +8,14 @@ class Price extends Model{
 
     protected $fillable = ['name'];
 
-    public function products(){
+    public function products()
+    {
         return $this->belongsToMany('App\Models\Shop\Product\Product', 'product_has_price')->withPivot('value', 'currency_id')->withTimestamps();
+    }
+
+    public function customer_groups()
+    {
+        return $this->hasMany('App\Models\Shop\CustomerGroup');
     }
 
 }

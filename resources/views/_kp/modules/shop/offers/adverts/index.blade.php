@@ -1,4 +1,4 @@
-<!-- Adverts -->
+{{-- Adverts --}}
 
 <div class="adverts">
     <div class="container">
@@ -6,7 +6,7 @@
 
             <div class="col-lg-4 advert_col">
 
-                <!-- Advert Item -->
+                {{-- Advert Item --}}
 
                 <div class="advert d-flex flex-row align-items-center justify-content-start">
                     <div class="advert_content">
@@ -19,7 +19,7 @@
 
             <div class="col-lg-4 advert_col">
 
-                <!-- Advert Item -->
+                {{-- Advert Item --}}
 
                 <div class="advert d-flex flex-row align-items-center justify-content-start">
                     <div class="advert_content">
@@ -33,7 +33,7 @@
 
             <div class="col-lg-4 advert_col">
 
-                <!-- Advert Item -->
+                {{-- Advert Item --}}
 
                 <div class="advert d-flex flex-row align-items-center justify-content-start">
                     <div class="advert_content">

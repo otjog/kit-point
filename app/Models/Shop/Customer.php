@@ -5,7 +5,7 @@ namespace App\Models\Shop;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Settings;
+use App\Facades\GlobalData;
 use Illuminate\Support\Facades\Auth;
 
 class Customer extends Authenticatable{
@@ -18,7 +18,7 @@ class Customer extends Authenticatable{
         'full_name',
         'email',
         'phone',
-        'price_id',
+        'customer_group_id',
         'address',
         'full_name_json',
         'address_json',
@@ -28,6 +28,11 @@ class Customer extends Authenticatable{
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function customer_group()
+    {
+        return $this->belongsTo(    'App\Models\Shop\CustomerGroup', 'customer_group_id');
+    }
 
     public function shopOrders()
     {
@@ -104,9 +109,7 @@ class Customer extends Authenticatable{
             }
         }
 
-        $settings = Settings::getInstance();
-
-        $data_customer['price_id'] = $settings->getParameter('components.shop.price.id');
+        $data_customer['customer_group_id'] = GlobalData::getParameter('components.shop.default_customer_group.id');
 
         if(!isset($data_customer['password']))
             $data_customer['password'] = Hash::make($this->getRandomPassword());

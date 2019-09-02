@@ -1,4 +1,4 @@
-<!-- Newsletter -->
+{{-- Newsletter --}}
 
 <div class="newsletter">
     <div class="container">

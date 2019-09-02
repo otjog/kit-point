@@ -1,4 +1,4 @@
-<!-- Best Sellers -->
+{{-- Best Sellers --}}
 
 <div class="best_sellers">
     <div class="container">
@@ -17,11 +17,11 @@
 
                     <div class="bestsellers_panel panel active">
 
-                        <!-- Best Sellers Slider -->
+                        {{-- Best Sellers Slider --}}
 
                         <div class="bestsellers_slider slider">
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_1.png')}}" alt=""></div>
@@ -39,7 +39,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_2.png')}}" alt=""></div>
@@ -57,7 +57,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_3.png')}}" alt=""></div>
@@ -75,7 +75,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_4.png')}}" alt=""></div>
@@ -93,7 +93,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_5.png')}}" alt=""></div>
@@ -111,7 +111,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_6.png')}}" alt=""></div>
@@ -129,7 +129,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_1.png')}}" alt=""></div>
@@ -147,7 +147,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_2.png')}}" alt=""></div>
@@ -165,7 +165,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_3.png')}}" alt=""></div>
@@ -183,7 +183,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_4.png')}}" alt=""></div>
@@ -201,7 +201,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_5.png')}}" alt=""></div>
@@ -219,7 +219,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_6.png')}}" alt=""></div>
@@ -242,11 +242,11 @@
 
                     <div class="bestsellers_panel panel">
 
-                        <!-- Best Sellers Slider -->
+                        {{-- Best Sellers Slider --}}
 
                         <div class="bestsellers_slider slider">
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_1.png')}}" alt=""></div>
@@ -264,7 +264,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_2.png')}}" alt=""></div>
@@ -282,7 +282,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_3.png')}}" alt=""></div>
@@ -300,7 +300,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_4.png')}}" alt=""></div>
@@ -318,7 +318,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_5.png')}}" alt=""></div>
@@ -336,7 +336,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_6.png')}}" alt=""></div>
@@ -354,7 +354,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_1.png')}}" alt=""></div>
@@ -372,7 +372,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_2.png')}}" alt=""></div>
@@ -390,7 +390,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_3.png')}}" alt=""></div>
@@ -408,7 +408,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_4.png')}}" alt=""></div>
@@ -426,7 +426,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_5.png')}}" alt=""></div>
@@ -444,7 +444,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_6.png')}}" alt=""></div>
@@ -467,11 +467,11 @@
 
                     <div class="bestsellers_panel panel">
 
-                        <!-- Best Sellers Slider -->
+                        {{-- Best Sellers Slider --}}
 
                         <div class="bestsellers_slider slider">
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_1.png')}}" alt=""></div>
@@ -489,7 +489,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_2.png')}}" alt=""></div>
@@ -507,7 +507,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_3.png')}}" alt=""></div>
@@ -525,7 +525,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_4.png')}}" alt=""></div>
@@ -543,7 +543,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_5.png')}}" alt=""></div>
@@ -561,7 +561,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_6.png')}}" alt=""></div>
@@ -579,7 +579,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_1.png')}}" alt=""></div>
@@ -597,7 +597,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_2.png')}}" alt=""></div>
@@ -615,7 +615,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_3.png')}}" alt=""></div>
@@ -633,7 +633,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_4.png')}}" alt=""></div>
@@ -651,7 +651,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item discount">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_5.png')}}" alt=""></div>
@@ -669,7 +669,7 @@
                                 </ul>
                             </div>
 
-                            <!-- Best Sellers Item -->
+                            {{-- Best Sellers Item --}}
                             <div class="bestsellers_item">
                                 <div class="bestsellers_item_container d-flex flex-row align-items-center justify-content-start">
                                     <div class="bestsellers_image"><img src="{{asset('storage/_kp/images/best_6.png')}}" alt=""></div>
