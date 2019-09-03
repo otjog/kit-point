@@ -134,8 +134,8 @@ class Product extends Model
             'product_has_price.value        as price|pivot|value',
             'manufacturers.id               as manufacturer|id',
             'manufacturers.name             as manufacturer|name',
-            //'categories.id                  as category|id',
-            //'categories.name                as category|name',
+            'categories.id                  as category|id',
+            'categories.name                as category|name',
 
             DB::raw(
                 'CASE discounts.type
@@ -200,8 +200,7 @@ class Product extends Model
             ->leftJoin('manufacturers', 'manufacturers.id', '=', 'products.manufacturer_id')
 
             /************CATEGORY***************/
-            //->leftJoin('categories', 'categories.id', '=', 'products.category_id')
-            ->with('category')
+            ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
 
             ->orderBy('products.name')
 
