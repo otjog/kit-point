@@ -1,22 +1,25 @@
 import getXmlHttpRequest from './xmlhttprequest';
 
-export default function Ajax(method, queryString, headers, requestName){
+export default function Ajax(method, queryString, headers, requestName, path){
 
-    this.path       = window.location.origin + '/ajax';
+    if (path === undefined || path === null)
+        this.path = window.location.origin + '/ajax';
+    else
+        this.path = path;
 
     this.previousUrl = window.location.origin + window.location.pathname;
 
-    this.method     = method;
+    this.method = method;
 
-    this.headers    = headers;
+    this.headers = headers;
 
     this.requestName = requestName;
 
-    this.timeout    = 30000;
+    this.timeout = 30000;
 
     this.queryString = queryString;
 
-    this.req        = getXmlHttpRequest();
+    this.req = getXmlHttpRequest();
 
     this.sendRequest = function(){
         if(ajaxRequests[this.requestName] !== undefined){

@@ -24,11 +24,7 @@ class BasketController extends Controller{
      */
     public function store(Request $request)
     {
-        $token = $request->session()->get('_token');
-
-        $this->baskets->addProductToBasket( $request, $token );
-
-        return back();
+        //
     }
 
     /**

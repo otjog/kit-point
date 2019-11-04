@@ -40,7 +40,12 @@ class Product extends Model
 
     public function discounts()
     {
-        return $this->belongsToMany('App\Models\Shop\Price\Discount', 'product_has_discount')->withPivot('value')->withTimestamps();
+        return $this->belongsToMany('App\Models\Shop\Price\Discount', 'product_has_discount')->withPivot(['value', 'quantity'])->withTimestamps();
+    }
+
+    public function quantity_discounts()
+    {
+        return $this->belongsToMany('App\Models\Shop\Price\Discount', 'product_has_discount')->withPivot(['value', 'quantity'])->withTimestamps();
     }
 
     public function parameters()
@@ -97,7 +102,9 @@ class Product extends Model
             ->get();
 
             if (isset($products[0])) {
-                $products = $this->addRelationCollections($products);
+                $products = $this->addLeftJoinsAsRelationCollections($products);
+                $products = $this->calculateQuantityDiscounts($products);
+                $products = $this->changePriceIfExistQuantityDiscount($products);
                 return $products[0];
             }
             return null;
@@ -119,7 +126,10 @@ class Product extends Model
 
             ->paginate($pagination);
 
-        return $this->addRelationCollections($products);
+        $products = $this->addLeftJoinsAsRelationCollections($products);
+        $products = $this->calculateQuantityDiscounts($products);
+        $products = $this->changePriceIfExistQuantityDiscount($products);
+        return $products;
 
     }
 
@@ -142,7 +152,7 @@ class Product extends Model
                            WHEN "percent"
                                     THEN ROUND( ( product_has_price.value - (product_has_price.value / 100 * product_has_discount.value) ) * currency.value )
                            WHEN "value"
-                                    THEN ROUND( (product_has_price.value * currency.value) - product_has_discount.value )
+                                    THEN ROUND( (product_has_price.value - product_has_discount.value) * currency.value )
                            ELSE ROUND( product_has_price.value * currency.value )
                         END AS "price|value" '
             ),
@@ -206,7 +216,10 @@ class Product extends Model
 
             ->get();
 
-        return $this->addRelationCollections($products);
+        $products = $this->addLeftJoinsAsRelationCollections($products);
+        $products = $this->calculateQuantityDiscounts($products);
+        $products = $this->changePriceIfExistQuantityDiscount($products);
+        return $products;
 
     }
 
@@ -279,7 +292,10 @@ class Product extends Model
 
                 ->paginate($pagination);
 
-        return $this->addRelationCollections($products);
+        $products = $this->addLeftJoinsAsRelationCollections($products);
+        $products = $this->calculateQuantityDiscounts($products);
+        $products = $this->changePriceIfExistQuantityDiscount($products);
+        return $products;
 
     }
 
@@ -309,7 +325,9 @@ class Product extends Model
 
             ->paginate($pagination);
 
-        return $this->addRelationCollections($products);
+        $products = $this->addLeftJoinsAsRelationCollections($products);
+        $products = $this->calculateQuantityDiscounts($products);
+        return $products;
 
     }
 
@@ -329,7 +347,9 @@ class Product extends Model
 
             ->paginate($pagination);
 
-        return $this->addRelationCollections($products);
+        $products = $this->addLeftJoinsAsRelationCollections($products);
+        $products = $this->calculateQuantityDiscounts($products);
+        return $products;
 
     }
 
@@ -360,9 +380,13 @@ class Product extends Model
 
             ->get();
 
-        $products = $this->addRelationCollections($products);
+        $products = $this->addLeftJoinsAsRelationCollections($products);
 
-        return $this->addSelectedOrderAttributeToPivot($products, 'basket');
+        $products = $this->addSelectedOrderAttributeToPivot($products, 'basket');
+
+        $products = $this->changePriceIfExistQuantityDiscount($products);
+
+        return $products;
     }
 
     public function getProductsFromOrder($order_id)
@@ -419,7 +443,7 @@ class Product extends Model
 
             ->get();
 
-        $products = $this->addRelationCollections($products);
+        $products = $this->addLeftJoinsAsRelationCollections($products);
 
         return $this->addSelectedOrderAttributeToPivot($products, 'order');
 
@@ -457,7 +481,7 @@ class Product extends Model
         ];
     }
 
-    private function addRelationCollections($products)
+    private function addLeftJoinsAsRelationCollections($products)
     {
         foreach ( $products as $product){
 
@@ -548,6 +572,7 @@ class Product extends Model
             'discounts.name                 as discounts|name',
             'discounts.type                 as discounts|type',
             'product_has_discount.value     as discounts|pivot|value',
+            'product_has_discount.quantity  as discounts|pivot|quantity',
             'manufacturers.id               as manufacturer|id',
             'manufacturers.name             as manufacturer|name',
             //'categories.id                  as category|id',
@@ -558,7 +583,7 @@ class Product extends Model
                            WHEN "percent"
                                     THEN ROUND( ( product_has_price.value - (product_has_price.value / 100 * product_has_discount.value) ) * currency.value )
                            WHEN "value"
-                                    THEN ROUND( (product_has_price.value * currency.value) - product_has_discount.value )
+                                    THEN ROUND( (product_has_price.value - product_has_discount.value) * currency.value )
                            ELSE ROUND( product_has_price.value * currency.value )
                         END AS "price|value"'
             ),
@@ -585,12 +610,24 @@ class Product extends Model
             ->leftJoin('currency', 'currency.id', '=', 'product_has_price.currency_id')
 
             /************DISCOUNT***************/
-            ->leftJoin('product_has_discount', 'products.id', '=', 'product_has_discount.product_id')
-            ->leftJoin('discounts', function ($join) use ($today) {
+            //->leftJoin('product_has_discount', 'products.id', '=', 'product_has_discount.product_id')
+            ->leftJoin('product_has_discount', function ($join) {
+                $join->on('products.id', '=', 'product_has_discount.product_id')
+                    ->where('product_has_discount.quantity', '=', '1');
+            })
+            ->leftJoin('discounts', function ($join) use ($today, $price_id) {
                 $join->on('discounts.id', '=', 'product_has_discount.discount_id')
                     ->where('discounts.active', '=', '1')
+                    ->where('discounts.price_id', '=', $price_id)
                     ->whereDate('to_date', '>=', $today);
             })
+
+            /********QUANTITY DISCOUNT**********/
+            ->with(['quantity_discounts' => function ($query) use ($price_id) {
+                $query->where('product_has_discount.quantity', '>', 1)
+                    ->where('discounts.price_id', '=', $price_id)
+                ->orderBy('product_has_discount.quantity');
+            }])
 
             /************MANUFACTURER***********/
             ->leftJoin('manufacturers', 'manufacturers.id', '=', 'products.manufacturer_id')
@@ -607,9 +644,17 @@ class Product extends Model
                     ->where('shop_store_has_product.quantity', '>', 0);
             }])
 
+            /************BASKET*****************/
+            ->with(['baskets' => function($query)
+            {
+                $query->where('token', session('_token'));
+            }])
+
             /************CATEGORY***************/
             //->leftJoin('categories', 'categories.id', '=', 'products.category_id')
             ->with('category');
+
+
     }
 
     public function getCustomProductsOffer($offer_id, $take){
@@ -632,7 +677,7 @@ class Product extends Model
 
             ->get();
 
-        return $this->addRelationCollections($products);
+        return $this->addLeftJoinsAsRelationCollections($products);
     }
 
     public function getProductsPrepareOffer($offer_name, $take){
@@ -652,7 +697,7 @@ class Product extends Model
 
                     ->get();
 
-                return $this->addRelationCollections($products);
+                return $this->addLeftJoinsAsRelationCollections($products);
 
             case 'newest' :
                 $productQuery = $this->getListProductQuery();
@@ -666,7 +711,7 @@ class Product extends Model
 
                     ->get();
 
-                return $this->addRelationCollections($products);
+                return $this->addLeftJoinsAsRelationCollections($products);
         }
 
     }
@@ -703,6 +748,99 @@ class Product extends Model
             $product['pivot']['order_attributes_collection'] = $temporary;
 
             $product->quantity = $product['pivot']['quantity'];
+        }
+        return $products;
+    }
+
+    private function changePriceIfExistQuantityDiscount($products)
+    {
+        foreach ($products as $product) {
+
+            if (isset($product->quantity_discounts) && $product->quantity_discounts !== null && count($product->quantity_discounts) > 0) {
+                $quantityDiscounts = $product->quantity_discounts;
+
+                if (isset($product->baskets[0]) && $product->baskets[0] !== null) {
+                    $quantityDiscounts = $quantityDiscounts->filter(function ($value, $key) use ($product)  {
+                        return $value->pivot->quantity <= $product->baskets[0]['pivot']['quantity'];
+                    });
+
+                    $quantityDiscounts = $quantityDiscounts->sortByDesc(function ($value, $key) {
+                        return $value->pivot->quantity;
+
+                    });
+
+                    $quantityDiscount = $quantityDiscounts->first();
+
+                    if ($quantityDiscount !== null) {
+
+                        switch ($quantityDiscount->type) {
+                            case 'percent' :
+                                if($quantityDiscount->pivot->value > 99)
+                                    break;
+
+                                $product->price['sale'] =
+                                $product['price|sale']  =
+                                    (int)($product['price|value'] / 100 * $quantityDiscount->pivot->value);
+
+                                $product->price['value'] =
+                                $product['price|value'] =
+                                    $product['price|value'] - $product->price['sale'];
+                                break;
+
+                            case 'value' :
+                                if($quantityDiscount->pivot->value * $product->price['pivot']['currency_value'] >= $product->price['value'] )
+                                    break;
+
+                                $product->price['sale'] =
+                                $product['price|sale'] =
+                                    (int)($quantityDiscount->pivot->value * $product->price['pivot']['currency_value']);
+
+                                $product['price|value'] -= $product->price['sale'];
+                                $product->price['value'] -= $product->price['sale'];
+                                break;
+                        }
+                    }
+                }
+
+            }
+        }
+        return $products;
+    }
+
+    protected function calculateQuantityDiscounts($products)
+    {
+        foreach ($products as $product) {
+
+            if (isset($product->quantity_discounts) && $product->quantity_discounts !== null && count($product->quantity_discounts) > 0) {
+
+                $quantityDiscounts = $product->quantity_discounts;
+
+                foreach ($quantityDiscounts as $quantityDiscount) {
+                    switch ($quantityDiscount->type) {
+                        case 'percent' :
+
+                            if($quantityDiscount->pivot->value > 99)
+                                break;
+
+                            $quantityDiscount->pivot['totalSale'] =
+                                (int)($product->price['value'] / 100 * $quantityDiscount->pivot->value);
+
+                            $quantityDiscount->pivot['totalPrice'] =
+                                $product->price['value'] - $quantityDiscount->pivot['totalSale'];
+                            break;
+                        case 'value' :
+
+                            if($quantityDiscount->pivot->value * $product->price['pivot']['currency_value'] >= $product->price['value'] )
+                                break;
+
+                            $quantityDiscount->pivot['totalSale'] =
+                                (int)($quantityDiscount->pivot->value * $product->price['pivot']['currency_value']);
+
+                            $quantityDiscount->pivot['totalPrice'] = $product->price['value'] - $quantityDiscount->pivot['totalSale'];
+                            break;
+                    }
+                }
+            }
         }
         return $products;
     }

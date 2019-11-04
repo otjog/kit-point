@@ -5,6 +5,7 @@ export default function DaData(id, type){
     let token = "23933ff36c0c7e63248d1782df14d07badb394a0";
     let button = document.getElementsByClassName('update-geo');
     let requestName = 'geo';
+    let headers = {};
     let qsParams = {
         module : requestName,
         response : 'json', //view or json
@@ -50,7 +51,7 @@ export default function DaData(id, type){
 
     function sendRequest () {
 
-        let ajaxReq = new Ajax("POST", queryString, {}, requestName);
+        let ajaxReq = new Ajax("POST", queryString, headers, requestName);
 
         //todo проверить, если объекта нет, делать submit формы
         ajaxReq.req.onreadystatechange = function() {

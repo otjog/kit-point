@@ -114,3 +114,23 @@ ul.child {
 .border-bottom-dotted{
     border-bottom: 1px dotted;
 }
+/* Эффект нажатия */
+form.shop-buy-form .btn:active {
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.5) inset !important;
+}
+/*Удаляем свечение вокруг кнопки*/
+button, input {
+    outline: 0 !important;
+}
+button::-moz-focus-inner
+{
+    border: 0;
+}
+
+.bg-grey {
+    background-color: #dae0e5 !important;
+}
+
+a.bg-grey:hover, a.bg-light:focus, button.bg-light:hover, button.bg-light:focus {
+    background-color: #cccccc !important;
+}
