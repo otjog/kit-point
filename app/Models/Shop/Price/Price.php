@@ -18,4 +18,7 @@ class Price extends Model{
         return $this->hasMany('App\Models\Shop\CustomerGroup');
     }
 
+    public function discounts(){
+        return $this->hasMany('App\Models\Shop\Price\Discount');
+    }
 }

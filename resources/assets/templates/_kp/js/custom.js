@@ -1,70 +1,3 @@
-//Quantity Button
-let quantity = {
-    'buttons': {
-        'increment' : document.getElementsByClassName('quantity_inc'),
-        'decrement' : document.getElementsByClassName('quantity_dec'),
-        'delete'    : document.getElementsByClassName('quantity_del'),
-        'update'    : document.getElementsByClassName('quantity_upd')
-    },
-    'inputs'    : document.getElementsByClassName('quantity_input'),
-    'form'      : document.getElementById('basket_form')
-};
-
-for(let buttonsType in quantity.buttons){
-
-    if(quantity.buttons.hasOwnProperty(buttonsType)){
-
-        for( let buttonIndex = 0; buttonIndex < quantity.buttons[buttonsType].length; buttonIndex++){
-
-            switch(buttonsType){
-                case 'increment':
-                case 'decrement':
-                    quantity.buttons[ buttonsType ][ buttonIndex ].addEventListener('click', function(e){
-                        e = e || event;
-                        changeQuantity(e, buttonIndex)
-                    });
-                    break;
-                case 'delete':
-                    quantity.buttons[ buttonsType ][ buttonIndex ].addEventListener('click', function(e){
-                        quantity.inputs[buttonIndex].value = 0;
-                        quantity.form.submit();
-                    });
-                    break;
-                case 'update':
-                    quantity.buttons[ buttonsType ][ buttonIndex ].addEventListener('click', function(e){
-                        //любая кнопка обновляет все товары
-                        quantity.form.submit();
-                    });
-                    break;
-            }
-
-        }
-
-    }
-
-}
-
-function changeQuantity(e, buttonIndex){
-
-    let target = e.target;
-
-    if(target.tagName === 'I'){
-        target = target.parentElement;
-
-    }
-
-    if (target.classList.contains('quantity_inc')) {
-        ++quantity.inputs[buttonIndex].value;
-    } else if(target.classList.contains('quantity_dec')){
-
-        let minValue = target.dataset.quantityMinValue;
-
-        if(quantity.inputs[buttonIndex].value > minValue)
-            --quantity.inputs[buttonIndex].value;
-    }
-}
-//END Quantity Button
-
 //FancyBox
 
 let fancyOptions = {
@@ -231,3 +164,10 @@ let shipment = new Shipment();
 shipment.getOffers();
 shipment.getPoints();
 /*******/
+
+/* PRODUCT BASKET MODAL */
+
+import ShopBasket from './product-basket-modal';
+let shopBasket = new ShopBasket();
+shopBasket.initAjaxSubmitAllForms();
+/* END PRODUCT BASKET MODAL */

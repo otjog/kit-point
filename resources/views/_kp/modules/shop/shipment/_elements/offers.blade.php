@@ -3,7 +3,7 @@
                        ['msg' => 'Рассчитываем доставку..'])
     <div class="shipment-offers">
         <div class="my-4">
-            <h3 class="text-center">Самовывоз с пункта выдачи</h3>
+            <h5 class="text-center">Самовывоз с пункта выдачи</h5>
 
             @foreach($shipments as $service)
                 @if($service['is_service'] || $service['alias'] === 'toTerminal')
@@ -19,7 +19,7 @@
             @endforeach
         </div>
         <div class="my-4">
-            <h3 class="text-center">Курьерская доставка до дверей</h3>
+            <h5 class="text-center">Курьерская доставка до дверей</h5>
 
             @foreach($shipments as $service)
                 @if($service['is_service'] || $service['alias'] === 'toDoor')

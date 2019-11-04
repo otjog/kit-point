@@ -10,4 +10,8 @@ class Discount extends Model{
         return $this->belongsToMany('App\Models\Shop\Product\Product', 'product_has_discount')->withPivot('value')->withTimestamps();
     }
 
+    public function price()
+    {
+        return $this->belongsTo(    'App\Models\Shop\Price\Price');
+    }
 }
