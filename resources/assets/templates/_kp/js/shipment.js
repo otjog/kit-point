@@ -2,7 +2,6 @@ import Ajax from './ajax';
 import InitMap from './googlemap';
 import MarkerClusterer from '@google/markerclusterer/src/markerclusterer';
 
-
 export default function Shipment(){
 
     this.getOffers = function () {
@@ -162,8 +161,8 @@ export default function Shipment(){
      * @param {String} [queryString] - строка, к которой нужно добавить параметры. Не обязательный параметр
      * @returns {string}
      */
-    function setQueryString(attributes, queryString = ''){
-
+    function setQueryString(attributes, queryString = '')
+    {
         if(attributes.length !== undefined && attributes.length !== null && attributes.length > 0 ){
         //для атрибутов ДОМ-Элемента
             for (let i = 0; i < attributes.length; i++) {

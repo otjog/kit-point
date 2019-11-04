@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Facades\GlobalData;
+use App\Models\Shop\Order\Basket;
 use App\Models\Shop\Product\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -103,6 +104,9 @@ class AjaxController extends Controller{
 
     private function sendResponse(){
 
+        if ($this->request['response'] === null) {
+            return null;
+        }
         //Присваиваем переменной экземпляр Ответа Сервера
         $this->response = response();
 

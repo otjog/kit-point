@@ -10,29 +10,58 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-    //Home
-    Route::get('/',         'HomeController@index'          )->name('home');
 
-    //Search
-    Route::get('/search',    'Search\SearchController@show' )->name('search');
+    /** VIEW Route **/
+        //Home
+        Route::get('/',         'HomeController@index'          )->name('home');
 
-    //Products
-    Route::resource('/products',    'Shop\ProductController',   [ 'only' => [ 'show' ]]);
+        //Search
+        Route::get('/search',    'Search\SearchController@show' )->name('search');
 
-    //Categories
-    Route::resource('/categories',  'Shop\CategoryController',  [ 'only' => [ 'index', 'show' ]]);
+        //Products
+        Route::resource('/products',    'Shop\ProductController',   [ 'only' => [ 'show' ]]);
 
-    //Brands
-    Route::resource('/brands',      'Shop\BrandController',     [ 'only' => [ 'index', 'show' ]]);
+        //Categories
+        Route::resource('/categories',  'Shop\CategoryController',  [ 'only' => [ 'index', 'show' ]]);
 
-    //Orders
-    Route::resource('/orders',      'Shop\OrderController',     [ 'only' => [ 'store', 'create', 'show' ]]);
+        //Brands
+        Route::resource('/brands',      'Shop\BrandController',     [ 'only' => [ 'index', 'show' ]]);
 
-    //Pages
-    Route::resource('/pages',       'Info\PageController',      [ 'only' => [ 'show' ]]);
+        //Orders
+        Route::resource('/orders',      'Shop\OrderController',     [ 'only' => [ 'store', 'create', 'show' ]]);
 
-    //Basket
-    Route::resource('/baskets',     'Shop\BasketController',    [ 'only' => [ 'store', 'edit', 'update' ]]);
+        //Pages
+        Route::resource('/pages',       'Info\PageController',      [ 'only' => [ 'show' ]]);
+
+        //Basket
+        Route::resource('/baskets',     'Shop\BasketController',    [ 'only' => [ 'store', 'edit', 'update' ]]);
+
+        //ProductInBasket
+        Route::resource('/baskets.products', 'Shop\BasketProductController');
+
+        //Image
+        Route::get('/models/{models}/sizes/{sizes}/images/{images}/modelid/{modelId?}/extension/{extension?}',     'Image\ImageController@show')
+            ->where('images', '.*')
+            ->name('getImage');
+
+        //Forms
+        Route::group(['prefix' => 'form'], function () {
+
+            //GeoData
+
+            Route::post('geodata', function (\Illuminate\Http\Request $request, \App\Models\Geo\GeoData $geoData){
+                $geoData->setGeoInput( $request->address_json );
+                return back();
+            })->name('GetGeo');
+
+        });
+
+    //ProductView
+    Route::resource('/products.views',    'Shop\View\ProductViewController',   [ 'only' => [ 'show' ]]);
+
+    //BasketView
+    Route::resource('/baskets.views',     'Shop\View\BasketViewController',    [ 'only' => [ 'show' ]]);
+
 
     //Pay
     Route::group(['prefix' => 'pay'], function(){
@@ -44,22 +73,7 @@
         Route::post('/redirect/{msg}', 'Shop\PayController@redirect');
     });
 
-    //Image
-    Route::get('/models/{models}/sizes/{sizes}/images/{images}/modelid/{modelId?}/extension/{extension?}',     'Image\ImageController@show')
-        ->where('images', '.*')
-        ->name('getImage');
 
-    //Forms
-    Route::group(['prefix' => 'form'], function () {
-
-        //GeoData
-
-        Route::post('geodata', function (\Illuminate\Http\Request $request, \App\Models\Geo\GeoData $geoData){
-            $geoData->setGeoInput( $request->address_json );
-            return back();
-        })->name('GetGeo');
-
-    });
 
     Route::get('/mailling/unsubscribe/{email}', 'Mailling\RunMaillingController@unsubscribe')->name('unsubscribe');
 

@@ -28670,7 +28670,7 @@ select option {
 
 .single_product .product_quantity input {
   display: block;
-  width: 30px;
+  width: 70px;
   height: 50px;
   border: none;
   outline: none;
@@ -28844,16 +28844,10 @@ select option {
 }
 
 .single_product .cart_button {
-  display: inline-block;
-  border: none;
   font-size: 18px;
-  font-weight: 400;
-  line-height: 48px;
-  color: #FFFFFF;
   padding-left: 35px;
   padding-right: 35px;
-  outline: none;
-  cursor: pointer;
+  height: 48px;
 }
 
 .single_product .cart_button:focus {
@@ -31272,6 +31266,34 @@ ul.child {
 
 .border-bottom-dotted {
   border-bottom: 1px dotted;
+}
+
+/* Эффект нажатия */
+
+form.shop-buy-form .btn:active {
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5) inset !important;
+}
+
+/*Удаляем свечение вокруг кнопки*/
+
+button,
+input {
+  outline: 0 !important;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+.bg-grey {
+  background-color: #dae0e5 !important;
+}
+
+a.bg-grey:hover,
+a.bg-light:focus,
+button.bg-light:hover,
+button.bg-light:focus {
+  background-color: #cccccc !important;
 }
 
 /* CSS Document */
