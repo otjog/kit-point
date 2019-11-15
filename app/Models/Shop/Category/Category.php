@@ -162,12 +162,13 @@ class Category extends Model{
             ->get();
     }
 
+    /*Depricated???*/
     public function getCategoriesTree($parent_id = 0)
     {
         if(GlobalData::getParameter('models.category.categoriesTree')){
             return GlobalData::getParameter('models.category.categoriesTree');
         }
-dd(1);
+
         /**
          * http://forum.php.su/topic.php?forum=71&topic=4385
          */
@@ -198,4 +199,20 @@ dd(1);
         return $result;
     }
 
+    /*добавить эту функцию ко всем моделям продуктов, чтобы использовать в качестве breadcrumbs*/
+    public function getParentCategories($id, $categories = [], $allCategories = null  )
+    {
+        if ($allCategories === null)
+            $allCategories = $this->getActiveCategories();
+
+        $category = $allCategories->first(function ($value, $key) use ($id) {
+            return $value->id === $id;
+        });
+
+        if ($category !== null) {
+            $category->children = $categories;
+            return $this->getParentCategories($category->parent_id, $category, $allCategories);
+        }
+        return $categories;
+    }
 }
