@@ -2,6 +2,7 @@
 
 namespace App\Models\Shop\Product;
 
+use App\Models\Shop\Category\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use JustBetter\PaginationWithHavings\PaginationWithHavings;
@@ -36,6 +37,12 @@ class Product extends Model
     public function stores()
     {
         return $this->belongsToMany('App\Models\Shop\Store\Store', 'shop_store_has_product')->withPivot('quantity')->withTimestamps();
+    }
+
+    public function marketplaces()
+    {
+        return $this->belongsToMany('App\Models\Shop\Marketplace', 'shop_marketplace_has_product')
+            ->withTimestamps();
     }
 
     public function discounts()
@@ -110,6 +117,27 @@ class Product extends Model
             return null;
     }
 
+    public function getActiveProducts()
+    {
+        $pagination = GlobalData::getParameter('components.shop.pagination');
+
+        $productsQuery = $this->getListProductQuery();
+
+        $products = $productsQuery
+
+            ->where('products.active', 1)
+
+            ->orderBy('products.name')
+
+            ->get();
+
+        $products = $this->addLeftJoinsAsRelationCollections($products);
+        $products = $this->calculateQuantityDiscounts($products);
+        $products = $this->changePriceIfExistQuantityDiscount($products);
+        return $products;
+
+    }
+
     public function getActiveProductsFromCategory($category_id)
     {
         $pagination = GlobalData::getParameter('components.shop.pagination');
@@ -125,6 +153,30 @@ class Product extends Model
             ->orderBy('products.name')
 
             ->paginate($pagination);
+
+        $products = $this->addLeftJoinsAsRelationCollections($products);
+        $products = $this->calculateQuantityDiscounts($products);
+        $products = $this->changePriceIfExistQuantityDiscount($products);
+        return $products;
+
+    }
+
+    public function getActiveProductsToMarketplace($marketplace_id)
+    {
+        $productsQuery = $this->getListProductQuery();
+
+        $products = $productsQuery
+
+            ->where('products.active', 1)
+
+            ->rightJoin('shop_marketplace_has_product', function ($join) use ($marketplace_id) {
+                $join->on('products.id', '=', 'shop_marketplace_has_product.product_id')
+                    ->where('shop_marketplace_has_product.marketplace_id', '=', $marketplace_id);
+            })
+
+            ->orderBy('products.name')
+
+            ->get();
 
         $products = $this->addLeftJoinsAsRelationCollections($products);
         $products = $this->calculateQuantityDiscounts($products);
@@ -653,6 +705,7 @@ class Product extends Model
             /************CATEGORY***************/
             //->leftJoin('categories', 'categories.id', '=', 'products.category_id')
             ->with('category');
+
 
 
     }
